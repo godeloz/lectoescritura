@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios · Integración: tema, idea central e intención</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #0F6E56; --accent-light: #E1F5EE; --accent-mid: #1D9E75;
+  --blue: #185FA5; --blue-light: #E6F1FB; --blue-mid: #0C447C;
+  --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
+  --coral: #993C1D; --coral-light: #FAECE7; --coral-dark: #712B13;
+  --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
+  --teal-text: #085041;
+  --bg: #ffffff; --bg-secondary: #f5f4f0; --bg-tertiary: #eeece6;
+  --text: #1a1a1a; --text-muted: #6b6b68; --text-hint: #9a9893;
+  --border: rgba(0,0,0,0.12); --border-med: rgba(0,0,0,0.22);
+  --ok-bg: #E1F5EE; --ok-text: #085041; --ok-border: #1D9E75;
+  --mal-bg: #FCEBEB; --mal-text: #791F1F; --mal-border: #E24B4A;
+  --radius-md: 8px; --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2e2e2b;
+    --text: #ede9e3; --text-muted: #9a9893; --text-hint: #6b6b68;
+    --border: rgba(255,255,255,0.1); --border-med: rgba(255,255,255,0.2);
+    --accent-light: #04342C; --blue-light: #042C53; --amber-light: #412402;
+    --coral-light: #4A1B0C; --purple-light: #26215C;
+    --accent: #5DCAA5; --blue: #85B7EB; --amber: #EF9F27;
+    --coral: #F0997B; --purple: #AFA9EC;
+    --teal-text: #9FE1CB; --blue-mid: #B5D4F4; --amber-dark: #FAC775;
+    --coral-dark: #F5C4B3; --purple-dark: #CECBF6;
+    --ok-bg: #04342C; --ok-text: #9FE1CB; --ok-border: #1D9E75;
+    --mal-bg: #501313; --mal-text: #F7C1C1; --mal-border: #E24B4A;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-tertiary);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 4rem;
+}
+.page-shell { width: 100%; max-width: 720px; }
+
+/* HEADER */
+.site-header {
+  background: var(--bg); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;
+}
+.header-icon {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--coral-light); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.header-icon svg { width: 22px; height: 22px; }
+.header-overline {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--coral); margin-bottom: 3px;
+}
+.header-title { font-size: 18px; font-weight: 500; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+.header-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+.header-pills { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.pill { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.pill-coral { background: var(--coral-light); color: var(--coral-dark); }
+.pill-teal  { background: var(--accent-light); color: var(--teal-text); }
+.pill-blue  { background: var(--blue-light); color: var(--blue-mid); }
+.pill-amber { background: var(--amber-light); color: var(--amber-dark); }
+.pill-purple{ background: var(--purple-light); color: var(--purple-dark); }
+
+/* LEGEND */
+.leyenda {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 1.25rem; padding-bottom: 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.leyenda-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+.leyenda-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-tema     { background: var(--blue); }
+.dot-idea     { background: var(--accent-mid); }
+.dot-intencion{ background: var(--purple); }
+.dot-extra    { background: var(--amber); }
+
+/* CARD */
+.card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; }
+
+/* PROGRESS */
+.prog-bar { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+.prog-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.35s; }
+.prog-seg.active { background: #F0997B; }
+.prog-seg.done   { background: var(--accent-mid); }
+
+/* TABS */
+.nav-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.nav-tab {
+  flex: 1; font-size: 12px; padding: 0.45rem 0.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  cursor: pointer; background: transparent; color: var(--text-muted);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.nav-tab:hover { background: var(--bg-secondary); }
+.nav-tab.on { background: var(--bg-secondary); color: var(--text); font-weight: 500; border-color: var(--border-med); }
+.nav-tab.completed { border-color: var(--ok-border); color: var(--ok-text); }
+
+/* PANEL */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+.panel-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.tipo-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+/* CARRERAS */
+.carreras-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.875rem; }
+.carrera-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 20px;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: 0.5px solid var(--border); font-weight: 500;
+}
+
+/* TEXTO */
+.texto-card {
+  border: 0.5px solid var(--border); border-radius: var(--radius-md);
+  padding: 1rem 1.125rem; margin-bottom: 1.5rem; background: var(--bg-secondary);
+}
+.texto-titulo { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.texto-autor  { font-size: 12px; color: var(--text-hint); margin-bottom: 0.75rem; padding-bottom: 0.625rem; border-bottom: 0.5px solid var(--border); }
+.cuerpo { font-size: 14px; line-height: 1.78; color: var(--text); }
+.cuerpo em { font-style: italic; }
+
+/* PREGUNTAS */
+.preguntas { display: flex; flex-direction: column; gap: 1rem; }
+.preg-bloque { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.preg-header { padding: 0.75rem 1rem; border-bottom: 0.5px solid var(--border); background: var(--bg-secondary); }
+.preg-tipo { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+.tipo-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.tipo-tema      .tipo-dot { background: var(--blue); }
+.tipo-idea      .tipo-dot { background: var(--accent-mid); }
+.tipo-intencion .tipo-dot { background: var(--purple); }
+.tipo-extra     .tipo-dot { background: var(--amber); }
+.tipo-tema      { color: var(--blue); }
+.tipo-idea      { color: var(--accent); }
+.tipo-intencion { color: var(--purple); }
+.tipo-extra     { color: var(--amber); }
+.preg-txt { font-size: 13.5px; color: var(--text); line-height: 1.5; }
+.preg-txt em {
+  background: var(--amber-light); color: var(--amber-dark);
+  padding: 1px 5px; border-radius: 3px; font-style: normal;
+}
+
+.opciones { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
+.opc {
+  width: 100%; text-align: left; font-size: 13px;
+  padding: 0.5rem 0.875rem; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); cursor: pointer;
+  color: var(--text); background: var(--bg);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.45; transition: background 0.12s;
+}
+.opc:hover:not(:disabled) { background: var(--bg-secondary); }
+.opc:disabled { cursor: default; }
+.opc .l { font-size: 11px; font-weight: 500; color: var(--text-muted); min-width: 14px; padding-top: 1px; flex-shrink: 0; }
+.opc.ok  { background: var(--ok-bg);  border-color: var(--ok-border); }
+.opc.ok  .l { color: var(--ok-text); }
+.opc.mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opc.mal .l { color: var(--mal-text); }
+
+/* FEEDBACK */
+.fb { font-size: 13px; line-height: 1.6; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.2s; }
+.fb.show { max-height: 160px; padding: 0.625rem 1rem 0.875rem; }
+.fb-ok  { color: var(--ok-text);  background: var(--ok-bg); }
+.fb-mal { color: var(--mal-text); background: var(--mal-bg); }
+.fb-concepto { font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; opacity: 0.7; }
+
+/* SCORE */
+.score-wrap {
+  margin-top: 1.5rem; padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  background: var(--bg-secondary); display: none;
+}
+.score-wrap.show { display: block; }
+.score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+.sc-item { text-align: center; }
+.sc-num { font-size: 26px; font-weight: 500; color: var(--text); }
+.sc-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.sc-desglose {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  margin-bottom: 1rem; padding-top: 1rem; border-top: 0.5px solid var(--border);
+}
+.sc-cat { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+.sc-cat-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.sc-cat-val { margin-left: auto; font-weight: 500; color: var(--text); font-size: 13px; }
+.sc-msg { font-size: 13px; color: var(--text-muted); text-align: center; padding-top: 0.875rem; border-top: 0.5px solid var(--border); line-height: 1.55; }
+
+/* BOTÓN LIMPIAR */
+.btn-limpiar {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 1rem; padding: 0.6rem 1rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border-med);
+  cursor: pointer; background: transparent; color: var(--text-muted);
+  font-size: 13px; transition: background 0.12s, color 0.12s;
+}
+.btn-limpiar:hover { background: var(--bg-tertiary); color: var(--text); }
+.btn-limpiar svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+@media (max-width: 520px) {
+  .site-header { flex-wrap: wrap; }
+  .header-pills { margin-left: 0; flex-direction: row; flex-wrap: wrap; }
+  .sc-desglose { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#993C1D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Ejercicio integrador</div>
+      <div class="header-desc">Tema · Idea central · Intención comunicativa — 3 textos, 12 preguntas</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-coral">Sesión 2</span>
+      <span class="pill pill-teal">Nivel medio</span>
+    </div>
+  </header>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- LEYENDA -->
+    <div class="leyenda">
+      <div class="leyenda-item"><div class="leyenda-dot dot-tema"></div>Tema</div>
+      <div class="leyenda-item"><div class="leyenda-dot dot-idea"></div>Idea central</div>
+      <div class="leyenda-item"><div class="leyenda-dot dot-intencion"></div>Intención</div>
+      <div class="leyenda-item"><div class="leyenda-dot dot-extra"></div>Pregunta variable</div>
+    </div>
+
+    <div class="prog-bar">
+      <div class="prog-seg active" id="ps0"></div>
+      <div class="prog-seg" id="ps1"></div>
+      <div class="prog-seg" id="ps2"></div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="nav-tab on" id="tab0" onclick="irA(0)">Texto 1</button>
+      <button class="nav-tab"    id="tab1" onclick="irA(1)">Texto 2</button>
+      <button class="nav-tab"    id="tab2" onclick="irA(2)">Texto 3</button>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PANEL 0 — Psicología / Derecho / Adm.
+    ══════════════════════════════════════ -->
+    <div class="panel active" id="panel0">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 1 de 3</span>
+        <span class="tipo-badge pill-blue">Sociedad y bienestar</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Psicología</span>
+        <span class="carrera-tag">Derecho</span>
+        <span class="carrera-tag">Administración de Negocios</span>
+        <span class="carrera-tag">Finanzas</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">La trampa de la productividad permanente</div>
+        <div class="texto-autor">Adaptado de un artículo de bienestar organizacional</div>
+        <div class="cuerpo">En los últimos años, la cultura corporativa ha elevado la productividad a la categoría de virtud moral. Ser ocupado se ha convertido en una señal de valor social: quien descansa es perezoso, quien tiene tiempo libre no está aprovechando su potencial. Esta lógica, que las plataformas digitales y las aplicaciones de gestión del tiempo refuerzan constantemente, ignora lo que la neurociencia lleva décadas documentando: el cerebro humano no está diseñado para la atención sostenida durante horas. El descanso no es el opuesto de la productividad, sino una de sus condiciones. Las organizaciones que han implementado semanas laborales más cortas reportan, de forma consistente, mayores niveles de creatividad, menor rotación de personal y mejores resultados financieros. Insistir en la hiperproductividad no es eficiencia: es una forma de ignorar la evidencia.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema"><div class="tipo-dot"></div>Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g0q0">
+            <button class="opc" onclick="resp(this,'g0q0',false,0)"><span class="l">a</span>Los avances recientes de la neurociencia sobre la atención y la memoria.</button>
+            <button class="opc" onclick="resp(this,'g0q0',true,1)"><span class="l">b</span>La cultura de la hiperproductividad y su contradicción con el bienestar y el rendimiento real.</button>
+            <button class="opc" onclick="resp(this,'g0q0',false,2)"><span class="l">c</span>Las ventajas económicas de reducir la jornada laboral en las empresas.</button>
+            <button class="opc" onclick="resp(this,'g0q0',false,3)"><span class="l">d</span>El impacto de las aplicaciones digitales en los hábitos de trabajo de los empleados.</button>
+          </div>
+          <div class="fb" id="g0q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea"><div class="tipo-dot"></div>Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g0q1">
+            <button class="opc" onclick="resp(this,'g0q1',false,0)"><span class="l">a</span>La neurociencia ha demostrado que el cerebro humano no puede mantener la atención de manera sostenida durante muchas horas.</button>
+            <button class="opc" onclick="resp(this,'g0q1',false,1)"><span class="l">b</span>Las plataformas digitales son las principales responsables de la cultura de la hiperproductividad en el mundo laboral.</button>
+            <button class="opc" onclick="resp(this,'g0q1',true,2)"><span class="l">c</span>La cultura que glorifica la ocupación permanente contradice la evidencia científica: el descanso es una condición del rendimiento, no su opuesto, y las organizaciones que lo reconocen obtienen mejores resultados.</button>
+            <button class="opc" onclick="resp(this,'g0q1',false,3)"><span class="l">d</span>Reducir la semana laboral es la política más eficaz para mejorar la creatividad y disminuir la rotación en las empresas.</button>
+          </div>
+          <div class="fb" id="g0q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion"><div class="tipo-dot"></div>Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor?</div>
+          </div>
+          <div class="opciones" id="g0q2">
+            <button class="opc" onclick="resp(this,'g0q2',false,0)"><span class="l">a</span>Describir de manera objetiva los distintos modelos de organización del tiempo laboral en empresas contemporáneas.</button>
+            <button class="opc" onclick="resp(this,'g0q2',false,1)"><span class="l">b</span>Informar sobre los hallazgos más recientes de la neurociencia aplicada al ámbito corporativo.</button>
+            <button class="opc" onclick="resp(this,'g0q2',true,2)"><span class="l">c</span>Criticar y desmitificar la cultura de la hiperproductividad, argumentando con evidencia científica y organizacional que es contraproducente.</button>
+            <button class="opc" onclick="resp(this,'g0q2',false,3)"><span class="l">d</span>Convencer a los empleados de que deben negociar jornadas más cortas con sus empleadores.</button>
+          </div>
+          <div class="fb" id="g0q2-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-extra"><div class="tipo-dot"></div>Recurso argumentativo</div>
+            <div class="preg-txt">El autor afirma: <em>"Insistir en la hiperproductividad no es eficiencia: es una forma de ignorar la evidencia."</em> ¿Qué recurso argumentativo usa en esta frase?</div>
+          </div>
+          <div class="opciones" id="g0q3">
+            <button class="opc" onclick="resp(this,'g0q3',false,0)"><span class="l">a</span>Una concesión: el autor acepta que la hiperproductividad tiene cierta eficiencia antes de criticarla.</button>
+            <button class="opc" onclick="resp(this,'g0q3',false,1)"><span class="l">b</span>Un ejemplo: ilustra con un caso concreto las consecuencias de ignorar la evidencia científica.</button>
+            <button class="opc" onclick="resp(this,'g0q3',true,2)"><span class="l">c</span>Una redefinición por contraste: reemplaza la etiqueta positiva ("eficiencia") por una negativa ("ignorar la evidencia") para desmontar el argumento contrario.</button>
+            <button class="opc" onclick="resp(this,'g0q3',false,3)"><span class="l">d</span>Una generalización: extrae una conclusión amplia a partir de casos particulares de empresas que redujeron su jornada.</button>
+          </div>
+          <div class="fb" id="g0q3-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PANEL 1 — Agronomía / Ing. Física / Sistemas
+    ══════════════════════════════════════ -->
+    <div class="panel" id="panel1">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 2 de 3</span>
+        <span class="tipo-badge pill-amber">Ambiente y decisión</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Ingeniería Agronómica</span>
+        <span class="carrera-tag">Ingeniería Física</span>
+        <span class="carrera-tag">Ingeniería de Sistemas</span>
+        <span class="carrera-tag">Negocios Internacionales</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">El suelo que nadie contabiliza</div>
+        <div class="texto-autor">Adaptado de un artículo de economía ambiental</div>
+        <div class="cuerpo">Cada año se degradan en el mundo alrededor de 24 mil millones de toneladas de suelo fértil, según la ONU. Este deterioro reduce la capacidad productiva de la tierra, encarece los alimentos y aumenta la vulnerabilidad de las comunidades rurales frente a las sequías. Sin embargo, la degradación del suelo rara vez aparece en los indicadores económicos nacionales: el PIB no registra la pérdida de un recurso que tardó siglos en formarse. Esta omisión no es accidental. Contabilizar el capital natural implicaría reconocer que los modelos de crecimiento actuales destruyen riqueza mientras fingen crearla. Varios países han comenzado a desarrollar cuentas del capital natural, pero la resistencia política y empresarial es considerable. Mientras la tierra siga siendo un recurso "gratuito" en los libros contables, los incentivos para protegerla serán insuficientes.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema"><div class="tipo-dot"></div>Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g1q0">
+            <button class="opc" onclick="resp(this,'g1q0',false,0)"><span class="l">a</span>La crisis alimentaria global causada por el aumento de la población mundial.</button>
+            <button class="opc" onclick="resp(this,'g1q0',false,1)"><span class="l">b</span>Los métodos científicos para medir la fertilidad y la salud del suelo agrícola.</button>
+            <button class="opc" onclick="resp(this,'g1q0',true,2)"><span class="l">c</span>La degradación del suelo como problema económico invisible que los sistemas de medición actuales ignoran deliberadamente.</button>
+            <button class="opc" onclick="resp(this,'g1q0',false,3)"><span class="l">d</span>La resistencia de los gobiernos y empresas a adoptar políticas ambientales más estrictas.</button>
+          </div>
+          <div class="fb" id="g1q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea"><div class="tipo-dot"></div>Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g1q1">
+            <button class="opc" onclick="resp(this,'g1q1',false,0)"><span class="l">a</span>La ONU reporta que cada año se pierden 24 mil millones de toneladas de suelo fértil, lo que amenaza la seguridad alimentaria global.</button>
+            <button class="opc" onclick="resp(this,'g1q1',true,1)"><span class="l">b</span>La degradación del suelo no aparece en los indicadores económicos porque reconocerla obligaría a cuestionar los modelos de crecimiento actuales; mientras no se contabilice, no habrá incentivos reales para protegerlo.</button>
+            <button class="opc" onclick="resp(this,'g1q1',false,2)"><span class="l">c</span>Los países que han desarrollado cuentas del capital natural demuestran que es posible integrar el valor del suelo en los sistemas de medición económica.</button>
+            <button class="opc" onclick="resp(this,'g1q1',false,3)"><span class="l">d</span>El PIB es un indicador insuficiente para medir el bienestar de los países porque no considera variables ambientales ni sociales.</button>
+          </div>
+          <div class="fb" id="g1q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion"><div class="tipo-dot"></div>Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor?</div>
+          </div>
+          <div class="opciones" id="g1q2">
+            <button class="opc" onclick="resp(this,'g1q2',false,0)"><span class="l">a</span>Informar de manera neutral sobre las estadísticas globales de pérdida de suelo fértil y sus consecuencias.</button>
+            <button class="opc" onclick="resp(this,'g1q2',true,1)"><span class="l">b</span>Denunciar que la omisión del suelo en los sistemas contables no es un descuido sino una elección que protege los modelos de crecimiento vigentes, y argumentar que sin corregirla los incentivos de protección serán insuficientes.</button>
+            <button class="opc" onclick="resp(this,'g1q2',false,2)"><span class="l">c</span>Proponer un sistema alternativo al PIB que incluya indicadores ambientales como el estado del suelo y los recursos hídricos.</button>
+            <button class="opc" onclick="resp(this,'g1q2',false,3)"><span class="l">d</span>Comparar distintos países según sus avances en la implementación de cuentas del capital natural.</button>
+          </div>
+          <div class="fb" id="g1q2-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-extra"><div class="tipo-dot"></div>Implicación del argumento</div>
+            <div class="preg-txt">El autor afirma que los modelos de crecimiento actuales <em>"destruyen riqueza mientras fingen crearla"</em>. ¿Qué implicación tiene esta afirmación para el argumento del texto?</div>
+          </div>
+          <div class="opciones" id="g1q3">
+            <button class="opc" onclick="resp(this,'g1q3',false,0)"><span class="l">a</span>Que el crecimiento económico es imposible si se implementan políticas de protección ambiental estrictas.</button>
+            <button class="opc" onclick="resp(this,'g1q3',false,1)"><span class="l">b</span>Que los gobiernos actúan de mala fe al publicar cifras de crecimiento que saben que son incorrectas.</button>
+            <button class="opc" onclick="resp(this,'g1q3',true,2)"><span class="l">c</span>Que el sistema de medición vigente produce una ilusión de progreso al no descontar la destrucción de recursos naturales no renovables, lo cual hace urgente reformar la contabilidad económica.</button>
+            <button class="opc" onclick="resp(this,'g1q3',false,3)"><span class="l">d</span>Que las empresas del sector agrícola son las principales responsables de la degradación del suelo a escala global.</button>
+          </div>
+          <div class="fb" id="g1q3-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PANEL 2 — Derecho / Ing. Mecánica / NI
+    ══════════════════════════════════════ -->
+    <div class="panel" id="panel2">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 3 de 3</span>
+        <span class="tipo-badge pill-purple">Tecnología y ética</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Derecho</span>
+        <span class="carrera-tag">Ingeniería Mecánica</span>
+        <span class="carrera-tag">Negocios Internacionales</span>
+        <span class="carrera-tag">Ingeniería de Sistemas</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">¿Quién decide cuando la máquina decide?</div>
+        <div class="texto-autor">Adaptado de un artículo sobre ética de la inteligencia artificial</div>
+        <div class="cuerpo">Los sistemas de inteligencia artificial utilizados para tomar decisiones de contratación, crédito o diagnóstico médico han mostrado patrones sistemáticos de discriminación: favorecen a ciertos perfiles demográficos y penalizan a otros, replicando y a veces amplificando sesgos presentes en los datos históricos con los que fueron entrenados. Sus fabricantes suelen responder que el algoritmo es "objetivo" porque no considera raza, género ni edad. Pero la objetividad de los datos de entrenamiento es precisamente lo que está en cuestión: si esos datos reflejan décadas de exclusión estructural, el algoritmo aprende a excluir con mayor precisión y a mayor velocidad. La automatización del sesgo no lo elimina; lo hace invisible e inapelable. Esto exige marcos legales capaces de auditar, cuestionar y corregir estas decisiones antes de que se vuelvan irreversibles.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema"><div class="tipo-dot"></div>Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g2q0">
+            <button class="opc" onclick="resp(this,'g2q0',false,0)"><span class="l">a</span>El desarrollo técnico de los algoritmos de inteligencia artificial y sus aplicaciones en el sector salud.</button>
+            <button class="opc" onclick="resp(this,'g2q0',true,1)"><span class="l">b</span>La reproducción de sesgos discriminatorios en sistemas de IA y la necesidad de marcos legales que los regulen.</button>
+            <button class="opc" onclick="resp(this,'g2q0',false,2)"><span class="l">c</span>El debate sobre si los algoritmos de contratación son más eficientes que los procesos de selección humana tradicionales.</button>
+            <button class="opc" onclick="resp(this,'g2q0',false,3)"><span class="l">d</span>Las estrategias que usan las empresas tecnológicas para evitar la regulación de sus productos.</button>
+          </div>
+          <div class="fb" id="g2q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea"><div class="tipo-dot"></div>Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g2q1">
+            <button class="opc" onclick="resp(this,'g2q1',false,0)"><span class="l">a</span>Los algoritmos de IA no deberían usarse en decisiones de contratación ni en diagnósticos médicos porque cometen errores con frecuencia.</button>
+            <button class="opc" onclick="resp(this,'g2q1',false,1)"><span class="l">b</span>Las empresas tecnológicas mienten cuando afirman que sus algoritmos son objetivos, porque en realidad los diseñan para discriminar.</span></button>
+            <button class="opc" onclick="resp(this,'g2q1',true,2)"><span class="l">c</span>Los sistemas de IA reproducen y ocultan sesgos históricos bajo la apariencia de objetividad; lejos de eliminar la discriminación, la automatizan y la vuelven difícil de cuestionar, lo que exige regulación urgente.</button>
+            <button class="opc" onclick="resp(this,'g2q1',false,3)"><span class="l">d</span>Los datos históricos son siempre una fuente poco confiable para entrenar modelos de inteligencia artificial en contextos sociales.</button>
+          </div>
+          <div class="fb" id="g2q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion"><div class="tipo-dot"></div>Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor?</div>
+          </div>
+          <div class="opciones" id="g2q2">
+            <button class="opc" onclick="resp(this,'g2q2',false,0)"><span class="l">a</span>Explicar de manera técnica cómo funcionan los algoritmos de aprendizaje automático y de dónde provienen sus errores.</button>
+            <button class="opc" onclick="resp(this,'g2q2',false,1)"><span class="l">b</span>Comparar distintos enfoques regulatorios sobre inteligencia artificial en diferentes países del mundo.</button>
+            <button class="opc" onclick="resp(this,'g2q2',true,2)"><span class="l">c</span>Refutar el argumento de la "objetividad algorítmica" y alertar sobre el peligro de que la discriminación automatizada se vuelva invisible e inapelable, demandando regulación legal.</button>
+            <button class="opc" onclick="resp(this,'g2q2',false,3)"><span class="l">d</span>Persuadir a los lectores de que deben rechazar el uso de inteligencia artificial en cualquier proceso que afecte derechos individuales.</button>
+          </div>
+          <div class="fb" id="g2q2-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-extra"><div class="tipo-dot"></div>Contraargumento y refutación</div>
+            <div class="preg-txt">El autor menciona que los fabricantes responden que el algoritmo es <em>"objetivo porque no considera raza, género ni edad"</em>. ¿Cómo rebate el autor ese argumento?</div>
+          </div>
+          <div class="opciones" id="g2q3">
+            <button class="opc" onclick="resp(this,'g2q3',false,0)"><span class="l">a</span>Demostrando que los algoritmos sí consideran esas variables de manera encubierta en su código.</button>
+            <button class="opc" onclick="resp(this,'g2q3',true,1)"><span class="l">b</span>Señalando que el problema no está en las variables que el algoritmo usa, sino en los datos con los que fue entrenado, los cuales ya contienen décadas de exclusión estructural que el sistema aprende y amplifica.</button>
+            <button class="opc" onclick="resp(this,'g2q3',false,2)"><span class="l">c</span>Argumentando que ningún sistema automatizado puede ser objetivo porque siempre refleja las preferencias de quienes lo programan.</button>
+            <button class="opc" onclick="resp(this,'g2q3',false,3)"><span class="l">d</span>Citando estudios que muestran que los errores de los algoritmos afectan por igual a todos los grupos demográficos.</button>
+          </div>
+          <div class="fb" id="g2q3-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SCORE -->
+    <div class="score-wrap" id="score-wrap">
+      <div class="score-grid">
+        <div class="sc-item"><div class="sc-num" id="sc-c">0</div><div class="sc-lbl">correctas</div></div>
+        <div class="sc-item"><div class="sc-num">12</div><div class="sc-lbl">preguntas</div></div>
+        <div class="sc-item"><div class="sc-num" id="sc-p">0%</div><div class="sc-lbl">puntaje</div></div>
+      </div>
+      <div class="sc-desglose">
+        <div class="sc-cat"><div class="sc-cat-dot dot-tema"></div>Tema<span class="sc-cat-val" id="sc-tema">—</span></div>
+        <div class="sc-cat"><div class="sc-cat-dot dot-idea"></div>Idea central<span class="sc-cat-val" id="sc-idea">—</span></div>
+        <div class="sc-cat"><div class="sc-cat-dot dot-intencion"></div>Intención<span class="sc-cat-val" id="sc-int">—</span></div>
+        <div class="sc-cat"><div class="sc-cat-dot dot-extra"></div>Pregunta variable<span class="sc-cat-val" id="sc-ext">—</span></div>
+      </div>
+      <div class="sc-msg" id="sc-msg"></div>
+    </div>
+
+    <!-- BOTÓN LIMPIAR -->
+    <button class="btn-limpiar" onclick="reiniciar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/>
+        <path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+      </svg>
+      Limpiar resultados y volver a intentar
+    </button>
+
+  </div>
+</div>
+
+<script>
+const MSGS = [
+  'Sigue practicando. Intenta releer cada texto preguntándote: ¿de qué trata?, ¿qué defiende el autor?, ¿para qué lo escribe? Esas tres preguntas orientan las tres competencias.',
+  'Vas progresando. Algunos conceptos ya los manejas bien. Revisa en qué categoría tuviste más errores y concéntrate en los textos donde fallaste.',
+  'Buen resultado. Reconoces los tres conceptos con solidez. El desafío ahora es distinguir los matices entre la idea central y la intención, que suelen confundirse.',
+  'Excelente desempeño. Dominas la distinción entre tema, idea central e intención, y puedes identificar los recursos argumentativos que el autor usa para sostener su postura.'
+];
+
+const FB = {
+  g0q0: [
+    { ok: false, concepto: 'tema', texto: 'La neurociencia es una fuente que el autor cita para respaldar su argumento, pero no es el asunto central del texto. El tema debe abarcar todo el texto, no solo una parte. Aquí el texto también habla de cultura corporativa, organizaciones y resultados laborales: la neurociencia es solo una pieza de ese conjunto.' },
+    { ok: true,  concepto: 'tema', texto: 'Correcto. El tema es el asunto que articula todo el texto de principio a fin. Aquí ese asunto es la cultura de la hiperproductividad y la contradicción entre su promesa (más rendimiento) y lo que la evidencia muestra (más daño). Un buen tema no es una sola palabra suelta, sino una formulación que capta la tensión central del texto.' },
+    { ok: false, concepto: 'tema', texto: 'Las ventajas de la semana laboral corta son un argumento de apoyo, no el tema. El texto no es un estudio sobre jornadas laborales; es una crítica a la cultura que las hace necesarias. La diferencia es importante: el tema debe cubrir todo el texto, no solo el ejemplo que el autor usa para defender su punto.' },
+    { ok: false, concepto: 'tema', texto: 'Las aplicaciones digitales se mencionan de pasada como un elemento que refuerza la cultura de la ocupación permanente, pero el texto no gira en torno a ellas. Cuando el tema es muy estrecho o cubre solo un detalle, suele ser una pista de que no es el tema central.' }
+  ],
+  g0q1: [
+    { ok: false, concepto: 'idea central', texto: 'Este es un dato de apoyo, no la tesis. La idea central es la afirmación principal que el autor defiende a lo largo de todo el texto. Un dato aislado —aunque sea importante— no puede ser la idea central, porque no articula el argumento completo: no dice qué propone el autor ni por qué ese dato importa.' },
+    { ok: false, concepto: 'idea central', texto: 'Las plataformas digitales son mencionadas como factor que refuerza la cultura de la hiperproductividad, no como su causa principal ni como el foco del texto. Atribuir toda la responsabilidad a las plataformas simplifica el argumento del autor, que apunta a una cultura más amplia.' },
+    { ok: true,  concepto: 'idea central', texto: 'Correcto. La idea central integra los tres elementos del argumento: (1) la cultura de la ocupación como problema, (2) la evidencia científica que la contradice, y (3) el dato organizacional que demuestra la solución. Una buena idea central no es una frase del texto, sino una síntesis que captura la tesis y el razonamiento que la sostiene.' },
+    { ok: false, concepto: 'idea central', texto: 'Esta opción captura solo la conclusión práctica del texto, no la tesis completa. La idea central debe incluir el diagnóstico (la cultura de hiperproductividad es contraproducente) y la razón (el descanso es condición del rendimiento, no su opuesto). Quedarse con la recomendación sin el argumento que la justifica es una lectura parcial.' }
+  ],
+  g0q2: [
+    { ok: false, concepto: 'intención', texto: 'Un texto descriptivo y objetivo presentaría múltiples modelos sin valorarlos. Aquí el autor claramente toma partido: califica la hiperproductividad de "trampa", usa la palabra "ignora" para señalar un error, y concluye con una afirmación negativa contundente. Esas son marcas de una intención argumentativa y crítica, no descriptiva.' },
+    { ok: false, concepto: 'intención', texto: 'Informar sobre la neurociencia implicaría un texto centrado en hallazgos científicos, sin posición valorativa. Aquí la neurociencia es solo uno de los apoyos del argumento. La intención del autor va más allá de transmitir datos: quiere usar esos datos para cuestionar una práctica cultural. Informar y criticar son intenciones distintas.' },
+    { ok: true,  concepto: 'intención', texto: 'Correcto. Criticar y desmitificar es una intención argumentativa que combina dos movimientos: primero, señalar un error en la cultura dominante (glorificar la ocupación); segundo, rebatirlo con evidencia (neurociencia + resultados organizacionales). El autor no solo describe: juzga y argumenta. Las palabras valorativas ("trampa", "ignorar la evidencia") y la estructura del texto lo confirman.' },
+    { ok: false, concepto: 'intención', texto: 'El texto se dirige a una audiencia amplia, no específicamente a empleados, y no propone una acción concreta de negociación. La intención del autor es más amplia: cuestionar una cultura. Confundir la intención con el destinatario o con la consecuencia que el lector podría tomar es un error frecuente de lectura.' }
+  ],
+  g0q3: [
+    { ok: false, concepto: 'recurso argumentativo', texto: 'Una concesión reconoce algo válido en la posición contraria antes de refutarla (por ejemplo: "es cierto que la productividad importa, pero..."). Aquí no hay ese reconocimiento: el autor directamente rechaza la etiqueta de "eficiencia" y la sustituye por otra. Es un movimiento de refutación por redefinición, no de concesión.' },
+    { ok: false, concepto: 'recurso argumentativo', texto: 'Un ejemplo ilustra con un caso específico y concreto. Esta frase no presenta un caso: es una afirmación general que redefine un concepto. El autor no dice "miren lo que pasó en tal empresa"; dice "llamar a esto eficiencia es incorrecto". La ausencia de caso específico descarta la opción del ejemplo.' },
+    { ok: true,  concepto: 'recurso argumentativo', texto: 'Correcto. La redefinición por contraste es un recurso argumentativo poderoso: consiste en tomar el término positivo que usa el adversario ("eficiencia") y reemplazarlo por uno que revela lo que realmente ocurre ("ignorar la evidencia"). Este movimiento no refuta con datos sino con lenguaje: desplaza el significado para que el concepto deje de ser neutro y se vuelva problemático.' },
+    { ok: false, concepto: 'recurso argumentativo', texto: 'Una generalización parte de casos particulares para llegar a una conclusión amplia. Esta frase no cita casos: es una afirmación directa sobre una práctica cultural en general. El autor ya usó los datos de organizaciones como evidencia más arriba; aquí cierra con una declaración categórica, no con una inferencia inductiva.' }
+  ],
+
+  g1q0: [
+    { ok: false, concepto: 'tema', texto: 'La crisis alimentaria es una consecuencia de la degradación del suelo, no el tema principal. El texto no se centra en la escasez de alimentos ni en el hambre global; su foco está en por qué el deterioro del suelo no aparece en los indicadores económicos y qué implica esa omisión. El tema siempre debe cubrir el argumento completo, no solo una de sus consecuencias.' },
+    { ok: false, concepto: 'tema', texto: 'El texto no describe métodos para medir la fertilidad del suelo ni entra en aspectos técnicos agronómicos. Su argumento es económico y político: ¿por qué el suelo no se contabiliza? ¿Qué intereses protege esa omisión? Cuando la opción parece técnica pero el texto es argumentativo, conviene revisar qué pregunta central articula todo el texto.' },
+    { ok: true,  concepto: 'tema', texto: 'Correcto. El tema integra dos dimensiones que el texto desarrolla en paralelo: el problema ambiental (la degradación del suelo) y el problema económico-político (su invisibilidad en los sistemas de medición). Un buen tema capta esa doble dimensión, porque el texto no habla solo de suelo ni solo de PIB, sino de la relación entre ambos.' },
+    { ok: false, concepto: 'tema', texto: 'La resistencia política y empresarial se menciona como uno de los obstáculos para el cambio, pero no es el tema central. El texto no es un análisis de estrategias corporativas de bloqueo regulatorio; es una crítica a un sistema de medición que hace invisible la destrucción de un recurso natural fundamental. Quedarse con un detalle del argumento como si fuera el todo es un error frecuente.' }
+  ],
+  g1q1: [
+    { ok: false, concepto: 'idea central', texto: 'Este es un dato estadístico de apertura que establece la magnitud del problema. Pero la idea central no es el dato: es lo que el autor argumenta a partir de ese dato. Una cifra, por importante que sea, no puede ser la tesis de un texto argumentativo; es solo su punto de partida.' },
+    { ok: true,  concepto: 'idea central', texto: 'Correcto. La idea central articula el argumento completo: (1) el diagnóstico (la degradación del suelo no se registra), (2) la explicación (hacerlo implicaría cuestionar los modelos de crecimiento), y (3) la consecuencia (sin contabilizarlo, los incentivos de protección serán insuficientes). Una buena idea central no es una frase del texto sino una síntesis que une el qué, el por qué y el para qué del argumento.' },
+    { ok: false, concepto: 'idea central', texto: 'Esta opción describe una situación mencionada en el texto como dato positivo marginal, no como la tesis central. De hecho, el autor la introduce para contrastarla con la resistencia que aún existe: no es el corazón del argumento sino un ejemplo de que el cambio es posible aunque difícil.' },
+    { ok: false, concepto: 'idea central', texto: 'Esta afirmación es demasiado general y no captura la especificidad del argumento. El texto no es una crítica genérica al PIB: es una denuncia concreta sobre la omisión del suelo y las razones políticas de esa omisión. Identificar la idea central requiere capturar el argumento particular, no solo el tema amplio al que pertenece.' }
+  ],
+  g1q2: [
+    { ok: false, concepto: 'intención', texto: 'Un texto informativo y neutral presentaría datos sin valorarlos y sin tomar partido sobre sus causas o consecuencias. Aquí el autor califica la omisión de "no accidental", afirma que los modelos "fingen crear riqueza" y concluye que los incentivos "serán insuficientes". Esas son expresiones valorativas que revelan una intención crítica y denunciante, no descriptiva.' },
+    { ok: true,  concepto: 'intención', texto: 'Correcto. Denunciar implica señalar una injusticia o un problema que no es accidental, y argumentar que tiene consecuencias que exigen corrección. El autor hace exactamente eso: usa el adjetivo "no accidental" para señalar que la omisión del suelo en el PIB es una elección política, y concluye que mientras persista, los incentivos de protección serán insuficientes. Denunciar y advertir son formas de intención argumentativa con carga ética.' },
+    { ok: false, concepto: 'intención', texto: 'El texto no propone un sistema alternativo al PIB ni describe cómo construir uno. Mencionar las cuentas del capital natural como ejemplo no equivale a proponer un modelo. La intención del autor es diagnosticar y denunciar el problema, no diseñar la solución técnica. Confundir denuncia con propuesta técnica es un error de lectura frecuente.' },
+    { ok: false, concepto: 'intención', texto: 'El texto no hace comparaciones entre países: los menciona brevemente como evidencia de que el cambio es posible, pero sin analizar sus diferencias. Un texto comparativo habría estructurado su argumento alrededor del contraste entre casos; aquí ese contraste es solo un detalle dentro de un argumento más amplio.' }
+  ],
+  g1q3: [
+    { ok: false, concepto: 'implicación', texto: 'El texto no sostiene que el crecimiento y la protección ambiental sean incompatibles; de hecho, señala que algunos países están avanzando hacia sistemas de contabilidad que integran el capital natural. La implicación correcta no es una incompatibilidad radical, sino la necesidad de reformar el sistema de medición para que los incentivos cambien.' },
+    { ok: false, concepto: 'implicación', texto: 'El autor no acusa a los gobiernos de actuar de mala fe ni de publicar datos que saben incorrectos. Su argumento es más estructural: el sistema de medición vigente no está diseñado para registrar la destrucción de capital natural, y reformarlo implicaría cuestionar los modelos de crecimiento. Es una crítica al sistema, no una acusación de deshonestidad intencional.' },
+    { ok: true,  concepto: 'implicación', texto: 'Correcto. "Fingen crear riqueza" es una metáfora crítica que señala la ilusión de progreso que produce el PIB cuando no descuenta la destrucción de recursos no renovables. La implicación es que el sistema produce una imagen falsa de la realidad económica, lo cual hace urgente reformarlo. Identificar las implicaciones de un argumento es una habilidad de lectura más profunda: requiere ir más allá de lo que el texto dice explícitamente.' },
+    { ok: false, concepto: 'implicación', texto: 'El texto no identifica al sector agrícola como el principal responsable de la degradación; de hecho, señala que el problema está en el sistema de incentivos que hace que el suelo sea un recurso "gratuito" en los libros contables. Atribuir la responsabilidad a un sector específico es una lectura parcial que pierde de vista la crítica estructural del autor.' }
+  ],
+
+  g2q0: [
+    { ok: false, concepto: 'tema', texto: 'El texto no explica cómo funcionan técnicamente los algoritmos ni se centra en el sector salud como ámbito específico. La contratación, el crédito y el diagnóstico médico son ejemplos de aplicaciones, no el tema. El tema debe cubrir todo el argumento: aquí ese argumento es sobre los sesgos y su ocultamiento bajo la apariencia de objetividad, con implicaciones legales.' },
+    { ok: true,  concepto: 'tema', texto: 'Correcto. El tema articula dos dimensiones del texto: el problema (los sesgos discriminatorios en sistemas de IA) y la respuesta necesaria (marcos legales de regulación). Ninguna de las dos por separado es el tema completo: es su relación lo que el texto desarrolla de principio a fin.' },
+    { ok: false, concepto: 'tema', texto: 'El texto no compara la eficiencia de los algoritmos con la de los procesos humanos de selección. Su argumento no es "¿cuál es mejor?", sino "¿por qué los algoritmos no son tan neutrales como se dice?". Cuando una opción introduce una pregunta que el texto no plantea, generalmente no es el tema.' },
+    { ok: false, concepto: 'tema', texto: 'El texto no analiza estrategias corporativas de evasión regulatoria. La resistencia a la regulación es un contexto implícito, pero el argumento central gira en torno a los sesgos y su mecanismo de ocultamiento, no a las estrategias empresariales para evitar ser regulados.' }
+  ],
+  g2q1: [
+    { ok: false, concepto: 'idea central', texto: 'El autor no propone eliminar la IA de esas decisiones: propone regularla y hacerla auditable. Además, el argumento no se basa en que los algoritmos cometan "errores" en sentido técnico, sino en que funcionan correctamente respecto a datos que ya son sesgados. La distinción es crucial: el problema no es la imprecisión, sino la precisión aplicada a datos discriminatorios.' },
+    { ok: false, concepto: 'idea central', texto: 'El autor no acusa a las empresas de mentir deliberadamente: su argumento es más estructural. Señala que la objetividad que las empresas reclaman para sus algoritmos es cuestionable porque los datos de entrenamiento no son objetivos. Es una crítica al argumento, no una acusación de deshonestidad. Esa diferencia importa para entender la idea central correctamente.' },
+    { ok: true,  concepto: 'idea central', texto: 'Correcto. La idea central integra tres elementos: (1) el mecanismo (los algoritmos aprenden de datos sesgados), (2) el efecto perverso (la discriminación se vuelve invisible e inapelable), y (3) la consecuencia normativa (se requiere regulación legal). La frase "la automatización del sesgo no lo elimina; lo hace invisible e inapelable" es la formulación más concentrada de esa tesis en el texto.' },
+    { ok: false, concepto: 'idea central', texto: 'Esta afirmación es demasiado amplia y no captura el argumento específico del texto. El autor no cuestiona todos los usos de datos históricos en todos los contextos: su argumento es preciso —que los datos que reflejan exclusión estructural producen algoritmos que aprenden a excluir. La idea central debe ser tan específica como el argumento, no más general.' }
+  ],
+  g2q2: [
+    { ok: false, concepto: 'intención', texto: 'Un texto técnico explicaría el funcionamiento interno de los algoritmos, los tipos de aprendizaje automático o los mecanismos de sesgo desde un punto de vista neutral. Este texto no hace nada de eso: asume que el lector entiende qué es un algoritmo y se enfoca en sus consecuencias éticas y legales. La intención es argumentativa y denunciante, no explicativa.' },
+    { ok: false, concepto: 'intención', texto: 'El texto no compara marcos regulatorios de distintos países ni presenta casos nacionales. Un texto comparativo habría estructurado su argumento alrededor del contraste entre enfoques; aquí la regulación aparece solo como demanda final, no como objeto de análisis comparado.' },
+    { ok: true,  concepto: 'intención', texto: 'Correcto. Refutar y alertar son dos movimientos argumentativos distintos que el autor combina: primero desmonta el argumento de la objetividad algorítmica (refutación), luego señala el peligro de que el sesgo automatizado se vuelva inapelable (alerta) y concluye con una demanda de regulación. Identificar estos dos movimientos permite entender la intención con mayor precisión.' },
+    { ok: false, concepto: 'intención', texto: 'El autor no propone rechazar la IA en ningún contexto: propone regularla y hacerla auditable. Hay una diferencia importante entre alertar sobre los riesgos de algo y proponer su eliminación. La intención del autor es más matizada: reconoce que la IA se usa y seguirá usándose, y argumenta que por eso mismo necesita control legal.' }
+  ],
+  g2q3: [
+    { ok: false, concepto: 'refutación', texto: 'El autor no argumenta que el algoritmo use variables de identidad de manera encubierta. Su punto es diferente y más sutil: incluso si el algoritmo no usa explícitamente raza o género, aprende patrones de datos que contienen esas variables de manera implícita, porque reflejan décadas de exclusión. La refutación no es sobre el código del algoritmo sino sobre la calidad de sus datos de entrenamiento.' },
+    { ok: true,  concepto: 'refutación', texto: 'Correcto. Esta es la estructura lógica de la refutación: el autor acepta la premisa de los fabricantes (el algoritmo no usa esas variables explícitamente) pero ataca la suposición que está detrás de ella (que eso garantiza objetividad). El argumento es: no importa qué variables use el algoritmo si los datos con los que aprendió ya contienen el sesgo. Es una refutación por desplazamiento del problema, de las variables al origen de los datos.' },
+    { ok: false, concepto: 'refutación', texto: 'El autor no hace un argumento tan amplio como "ningún sistema puede ser objetivo porque siempre refleja a sus creadores". Su refutación es específica: el problema no es que haya programadores con prejuicios, sino que los datos históricos de entrenamiento contienen exclusión estructural. Una refutación específica es más fuerte que una afirmación general, y el autor lo sabe.' },
+    { ok: false, concepto: 'refutación', texto: 'El autor no cita estudios que demuestren impacto igual en todos los grupos; de hecho, afirma lo contrario: que los algoritmos favorecen ciertos perfiles y penalizan otros. Una opción que contradice lo que el texto dice explícitamente no puede ser la estrategia que el autor usa para refutar.' }
+  ]
+};
+
+const catMap = {
+  g0q0:'tema', g1q0:'tema', g2q0:'tema',
+  g0q1:'idea', g1q1:'idea', g2q1:'idea',
+  g0q2:'int',  g1q2:'int',  g2q2:'int',
+  g0q3:'ext',  g1q3:'ext',  g2q3:'ext'
+};
+const catScore = { tema:0, idea:0, int:0, ext:0 };
+
+let correctas = 0, respondidas = 0;
+const completado = [false, false, false];
+
+function resp(btn, gid, esOk, idx) {
+  const grupo = document.getElementById(gid);
+  if (grupo.dataset.done) return;
+  grupo.dataset.done = '1';
+  grupo.querySelectorAll('.opc').forEach(b => b.disabled = true);
+  btn.classList.add(esOk ? 'ok' : 'mal');
+  const data = FB[gid][idx];
+  const fb = document.getElementById(gid + '-fb');
+  fb.innerHTML = '<div class="fb-concepto">' + (esOk ? '✓ ' : '✗ ') + data.concepto + '</div>' + data.texto;
+  fb.className = 'fb show ' + (esOk ? 'fb-ok' : 'fb-mal');
+  if (esOk) { correctas++; catScore[catMap[gid]]++; }
+  respondidas++;
+  actualizarProgreso();
+  if (respondidas === 12) mostrarScore();
+}
+
+function actualizarProgreso() {
+  for (let p = 0; p < 3; p++) {
+    const ids = ['g'+p+'q0','g'+p+'q1','g'+p+'q2','g'+p+'q3'];
+    const done = ids.filter(id => document.getElementById(id).dataset.done).length;
+    completado[p] = done === 4;
+    if (completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg done';
+      const tab = document.getElementById('tab'+p);
+      tab.classList.remove('on');
+      tab.classList.add('completed');
+    }
+  }
+}
+
+function irA(n) {
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    if (!completado[i]) t.classList.toggle('on', i===n);
+  });
+  for (let p = 0; p < 3; p++) {
+    if (!completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg' + (p===n ? ' active' : '');
+    }
+  }
+}
+
+function fmt(n, d) { return n + '/' + d; }
+
+function mostrarScore() {
+  const w = document.getElementById('score-wrap');
+  w.classList.add('show');
+  document.getElementById('sc-c').textContent = correctas;
+  document.getElementById('sc-p').textContent = Math.round(correctas/12*100) + '%';
+  document.getElementById('sc-tema').textContent = fmt(catScore.tema, 3);
+  document.getElementById('sc-idea').textContent = fmt(catScore.idea, 3);
+  document.getElementById('sc-int').textContent  = fmt(catScore.int,  3);
+  document.getElementById('sc-ext').textContent  = fmt(catScore.ext,  3);
+  const nivel = correctas <= 4 ? 0 : correctas <= 8 ? 1 : correctas <= 11 ? 2 : 3;
+  document.getElementById('sc-msg').textContent = MSGS[nivel];
+}
+
+function reiniciar() {
+  correctas = 0; respondidas = 0;
+  completado.fill(false);
+  Object.keys(catScore).forEach(k => catScore[k] = 0);
+  document.querySelectorAll('.opciones').forEach(g => delete g.dataset.done);
+  document.querySelectorAll('.opc').forEach(b => { b.classList.remove('ok','mal'); b.disabled = false; });
+  document.querySelectorAll('.fb').forEach(f => { f.className = 'fb'; f.innerHTML = ''; });
+  document.getElementById('score-wrap').classList.remove('show');
+  for (let p = 0; p < 3; p++) {
+    document.getElementById('ps'+p).className = 'prog-seg';
+    document.getElementById('tab'+p).classList.remove('completed','on');
+  }
+  irA(0);
+  document.getElementById('tab0').classList.add('on');
+  document.getElementById('ps0').className = 'prog-seg active';
+}
+</script>
+</body>
+</html>

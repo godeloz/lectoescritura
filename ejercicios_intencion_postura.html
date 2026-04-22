@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios · Intención y postura del autor</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #0F6E56; --accent-light: #E1F5EE; --accent-mid: #1D9E75;
+  --blue: #185FA5; --blue-light: #E6F1FB; --blue-mid: #0C447C;
+  --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
+  --purple: #534AB7; --purple-light: #EEEDFE; --purple-dark: #3C3489;
+  --teal-text: #085041;
+  --bg: #ffffff; --bg-secondary: #f5f4f0; --bg-tertiary: #eeece6;
+  --text: #1a1a1a; --text-muted: #6b6b68; --text-hint: #9a9893;
+  --border: rgba(0,0,0,0.12); --border-med: rgba(0,0,0,0.22);
+  --ok-bg: #E1F5EE; --ok-text: #085041; --ok-border: #1D9E75;
+  --mal-bg: #FCEBEB; --mal-text: #791F1F; --mal-border: #E24B4A;
+  --radius-md: 8px; --radius-lg: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2e2e2b;
+    --text: #ede9e3; --text-muted: #9a9893; --text-hint: #6b6b68;
+    --border: rgba(255,255,255,0.1); --border-med: rgba(255,255,255,0.2);
+    --accent-light: #04342C; --blue-light: #042C53; --amber-light: #412402; --purple-light: #26215C;
+    --accent: #5DCAA5; --blue: #85B7EB; --amber: #EF9F27; --purple: #AFA9EC;
+    --teal-text: #9FE1CB; --blue-mid: #B5D4F4; --amber-dark: #FAC775; --purple-dark: #CECBF6;
+    --ok-bg: #04342C; --ok-text: #9FE1CB; --ok-border: #1D9E75;
+    --mal-bg: #501313; --mal-text: #F7C1C1; --mal-border: #E24B4A;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-tertiary);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 4rem;
+}
+
+.page-shell { width: 100%; max-width: 720px; }
+
+/* HEADER */
+.site-header {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--purple-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-icon svg { width: 22px; height: 22px; }
+.header-overline {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 3px;
+}
+.header-title { font-size: 18px; font-weight: 500; color: var(--text); line-height: 1.2; margin-bottom: 4px; }
+.header-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+.header-pills { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.pill { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.pill-purple { background: var(--purple-light); color: var(--purple-dark); }
+.pill-teal { background: var(--accent-light); color: var(--teal-text); }
+.pill-blue { background: var(--blue-light); color: var(--blue-mid); }
+.pill-amber { background: var(--amber-light); color: var(--amber-dark); }
+
+/* CARD */
+.card {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+}
+
+/* PROGRESS */
+.prog-bar { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+.prog-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.35s; }
+.prog-seg.active { background: #AFA9EC; }
+.prog-seg.done { background: var(--accent-mid); }
+
+/* TABS */
+.nav-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.nav-tab {
+  flex: 1; font-size: 12px; padding: 0.45rem 0.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  cursor: pointer; background: transparent; color: var(--text-muted);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.nav-tab:hover { background: var(--bg-secondary); }
+.nav-tab.on { background: var(--bg-secondary); color: var(--text); font-weight: 500; border-color: var(--border-med); }
+.nav-tab.completed { border-color: var(--ok-border); color: var(--ok-text); }
+
+/* PANEL */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.panel-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.tipo-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+/* CARRERA TAGS */
+.carreras-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0.875rem; }
+.carrera-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: 20px;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: 0.5px solid var(--border); font-weight: 500;
+}
+
+/* TEXTO */
+.texto-card {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-secondary);
+}
+.texto-titulo { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.texto-autor { font-size: 12px; color: var(--text-hint); margin-bottom: 0.75rem; padding-bottom: 0.625rem; border-bottom: 0.5px solid var(--border); }
+.cuerpo { font-size: 14px; line-height: 1.75; color: var(--text); }
+.cuerpo em { font-style: italic; }
+
+/* PREGUNTAS */
+.preguntas { display: flex; flex-direction: column; gap: 1rem; }
+.preg-bloque { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.preg-header { padding: 0.75rem 1rem; border-bottom: 0.5px solid var(--border); background: var(--bg-secondary); }
+.preg-tipo { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+.tipo-intencion { color: var(--purple); }
+.tipo-postura { color: var(--accent); }
+.tipo-arg { color: var(--amber); }
+.preg-txt { font-size: 13.5px; color: var(--text); line-height: 1.5; }
+.preg-txt em { background: var(--amber-light); color: var(--amber-dark); padding: 1px 5px; border-radius: 3px; font-style: normal; }
+
+.opciones { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
+.opc {
+  width: 100%; text-align: left; font-size: 13px;
+  padding: 0.5rem 0.875rem; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); cursor: pointer;
+  color: var(--text); background: var(--bg);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.45; transition: background 0.12s;
+}
+.opc:hover:not(:disabled) { background: var(--bg-secondary); }
+.opc:disabled { cursor: default; }
+.opc .l { font-size: 11px; font-weight: 500; color: var(--text-muted); min-width: 14px; padding-top: 1px; flex-shrink: 0; }
+.opc.ok { background: var(--ok-bg); border-color: var(--ok-border); }
+.opc.ok .l { color: var(--ok-text); }
+.opc.mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opc.mal .l { color: var(--mal-text); }
+
+/* FEEDBACK */
+.fb {
+  font-size: 13px; line-height: 1.55;
+  padding: 0; max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.2s;
+}
+.fb.show { max-height: 120px; padding: 0.625rem 1rem 0.875rem; }
+.fb-ok { color: var(--ok-text); background: var(--ok-bg); }
+.fb-mal { color: var(--mal-text); background: var(--mal-bg); }
+.fb-concepto { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; opacity: 0.75; }
+
+/* SCORE */
+.score-wrap {
+  margin-top: 1.5rem; padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  background: var(--bg-secondary); display: none;
+}
+.score-wrap.show { display: block; }
+.score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+.sc-item { text-align: center; }
+.sc-num { font-size: 24px; font-weight: 500; color: var(--text); }
+.sc-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.sc-msg { font-size: 13px; color: var(--text-muted); text-align: center; padding-top: 0.875rem; border-top: 0.5px solid var(--border); line-height: 1.55; }
+
+/* BOTÓN LIMPIAR */
+.btn-limpiar {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 1rem; padding: 0.6rem 1rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border-med);
+  cursor: pointer; background: transparent; color: var(--text-muted);
+  font-size: 13px; transition: background 0.12s, color 0.12s;
+}
+.btn-limpiar:hover { background: var(--bg-tertiary); color: var(--text); }
+.btn-limpiar svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+@media (max-width: 520px) {
+  .site-header { flex-wrap: wrap; }
+  .header-pills { margin-left: 0; flex-direction: row; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Intención y postura del autor</div>
+      <div class="header-desc">3 textos · 9 preguntas de selección múltiple</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-purple">Sesión 1</span>
+      <span class="pill pill-teal">Nivel básico</span>
+    </div>
+  </header>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="prog-bar">
+      <div class="prog-seg active" id="ps0"></div>
+      <div class="prog-seg" id="ps1"></div>
+      <div class="prog-seg" id="ps2"></div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="nav-tab on" id="tab0" onclick="irA(0)">Texto 1</button>
+      <button class="nav-tab" id="tab1" onclick="irA(1)">Texto 2</button>
+      <button class="nav-tab" id="tab2" onclick="irA(2)">Texto 3</button>
+    </div>
+
+    <!-- ══ PANEL 0 ══ Derecho / Negocios Internacionales / Administración -->
+    <div class="panel active" id="panel0">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 1 de 3</span>
+        <span class="tipo-badge pill-purple">Derecho y negocios</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Derecho</span>
+        <span class="carrera-tag">Negocios Internacionales</span>
+        <span class="carrera-tag">Administración de Negocios</span>
+        <span class="carrera-tag">Finanzas</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">Contratos inteligentes: ¿eficiencia o riesgo?</div>
+        <div class="texto-autor">Adaptado de una columna jurídico-empresarial</div>
+        <div class="cuerpo">Los contratos inteligentes —programas que se ejecutan automáticamente cuando se cumplen ciertas condiciones— son presentados por sus promotores como la solución definitiva a la lentitud y los costos del derecho contractual tradicional. Sin embargo, su adopción masiva plantea riesgos que sus defensores suelen minimizar: ¿qué ocurre cuando el código tiene un error? ¿Quién responde si la automatización produce un resultado injusto? El derecho no es solo un mecanismo de ejecución; es también un sistema de interpretación y equidad. Adoptar contratos inteligentes sin un marco regulatorio sólido equivale a construir una autopista sin señales de tránsito.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion">Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor de este texto?</div>
+          </div>
+          <div class="opciones" id="g0q0">
+            <button class="opc" onclick="resp(this,'g0q0',false,0)"><span class="l">a</span>Informar objetivamente sobre el funcionamiento técnico de los contratos inteligentes.</button>
+            <button class="opc" onclick="resp(this,'g0q0',false,1)"><span class="l">b</span>Promover la adopción de contratos inteligentes como alternativa al derecho tradicional.</button>
+            <button class="opc" onclick="resp(this,'g0q0',true,2)"><span class="l">c</span>Advertir sobre los riesgos de adoptar contratos inteligentes sin regulación adecuada, cuestionando el optimismo de sus defensores.</button>
+          </div>
+          <div class="fb" id="g0q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-postura">Postura del autor</div>
+            <div class="preg-txt">¿Cómo describirías la postura del autor frente a los contratos inteligentes?</div>
+          </div>
+          <div class="opciones" id="g0q1">
+            <button class="opc" onclick="resp(this,'g0q1',false,0)"><span class="l">a</span>Favorable: considera que son superiores al derecho contractual tradicional en todos los aspectos.</button>
+            <button class="opc" onclick="resp(this,'g0q1',true,1)"><span class="l">b</span>Crítica y cautelosa: reconoce su utilidad potencial pero señala que sin regulación representan un riesgo serio.</button>
+            <button class="opc" onclick="resp(this,'g0q1',false,2)"><span class="l">c</span>Neutral: expone las dos posiciones sin comprometerse con ninguna.</button>
+          </div>
+          <div class="fb" id="g0q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-arg">Contraargumento implícito</div>
+            <div class="preg-txt">El autor menciona que los promotores presentan los contratos inteligentes como "la solución definitiva". ¿Qué función cumple esta referencia dentro del texto?</div>
+          </div>
+          <div class="opciones" id="g0q2">
+            <button class="opc" onclick="resp(this,'g0q2',false,0)"><span class="l">a</span>Presentar la posición de los promotores como válida y suficiente para justificar la adopción inmediata.</button>
+            <button class="opc" onclick="resp(this,'g0q2',true,1)"><span class="l">b</span>Introducir la posición contraria para luego rebatirla y reforzar su propia advertencia sobre los riesgos.</button>
+            <button class="opc" onclick="resp(this,'g0q2',false,2)"><span class="l">c</span>Resumir el consenso académico sobre el tema antes de desarrollar su argumento central.</button>
+          </div>
+          <div class="fb" id="g0q2-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PANEL 1 ══ Ingeniería / Psicología / Sistemas -->
+    <div class="panel" id="panel1">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 2 de 3</span>
+        <span class="tipo-badge pill-blue">Tecnología y conducta</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Psicología</span>
+        <span class="carrera-tag">Ingeniería de Sistemas</span>
+        <span class="carrera-tag">Ingeniería Física</span>
+        <span class="carrera-tag">Ingeniería Mecánica</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">La ilusión del usuario informado</div>
+        <div class="texto-autor">Adaptado de un artículo sobre diseño de interfaces y ética digital</div>
+        <div class="cuerpo">Cada vez que aceptamos los términos y condiciones de una aplicación, se supone que hemos tomado una decisión informada. En la práctica, leer esos documentos tomaría en promedio 76 horas al año por persona. Las empresas tecnológicas lo saben, y diseñan interfaces que explotan los sesgos cognitivos del usuario: botones de aceptar más grandes, opciones de rechazo enterradas en menús, lenguaje técnico inaccesible. Llamar "consentimiento" a este proceso es un eufemismo conveniente. La ingeniería de interfaces no es neutral: cuando diseña para la aceptación automática, se convierte en una herramienta de manipulación que merece ser regulada con urgencia.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion">Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor?</div>
+          </div>
+          <div class="opciones" id="g1q0">
+            <button class="opc" onclick="resp(this,'g1q0',false,0)"><span class="l">a</span>Explicar cómo funciona técnicamente el diseño de interfaces de usuario en aplicaciones digitales.</button>
+            <button class="opc" onclick="resp(this,'g1q0',false,1)"><span class="l">b</span>Comparar distintas plataformas digitales según su nivel de transparencia con los usuarios.</button>
+            <button class="opc" onclick="resp(this,'g1q0',true,2)"><span class="l">c</span>Denunciar que el diseño de interfaces manipula el comportamiento del usuario y exigir que esto sea regulado.</button>
+          </div>
+          <div class="fb" id="g1q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-postura">Postura del autor</div>
+            <div class="preg-txt">¿Cuál de las siguientes frases del texto revela con mayor claridad la postura del autor?</div>
+          </div>
+          <div class="opciones" id="g1q1">
+            <button class="opc" onclick="resp(this,'g1q1',false,0)"><span class="l">a</span>"Leer esos documentos tomaría en promedio 76 horas al año por persona."</button>
+            <button class="opc" onclick="resp(this,'g1q1',false,1)"><span class="l">b</span>"Cada vez que aceptamos los términos y condiciones de una aplicación, se supone que hemos tomado una decisión informada."</button>
+            <button class="opc" onclick="resp(this,'g1q1',true,2)"><span class="l">c</span>"La ingeniería de interfaces no es neutral: cuando diseña para la aceptación automática, se convierte en una herramienta de manipulación que merece ser regulada con urgencia."</button>
+          </div>
+          <div class="fb" id="g1q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-arg">Tensión interna del texto</div>
+            <div class="preg-txt">El autor afirma que llamar "consentimiento" a aceptar los términos de uso es <em>"un eufemismo conveniente"</em>. ¿Qué tensión señala esta expresión?</div>
+          </div>
+          <div class="opciones" id="g1q2">
+            <button class="opc" onclick="resp(this,'g1q2',false,0)"><span class="l">a</span>La diferencia entre el lenguaje técnico y el lenguaje cotidiano en el ámbito digital.</button>
+            <button class="opc" onclick="resp(this,'g1q2',true,1)"><span class="l">b</span>La contradicción entre lo que el término "consentimiento" implica (una decisión libre e informada) y lo que realmente ocurre (una aceptación automática inducida por el diseño).</button>
+            <button class="opc" onclick="resp(this,'g1q2',false,2)"><span class="l">c</span>La dificultad de los usuarios para comprender los documentos legales de las empresas tecnológicas.</button>
+          </div>
+          <div class="fb" id="g1q2-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PANEL 2 ══ Agronomía / Ingeniería Física / Sistemas -->
+    <div class="panel" id="panel2">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 3 de 3</span>
+        <span class="tipo-badge pill-amber">Ciencia y decisión pública</span>
+      </div>
+      <div class="carreras-row">
+        <span class="carrera-tag">Ingeniería Agronómica</span>
+        <span class="carrera-tag">Ingeniería Física</span>
+        <span class="carrera-tag">Ingeniería de Sistemas</span>
+        <span class="carrera-tag">Administración de Negocios</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">Cuando los datos no bastan</div>
+        <div class="texto-autor">Adaptado de un artículo sobre ciencia y política pública</div>
+        <div class="cuerpo">La evidencia científica sobre el cambio climático es abrumadora y prácticamente unánime entre los investigadores. Sin embargo, esta unanimidad no ha producido las transformaciones de política pública que la crisis exige. Quienes sostienen que "los datos hablan por sí solos" ignoran que las decisiones colectivas no dependen solo de la información, sino de valores, intereses económicos y narrativas culturales que compiten con ella. Los científicos pueden describir el problema con precisión; pero convencer a una sociedad de actuar requiere mucho más que cifras: requiere comprender cómo se forman las creencias y quién tiene el poder de cambiarlas.</div>
+      </div>
+      <div class="preguntas">
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-intencion">Intención comunicativa</div>
+            <div class="preg-txt">¿Cuál es la intención comunicativa del autor?</div>
+          </div>
+          <div class="opciones" id="g2q0">
+            <button class="opc" onclick="resp(this,'g2q0',false,0)"><span class="l">a</span>Cuestionar la validez de la evidencia científica sobre el cambio climático.</button>
+            <button class="opc" onclick="resp(this,'g2q0',true,1)"><span class="l">b</span>Argumentar que la información científica por sí sola es insuficiente para generar cambios de política pública, e identificar otros factores que intervienen.</button>
+            <button class="opc" onclick="resp(this,'g2q0',false,2)"><span class="l">c</span>Defender que los gobiernos deben delegar las decisiones climáticas exclusivamente en la comunidad científica.</button>
+          </div>
+          <div class="fb" id="g2q0-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-postura">Postura del autor</div>
+            <div class="preg-txt">La postura del autor frente a la relación entre ciencia y política pública es:</div>
+          </div>
+          <div class="opciones" id="g2q1">
+            <button class="opc" onclick="resp(this,'g2q1',false,0)"><span class="l">a</span>Escéptica frente a la ciencia: considera que los datos climáticos son exagerados o poco confiables.</button>
+            <button class="opc" onclick="resp(this,'g2q1',false,1)"><span class="l">b</span>Optimista: cree que con más datos y mejor comunicación la sociedad actuará correctamente.</button>
+            <button class="opc" onclick="resp(this,'g2q1',true,2)"><span class="l">c</span>Realista y crítica: acepta la solidez de la ciencia pero señala que el cambio requiere entender también los factores sociales, económicos y culturales que condicionan las decisiones.</button>
+          </div>
+          <div class="fb" id="g2q1-fb"></div>
+        </div>
+
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-arg">Supuesto que el autor refuta</div>
+            <div class="preg-txt">El autor critica a quienes sostienen que <em>"los datos hablan por sí solos"</em>. ¿Qué supuesto está refutando con esa crítica?</div>
+          </div>
+          <div class="opciones" id="g2q2">
+            <button class="opc" onclick="resp(this,'g2q2',false,0)"><span class="l">a</span>Que los científicos deben comunicar sus hallazgos en un lenguaje más accesible para el público general.</button>
+            <button class="opc" onclick="resp(this,'g2q2',false,1)"><span class="l">b</span>Que las políticas públicas siempre están determinadas por intereses económicos y no por evidencia.</button>
+            <button class="opc" onclick="resp(this,'g2q2',true,2)"><span class="l">c</span>Que la información objetiva y suficiente produce automáticamente cambios en el comportamiento y las decisiones colectivas, ignorando el peso de los valores, intereses y narrativas culturales.</button>
+          </div>
+          <div class="fb" id="g2q2-fb"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SCORE -->
+    <div class="score-wrap" id="score-wrap">
+      <div class="score-grid">
+        <div class="sc-item"><div class="sc-num" id="sc-c">0</div><div class="sc-lbl">correctas</div></div>
+        <div class="sc-item"><div class="sc-num">9</div><div class="sc-lbl">preguntas</div></div>
+        <div class="sc-item"><div class="sc-num" id="sc-p">0%</div><div class="sc-lbl">puntaje</div></div>
+      </div>
+      <div class="sc-msg" id="sc-msg"></div>
+    </div>
+
+    <!-- BOTÓN LIMPIAR (siempre visible al fondo) -->
+    <button class="btn-limpiar" onclick="reiniciar()" style="margin-top:1.25rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/>
+      </svg>
+      Limpiar resultados y volver a intentar
+    </button>
+
+  </div>
+</div>
+
+<script>
+const MSGS = [
+  'Sigue practicando. Vuelve a leer los textos identificando palabras valorativas y preguntas retóricas: son marcas claras de intención y postura.',
+  'Buen intento. Algunos conceptos ya los tienes claros. Revisa las preguntas sobre postura: busca siempre qué defiende el autor, no solo qué describe.',
+  'Muy buen resultado. Reconoces la intención y la postura con precisión. Sigue trabajando la lectura de contraargumentos.',
+  'Excelente dominio. Identificas con claridad la intención, la postura y los recursos argumentativos que usa el autor.'
+];
+
+const FB = {
+  g0q0: [
+    { ok: false, concepto: 'intención', texto: 'Un texto informativo presenta datos de manera equilibrada y sin tomar partido. Este texto sí toma partido: usa preguntas retóricas, advierte sobre riesgos y critica a quienes minimizan los problemas. Esas son marcas de intención argumentativa, no expositiva.' },
+    { ok: false, concepto: 'intención', texto: 'Si el autor promoviera los contratos inteligentes, usaría un tono favorable y destacaría sus ventajas. Aquí ocurre lo contrario: las preguntas retóricas ("¿qué ocurre cuando el código tiene un error?") y la metáfora final ("autopista sin señales") muestran una postura crítica y preventiva.' },
+    { ok: true, concepto: 'intención', texto: 'Correcto. La intención del autor es advertir. Lo revela el uso de preguntas retóricas que señalan riesgos, la crítica explícita a los "promotores" que minimizan problemas, y la metáfora final que resume el peligro de actuar sin regulación. Advertir implica reconocer un problema y urgir a tomar precauciones.' }
+  ],
+  g0q1: [
+    { ok: false, concepto: 'postura', texto: 'Una postura favorable usaría lenguaje positivo y no plantearía objeciones. El autor hace exactamente lo contrario: plantea preguntas que los defensores no responden y concluye con una metáfora que enfatiza el riesgo. No hay aquí ningún respaldo a la adopción sin condiciones.' },
+    { ok: true, concepto: 'postura', texto: 'Correcto. La postura del autor es crítica pero matizada: no rechaza los contratos inteligentes en absoluto (reconoce que existen razones para su uso), pero condiciona su aceptación a la existencia de un marco regulatorio sólido. Esa combinación de apertura y cautela es característica de una postura crítica equilibrada.' },
+    { ok: false, concepto: 'postura', texto: 'Una postura neutral evitaría expresar valoraciones y presentaría los argumentos de cada lado con igual peso. Aquí el autor claramente se posiciona en contra de la adopción irrestricta: usa preguntas retóricas, califica de incompleta la visión de los promotores y cierra con una metáfora que enfatiza el peligro. No es neutral.' }
+  ],
+  g0q2: [
+    { ok: false, concepto: 'contraargumento', texto: 'Si el autor considerara válida la posición de los promotores, no la cuestionaría a continuación. Mencionar la posición contraria para luego rebatirla es una estrategia argumentativa clásica: se llama "concesión retórica". El autor la usa para mostrar que conoce el argumento opuesto y para hacer más sólida su crítica.' },
+    { ok: true, concepto: 'contraargumento', texto: 'Correcto. Esta es la estructura típica del argumento por concesión y refutación: el autor presenta la posición de sus adversarios ("solución definitiva") y de inmediato la confronta con preguntas que esa posición no responde. Esta técnica fortalece el argumento propio porque demuestra que el autor conoce —y supera— la posición contraria.' },
+    { ok: false, concepto: 'contraargumento', texto: 'El autor no está resumiendo un consenso académico; está presentando una posición específica (la de los promotores) para luego cuestionarla. La diferencia es importante: citar consenso académico da autoridad al argumento, mientras que presentar la posición contraria para rebatirla es una estrategia de refutación.' }
+  ],
+  g1q0: [
+    { ok: false, concepto: 'intención', texto: 'Un texto que solo explica el funcionamiento técnico de las interfaces sería descriptivo y neutral. Este texto va mucho más allá: califica el diseño de "manipulación", usa el término "eufemismo" para cuestionar el lenguaje de las empresas y termina exigiendo regulación. Esas son marcas claras de denuncia y persuasión, no de explicación técnica.' },
+    { ok: false, concepto: 'intención', texto: 'El texto no compara plataformas entre sí ni evalúa cuáles son más o menos transparentes. Su argumento es más general: cuestiona la práctica del diseño persuasivo como categoría y reclama regulación para todo el sector. Un texto comparativo habría presentado casos específicos y contrastados.' },
+    { ok: true, concepto: 'intención', texto: 'Correcto. La intención es denunciar, que es una forma de intención argumentativa orientada a visibilizar una injusticia y a exigir una acción correctiva. Las señales en el texto son claras: el uso de "manipulación" y "eufemismo" como términos valorativos negativos, el dato de las 76 horas como evidencia de la imposibilidad real del consentimiento, y la demanda explícita de regulación al final.' }
+  ],
+  g1q1: [
+    { ok: false, concepto: 'postura', texto: 'Este dato cumple una función de evidencia: muestra que leer los términos es prácticamente imposible. Pero es un dato relativamente neutro —informa sin revelar directamente la valoración del autor. La postura se expresa principalmente en las afirmaciones valorativas, no en los datos estadísticos.' },
+    { ok: false, concepto: 'postura', texto: 'Esta frase describe la situación tal como se presenta oficialmente ("se supone que"), pero su tono es más descriptivo que valorativo. La postura del autor aparece más claramente cuando usa adjetivos o calificaciones directas sobre lo que ocurre, no cuando describe lo que se supone que debería ocurrir.' },
+    { ok: true, concepto: 'postura', texto: 'Correcto. Esta frase concentra la postura del autor en tres elementos: (1) la negación de la neutralidad del diseño ("no es neutral"), que desmonta el argumento técnico; (2) la calificación moral ("herramienta de manipulación"), que ubica el problema en el terreno ético; y (3) la exigencia de acción ("merece ser regulada con urgencia"), que convierte la crítica en demanda. Cuando el autor califica, juzga y exige, ahí está su postura.' }
+  ],
+  g1q2: [
+    { ok: false, concepto: 'tensión', texto: 'La dificultad del lenguaje técnico es un problema real, pero no es lo que el autor señala aquí. "Eufemismo conveniente" no alude a que las palabras sean difíciles de entender, sino a que el término "consentimiento" encubre una realidad que no corresponde con su significado verdadero. Es una crítica a la honestidad del lenguaje, no a su complejidad.' },
+    { ok: true, concepto: 'tensión', texto: 'Correcto. Un eufemismo es una palabra que suaviza o disfraza una realidad incómoda. Al llamar "eufemismo conveniente" al término "consentimiento", el autor señala una contradicción entre el significado real de esa palabra (decisión libre, consciente e informada) y lo que en realidad ocurre (una aceptación casi forzada por el diseño de la interfaz). Esta tensión entre el nombre y la realidad es el núcleo de su crítica.' },
+    { ok: false, concepto: 'tensión', texto: 'La dificultad de comprensión de los documentos legales es un argumento secundario en el texto (apoyado por el dato de las 76 horas). Pero "eufemismo conveniente" no apunta a ese problema: apunta a algo más profundo, que es la falsedad del concepto de consentimiento cuando el diseño ya ha eliminado la posibilidad real de decidir libremente.' }
+  ],
+  g2q0: [
+    { ok: false, concepto: 'intención', texto: 'El autor nunca pone en duda la validez de la ciencia climática: afirma que la evidencia es "abrumadora y prácticamente unánime". Cuestionar la ciencia sería lo opuesto a su argumento. Confundir "la ciencia es insuficiente para generar cambio político" con "la ciencia no es válida" es un error de lectura frecuente que importa detectar.' },
+    { ok: true, concepto: 'intención', texto: 'Correcto. El autor argumenta, es decir, defiende una tesis con razones. Su tesis es que los datos científicos, por sólidos que sean, no bastan para producir transformaciones sociales, porque las decisiones colectivas también dependen de valores, intereses y narrativas. Su intención es ampliar la comprensión del problema más allá de la lógica de "más datos = más acción".' },
+    { ok: false, concepto: 'intención', texto: 'El texto no propone delegar decisiones en los científicos; de hecho, reconoce que la ciencia sola no puede producir el cambio. Sugerir ese rol exclusivo para la ciencia sería contradecir el argumento central del autor, que es precisamente que las decisiones colectivas involucran actores, valores e intereses que van más allá del conocimiento técnico.' }
+  ],
+  g2q1: [
+    { ok: false, concepto: 'postura', texto: 'El autor no cuestiona los datos climáticos en ningún momento: los describe como "abrumadores" y "prácticamente unánimes". Su crítica no va hacia la ciencia sino hacia quienes creen que la sola existencia de datos produce automáticamente el cambio político. Escepticismo ante la ciencia y escepticismo ante la suficiencia política de la ciencia son cosas muy distintas.' },
+    { ok: false, concepto: 'postura', texto: 'Una postura optimista confiaría en que mejorando la comunicación científica el problema se resolvería. El autor descarta esa salida: argumenta que los obstáculos son estructurales (valores, intereses económicos, narrativas culturales) y no pueden superarse solo con más o mejor información. Su tono no es de esperanza sino de análisis crítico de la complejidad.' },
+    { ok: true, concepto: 'postura', texto: 'Correcto. La postura realista y crítica reconoce la solidez de lo que critica (la ciencia es válida) pero señala sus límites en el terreno político. El autor no niega el valor del conocimiento científico; lo que niega es la ingenuidad de creer que ese conocimiento, por sí solo, mueve a la acción. Esta postura distingue entre el plano epistémico (qué sabemos) y el plano político (cómo se toman decisiones).' }
+  ],
+  g2q2: [
+    { ok: false, concepto: 'supuesto refutado', texto: 'La accesibilidad del lenguaje científico es un tema distinto al que plantea el texto. El autor no dice que el problema sea de comunicación o divulgación; dice que incluso si los datos fueran perfectamente claros y conocidos, eso no garantizaría un cambio de política. El obstáculo que señala es más profundo: son los valores, los intereses y las narrativas que compiten con los datos.' },
+    { ok: false, concepto: 'supuesto refutado', texto: 'El autor no afirma que los intereses económicos siempre se impongan sobre la evidencia; eso sería un argumento determinista que el texto no sostiene. Lo que dice es que esos intereses son uno de los factores que compiten con la evidencia, junto con los valores y las narrativas culturales. La diferencia importa: no todo está determinado por lo económico.' },
+    { ok: true, concepto: 'supuesto refutado', texto: 'Correcto. El supuesto que el autor refuta es el de la "racionalidad automática": la idea de que las personas y los gobiernos actúan directamente a partir de la evidencia disponible. Esta visión, muy común en contextos científicos y técnicos, ignora que las decisiones colectivas también están mediadas por creencias previas, intereses en juego y estructuras de poder. Refutar ese supuesto es el núcleo del argumento.' }
+  ]
+};
+
+let correctas = 0, respondidas = 0;
+const completado = [false, false, false];
+
+function resp(btn, gid, esOk, idx) {
+  const grupo = document.getElementById(gid);
+  if (grupo.dataset.done) return;
+  grupo.dataset.done = '1';
+  grupo.querySelectorAll('.opc').forEach(b => b.disabled = true);
+  btn.classList.add(esOk ? 'ok' : 'mal');
+  const data = FB[gid][idx];
+  const fb = document.getElementById(gid + '-fb');
+  fb.innerHTML = '<div class="fb-concepto">' + (esOk ? '✓ ' : '✗ ') + data.concepto + '</div>' + data.texto;
+  fb.className = 'fb show ' + (esOk ? 'fb-ok' : 'fb-mal');
+  if (esOk) correctas++;
+  respondidas++;
+  actualizarProgreso();
+  if (respondidas === 9) mostrarScore();
+}
+
+function actualizarProgreso() {
+  for (let p = 0; p < 3; p++) {
+    const ids = ['g'+p+'q0','g'+p+'q1','g'+p+'q2'];
+    const done = ids.filter(id => document.getElementById(id).dataset.done).length;
+    completado[p] = done === 3;
+    if (completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg done';
+      const tab = document.getElementById('tab'+p);
+      tab.classList.remove('on');
+      tab.classList.add('completed');
+    }
+  }
+}
+
+function irA(n) {
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    if (!completado[i]) t.classList.toggle('on', i===n);
+  });
+  for (let p = 0; p < 3; p++) {
+    if (!completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg' + (p===n ? ' active' : '');
+    }
+  }
+}
+
+function mostrarScore() {
+  const w = document.getElementById('score-wrap');
+  w.classList.add('show');
+  document.getElementById('sc-c').textContent = correctas;
+  document.getElementById('sc-p').textContent = Math.round(correctas/9*100) + '%';
+  const nivel = correctas <= 3 ? 0 : correctas <= 6 ? 1 : correctas <= 8 ? 2 : 3;
+  document.getElementById('sc-msg').textContent = MSGS[nivel];
+}
+
+function reiniciar() {
+  correctas = 0; respondidas = 0;
+  completado.fill(false);
+  document.querySelectorAll('.opciones').forEach(g => delete g.dataset.done);
+  document.querySelectorAll('.opc').forEach(b => { b.classList.remove('ok','mal'); b.disabled = false; });
+  document.querySelectorAll('.fb').forEach(f => { f.className = 'fb'; f.innerHTML = ''; });
+  document.getElementById('score-wrap').classList.remove('show');
+  for (let p = 0; p < 3; p++) {
+    document.getElementById('ps'+p).className = 'prog-seg';
+    document.getElementById('tab'+p).classList.remove('completed','on');
+  }
+  irA(0);
+  document.getElementById('tab0').classList.add('on');
+  document.getElementById('ps0').className = 'prog-seg active';
+}
+</script>
+</body>
+</html>

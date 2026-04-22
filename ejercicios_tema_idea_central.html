@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios · Tema e idea central</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #0F6E56; --accent-light: #E1F5EE; --accent-mid: #1D9E75;
+  --blue: #185FA5; --blue-light: #E6F1FB; --blue-mid: #0C447C;
+  --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #633806;
+  --teal-text: #085041;
+  --bg: #ffffff; --bg-secondary: #f5f4f0; --bg-tertiary: #eeece6;
+  --text: #1a1a1a; --text-muted: #6b6b68; --text-hint: #9a9893;
+  --border: rgba(0,0,0,0.12); --border-med: rgba(0,0,0,0.22);
+  --radius-md: 8px; --radius-lg: 12px;
+  --ok-bg: #E1F5EE; --ok-text: #085041; --ok-border: #1D9E75;
+  --mal-bg: #FCEBEB; --mal-text: #791F1F; --mal-border: #E24B4A;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1a; --bg-secondary: #252523; --bg-tertiary: #2e2e2b;
+    --text: #ede9e3; --text-muted: #9a9893; --text-hint: #6b6b68;
+    --border: rgba(255,255,255,0.1); --border-med: rgba(255,255,255,0.2);
+    --accent-light: #04342C; --blue-light: #042C53; --amber-light: #412402;
+    --accent: #5DCAA5; --blue: #85B7EB; --amber: #EF9F27;
+    --teal-text: #9FE1CB; --blue-mid: #B5D4F4; --amber-dark: #FAC775;
+    --ok-bg: #04342C; --ok-text: #9FE1CB; --ok-border: #1D9E75;
+    --mal-bg: #501313; --mal-text: #F7C1C1; --mal-border: #E24B4A;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-tertiary);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 4rem;
+}
+
+.page-shell {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.header-icon svg { width: 22px; height: 22px; }
+.header-text {}
+.header-overline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+.header-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.header-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.header-pills {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.pill {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.pill-teal { background: var(--accent-light); color: var(--teal-text); }
+.pill-blue { background: var(--blue-light); color: var(--blue-mid); }
+.pill-amber { background: var(--amber-light); color: var(--amber-dark); }
+
+/* ── CARD SHELL ── */
+.card {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+}
+
+/* ── PROGRESS + TABS ── */
+.prog-bar { display: flex; gap: 6px; margin-bottom: 1.25rem; }
+.prog-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.35s; }
+.prog-seg.active { background: #85B7EB; }
+.prog-seg.done { background: var(--accent-mid); }
+
+.nav-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.nav-tab {
+  flex: 1; font-size: 12px; padding: 0.45rem 0.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border);
+  cursor: pointer; background: transparent; color: var(--text-muted);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.nav-tab:hover { background: var(--bg-secondary); }
+.nav-tab.on { background: var(--bg-secondary); color: var(--text); font-weight: 500; border-color: var(--border-med); }
+.nav-tab.completed { border-color: var(--ok-border); color: var(--ok-text); }
+
+/* ── PANEL ── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+.panel-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.panel-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.tipo-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+/* ── TEXTO ── */
+.texto-card {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.125rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-secondary);
+}
+.texto-titulo { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.texto-autor { font-size: 12px; color: var(--text-hint); margin-bottom: 0.75rem; padding-bottom: 0.625rem; border-bottom: 0.5px solid var(--border); }
+.cuerpo { font-size: 14px; line-height: 1.75; color: var(--text); }
+
+/* ── PREGUNTAS ── */
+.preguntas { display: flex; flex-direction: column; gap: 1rem; }
+.preg-bloque { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.preg-header { padding: 0.75rem 1rem; border-bottom: 0.5px solid var(--border); background: var(--bg-secondary); }
+.preg-tipo { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+.tipo-tema { color: var(--blue); }
+.tipo-idea { color: var(--accent); }
+.tipo-vocab { color: var(--amber); }
+.preg-txt { font-size: 13.5px; color: var(--text); line-height: 1.5; }
+.preg-txt em { background: var(--amber-light); color: var(--amber-dark); padding: 1px 5px; border-radius: 3px; font-style: normal; }
+
+.opciones { padding: 0.75rem 1rem; display: flex; flex-direction: column; gap: 6px; background: var(--bg); }
+.opc {
+  width: 100%; text-align: left; font-size: 13px;
+  padding: 0.5rem 0.875rem; border-radius: var(--radius-md);
+  border: 0.5px solid var(--border); cursor: pointer;
+  color: var(--text); background: var(--bg);
+  display: flex; align-items: flex-start; gap: 10px;
+  line-height: 1.45; transition: background 0.12s;
+}
+.opc:hover:not(:disabled) { background: var(--bg-secondary); }
+.opc:disabled { cursor: default; }
+.opc .l { font-size: 11px; font-weight: 500; color: var(--text-muted); min-width: 14px; padding-top: 1px; }
+.opc.ok { background: var(--ok-bg); border-color: var(--ok-border); }
+.opc.ok .l { color: var(--ok-text); }
+.opc.mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opc.mal .l { color: var(--mal-text); }
+
+.fb { font-size: 12.5px; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s, padding 0.2s; color: var(--text-muted); }
+.fb.show { max-height: 80px; padding: 0.5rem 1rem 0.75rem; }
+.fb.fb-ok { color: var(--ok-text); background: var(--ok-bg); }
+.fb.fb-mal { color: var(--mal-text); background: var(--mal-bg); }
+
+/* ── SCORE ── */
+.score-wrap { margin-top: 1.5rem; padding: 1.25rem 1.5rem; border-radius: var(--radius-md); border: 0.5px solid var(--border); background: var(--bg-secondary); display: none; }
+.score-wrap.show { display: block; }
+.score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+.sc-item { text-align: center; }
+.sc-num { font-size: 24px; font-weight: 500; color: var(--text); }
+.sc-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.sc-msg { font-size: 13px; color: var(--text-muted); text-align: center; padding-top: 0.875rem; border-top: 0.5px solid var(--border); line-height: 1.5; }
+.btn-reset {
+  display: block; width: 100%; margin-top: 0.875rem;
+  font-size: 13px; padding: 0.5rem;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border-med);
+  cursor: pointer; background: transparent; color: var(--text);
+  transition: background 0.12s;
+}
+.btn-reset:hover { background: var(--bg-tertiary); }
+
+@media (max-width: 520px) {
+  .site-header { flex-wrap: wrap; }
+  .header-pills { margin-left: 0; flex-direction: row; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <line x1="9" y1="9" x2="15" y2="9"/>
+        <line x1="9" y1="13" x2="13" y2="13"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Tema e idea central</div>
+      <div class="header-desc">3 textos · 9 preguntas de selección múltiple</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-teal">Sesión 1</span>
+      <span class="pill pill-blue">Nivel básico</span>
+    </div>
+  </header>
+
+  <!-- CARD PRINCIPAL -->
+  <div class="card">
+    <div class="prog-bar">
+      <div class="prog-seg active" id="ps0"></div>
+      <div class="prog-seg" id="ps1"></div>
+      <div class="prog-seg" id="ps2"></div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="nav-tab on" id="tab0" onclick="irA(0)">Texto 1</button>
+      <button class="nav-tab" id="tab1" onclick="irA(1)">Texto 2</button>
+      <button class="nav-tab" id="tab2" onclick="irA(2)">Texto 3</button>
+    </div>
+
+    <!-- PANEL 0 -->
+    <div class="panel active" id="panel0">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 1 de 3</span>
+        <span class="tipo-badge pill-teal">Ciencia y sociedad</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">El silencio que enfermó a las ciudades</div>
+        <div class="texto-autor">Adaptado de un artículo de divulgación científica</div>
+        <div class="cuerpo">Durante décadas, el ruido urbano fue considerado una molestia menor, casi inevitable. Sin embargo, la investigación científica de los últimos años ha demostrado que la contaminación acústica tiene consecuencias graves sobre la salud: aumenta el riesgo de enfermedades cardiovasculares, deteriora el sueño y afecta el desarrollo cognitivo en niños. Las ciudades más ruidosas del mundo concentran también las tasas más altas de ansiedad crónica. Paradójicamente, las políticas públicas aún tratan el ruido como un problema estético, no como una emergencia sanitaria. Mientras los gobiernos invierten en reducir la contaminación del aire y el agua, el ruido sigue siendo el gran ignorado de la salud pública urbana.</div>
+      </div>
+      <div class="preguntas">
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema">Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g0q0">
+            <button class="opc" onclick="resp(this,'g0q0',false,0)"><span class="l">a</span>Las enfermedades crónicas en las ciudades.</button>
+            <button class="opc" onclick="resp(this,'g0q0',true,1)"><span class="l">b</span>La contaminación acústica urbana y su impacto en la salud pública.</button>
+            <button class="opc" onclick="resp(this,'g0q0',false,2)"><span class="l">c</span>Las políticas ambientales de los gobiernos urbanos.</button>
+          </div>
+          <div class="fb" id="g0q0-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea">Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g0q1">
+            <button class="opc" onclick="resp(this,'g0q1',false,0)"><span class="l">a</span>El ruido urbano provoca ansiedad crónica y deterioro del sueño en los habitantes de las ciudades.</button>
+            <button class="opc" onclick="resp(this,'g0q1',false,1)"><span class="l">b</span>Los gobiernos invierten más en contaminación del agua que en reducir el ruido.</button>
+            <button class="opc" onclick="resp(this,'g0q1',true,2)"><span class="l">c</span>A pesar de sus efectos comprobados sobre la salud, la contaminación acústica sigue siendo ignorada como emergencia sanitaria por las políticas públicas.</button>
+          </div>
+          <div class="fb" id="g0q1-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-vocab">Sentido de una expresión</div>
+            <div class="preg-txt">En el texto se afirma que el ruido es <em>"el gran ignorado de la salud pública urbana"</em>. ¿Qué quiere decir esta expresión?</div>
+          </div>
+          <div class="opciones" id="g0q2">
+            <button class="opc" onclick="resp(this,'g0q2',false,0)"><span class="l">a</span>Que el ruido es un fenómeno del que nadie tiene información ni estudios.</button>
+            <button class="opc" onclick="resp(this,'g0q2',true,1)"><span class="l">b</span>Que es un problema reconocido pero al que no se le da la atención ni la prioridad que merece.</button>
+            <button class="opc" onclick="resp(this,'g0q2',false,2)"><span class="l">c</span>Que los gobiernos no tienen tecnología suficiente para medir el ruido en las ciudades.</button>
+          </div>
+          <div class="fb" id="g0q2-fb"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 1 -->
+    <div class="panel" id="panel1">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 2 de 3</span>
+        <span class="tipo-badge pill-blue">Cultura y tecnología</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">Fotografiar para no vivir</div>
+        <div class="texto-autor">Texto de opinión, autor anónimo</div>
+        <div class="cuerpo">Cada vez que asistimos a un concierto, un paisaje memorable o una reunión familiar, el primer instinto de muchos es sacar el teléfono y fotografiar el momento. Esta práctica, que parece inocente, esconde una paradoja inquietante: al intentar capturar la experiencia, renunciamos a vivirla. Estudios en psicología cognitiva han encontrado que fotografiar un objeto reduce la capacidad de recordarlo con precisión, porque el cerebro delega esa tarea a la cámara. Así, la fotografía compulsiva no preserva los recuerdos: los empobrece. Quizás deberíamos preguntarnos si preferimos tener el registro o haber tenido la experiencia.</div>
+      </div>
+      <div class="preguntas">
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema">Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g1q0">
+            <button class="opc" onclick="resp(this,'g1q0',false,0)"><span class="l">a</span>La psicología cognitiva y el funcionamiento de la memoria.</button>
+            <button class="opc" onclick="resp(this,'g1q0',true,1)"><span class="l">b</span>El efecto de fotografiar compulsivamente sobre la experiencia vivida y la memoria.</button>
+            <button class="opc" onclick="resp(this,'g1q0',false,2)"><span class="l">c</span>El uso de redes sociales durante eventos y reuniones familiares.</button>
+          </div>
+          <div class="fb" id="g1q0-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea">Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g1q1">
+            <button class="opc" onclick="resp(this,'g1q1',true,0)"><span class="l">a</span>Fotografiar compulsivamente no preserva los recuerdos sino que los deteriora, porque el cerebro deja de procesarlos con profundidad.</button>
+            <button class="opc" onclick="resp(this,'g1q1',false,1)"><span class="l">b</span>Los estudios de psicología cognitiva demuestran que el cerebro funciona mejor sin dispositivos tecnológicos.</button>
+            <button class="opc" onclick="resp(this,'g1q1',false,2)"><span class="l">c</span>La gente debería decidir si prefiere tener fotos o haber disfrutado la experiencia.</button>
+          </div>
+          <div class="fb" id="g1q1-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-vocab">Significado de una palabra</div>
+            <div class="preg-txt">En el texto, la palabra <em>compulsiva</em> (en "fotografía compulsiva") significa:</div>
+          </div>
+          <div class="opciones" id="g1q2">
+            <button class="opc" onclick="resp(this,'g1q2',false,0)"><span class="l">a</span>Creativa y original.</button>
+            <button class="opc" onclick="resp(this,'g1q2',false,1)"><span class="l">b</span>Técnica y profesional.</button>
+            <button class="opc" onclick="resp(this,'g1q2',true,2)"><span class="l">c</span>Repetitiva y difícil de controlar, hecha casi de manera automática.</button>
+          </div>
+          <div class="fb" id="g1q2-fb"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2 -->
+    <div class="panel" id="panel2">
+      <div class="panel-meta">
+        <span class="panel-lbl">Texto 3 de 3</span>
+        <span class="tipo-badge pill-amber">Economía y vida cotidiana</span>
+      </div>
+      <div class="texto-card">
+        <div class="texto-titulo">El precio del tiempo libre</div>
+        <div class="texto-autor">Adaptado de una columna de opinión económica</div>
+        <div class="cuerpo">En las economías más desarrolladas, el tiempo libre se ha convertido paradójicamente en un bien escaso. Los trabajadores con mayores ingresos reportan tener menos horas disponibles para el ocio que quienes ganan menos, aunque puedan costear muchos más planes. La razón es sencilla: a mayor salario, mayor es el costo de oportunidad de cada hora no trabajada. Una hora de descanso "cuesta" más cuando el ingreso por hora es alto. Este fenómeno explica por qué muchos profesionales exitosos se sienten atrapados en una rueda donde ganan más pero disfrutan menos, incapaces de desconectarse sin sentir que están perdiendo algo.</div>
+      </div>
+      <div class="preguntas">
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-tema">Tema del texto</div>
+            <div class="preg-txt">¿Cuál es el tema del texto?</div>
+          </div>
+          <div class="opciones" id="g2q0">
+            <button class="opc" onclick="resp(this,'g2q0',false,0)"><span class="l">a</span>Las diferencias salariales entre trabajadores de distintos sectores económicos.</button>
+            <button class="opc" onclick="resp(this,'g2q0',false,1)"><span class="l">b</span>La insatisfacción psicológica de los profesionales exitosos.</button>
+            <button class="opc" onclick="resp(this,'g2q0',true,2)"><span class="l">c</span>La escasez de tiempo libre entre las personas de mayores ingresos y la paradoja que esto representa.</button>
+          </div>
+          <div class="fb" id="g2q0-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-idea">Idea central</div>
+            <div class="preg-txt">¿Cuál es la idea central del texto?</div>
+          </div>
+          <div class="opciones" id="g2q1">
+            <button class="opc" onclick="resp(this,'g2q1',false,0)"><span class="l">a</span>El costo de oportunidad hace que cada hora de descanso valga más cuando el salario es alto.</button>
+            <button class="opc" onclick="resp(this,'g2q1',true,1)"><span class="l">b</span>En las economías desarrolladas, ganar más dinero no garantiza más tiempo libre ni mayor bienestar, sino que puede generar la paradoja de tener menos ocio real.</button>
+            <button class="opc" onclick="resp(this,'g2q1',false,2)"><span class="l">c</span>Los profesionales exitosos deberían aprender a desconectarse para disfrutar mejor de su tiempo.</button>
+          </div>
+          <div class="fb" id="g2q1-fb"></div>
+        </div>
+        <div class="preg-bloque">
+          <div class="preg-header">
+            <div class="preg-tipo tipo-vocab">Concepto técnico en contexto</div>
+            <div class="preg-txt">El texto usa la expresión <em>costo de oportunidad</em>. Según el contexto, ¿qué significa esta idea aplicada al tiempo libre?</div>
+          </div>
+          <div class="opciones" id="g2q2">
+            <button class="opc" onclick="resp(this,'g2q2',false,0)"><span class="l">a</span>El dinero que una persona gasta en actividades de ocio como viajes o restaurantes.</button>
+            <button class="opc" onclick="resp(this,'g2q2',true,1)"><span class="l">b</span>Lo que una persona percibe que pierde o deja de ganar cada hora que decide no trabajar.</button>
+            <button class="opc" onclick="resp(this,'g2q2',false,2)"><span class="l">c</span>El desgaste físico y mental que produce trabajar demasiadas horas seguidas.</button>
+          </div>
+          <div class="fb" id="g2q2-fb"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCORE -->
+    <div class="score-wrap" id="score-wrap">
+      <div class="score-grid">
+        <div class="sc-item"><div class="sc-num" id="sc-c">0</div><div class="sc-lbl">correctas</div></div>
+        <div class="sc-item"><div class="sc-num">9</div><div class="sc-lbl">preguntas</div></div>
+        <div class="sc-item"><div class="sc-num" id="sc-p">0%</div><div class="sc-lbl">puntaje</div></div>
+      </div>
+      <div class="sc-msg" id="sc-msg"></div>
+      <button class="btn-reset" onclick="reiniciar()">Volver a intentar</button>
+    </div>
+  </div>
+
+</div>
+<script>
+const MSGS = [
+  'Sigue practicando. Vuelve a leer los textos con calma antes de responder.',
+  'Vas bien, pero hay aspectos por reforzar. Revisa las respuestas incorrectas.',
+  'Muy buen resultado. Identificas con precisión el tema y la idea central.',
+  'Excelente. Dominas las tres competencias trabajadas en este ejercicio.'
+];
+
+const FB = {
+  g0q0: ['El texto menciona enfermedades, pero el asunto central es el ruido como causa ignorada de problemas de salud.','Correcto. El texto gira en torno a la contaminación acústica como problema de salud pública desatendido.','Las políticas ambientales aparecen como contraste, no como el asunto central.'],
+  g0q1: ['Eso es un dato de apoyo, no la tesis del texto.','Eso es solo un contraste que el autor usa; no es la afirmación principal.','Correcto. El autor argumenta que el ruido es un problema serio de salud pública que las políticas siguen tratando como algo menor.'],
+  g0q2: ['La expresión no alude a desconocimiento, sino a que se le resta importancia pese a ser conocido.','Correcto. "Ignorado" aquí significa desatendido, no considerado con la seriedad que merece.','La expresión critica la falta de acción política, no la falta de tecnología de medición.'],
+  g1q0: ['El texto menciona estudios de psicología, pero el tema central no es esa disciplina en sí.','Correcto. El texto reflexiona sobre cómo el hábito de fotografiar todo puede perjudicar la experiencia y el recuerdo.','Las redes sociales no se mencionan; el texto trata el acto de fotografiar, no el de compartir fotos.'],
+  g1q1: ['Correcto. El autor sostiene que la fotografía compulsiva empobrece los recuerdos en vez de preservarlos.','Eso es un dato de apoyo, no la tesis principal del texto.','Esa es la pregunta retórica final del texto, una invitación a reflexionar, no la idea que el autor defiende.'],
+  g1q2: ['Creativa alude a originalidad, no a la frecuencia ni al control del comportamiento.','Técnica se refiere a habilidad o destreza, no a la naturaleza del hábito.','Correcto. Compulsivo describe un comportamiento repetitivo que se hace de forma casi automática y es difícil de controlar.'],
+  g2q0: ['Los salarios son parte del argumento, no el tema central del texto.','El texto explica por qué ocurre esa insatisfacción, pero el tema no se reduce a la psicología del éxito.','Correcto. El texto trata la paradoja de que más ingreso no siempre equivale a más tiempo o disfrute del ocio.'],
+  g2q1: ['Eso describe el mecanismo del costo de oportunidad, pero no resume la tesis completa que el autor desarrolla.','Correcto. La tesis es que el mayor ingreso puede generar la paradoja de tener menos ocio real y bienestar.','Esa es una consecuencia implícita mencionada al final, no la tesis central del texto.'],
+  g2q2: ['El texto no habla del precio de actividades de ocio, sino del valor percibido del tiempo no trabajado.','Correcto. El costo de oportunidad del tiempo libre es aquello que se "deja de ganar" por no trabajar ese tiempo.','Esa opción describe agotamiento laboral, lo cual no es lo que el concepto económico expresa en este contexto.']
+};
+
+let correctas = 0, respondidas = 0;
+const completado = [false, false, false];
+
+function resp(btn, gid, esOk, idx) {
+  const grupo = document.getElementById(gid);
+  if (grupo.dataset.done) return;
+  grupo.dataset.done = '1';
+  grupo.querySelectorAll('.opc').forEach(b => b.disabled = true);
+  btn.classList.add(esOk ? 'ok' : 'mal');
+  const fb = document.getElementById(gid + '-fb');
+  fb.textContent = (esOk ? '✓ ' : '✗ ') + FB[gid][idx];
+  fb.className = 'fb show ' + (esOk ? 'fb-ok' : 'fb-mal');
+  if (esOk) correctas++;
+  respondidas++;
+  actualizarProgreso();
+  if (respondidas === 9) mostrarScore();
+}
+
+function actualizarProgreso() {
+  for (let p = 0; p < 3; p++) {
+    const ids = ['g'+p+'q0','g'+p+'q1','g'+p+'q2'];
+    const done = ids.filter(id => document.getElementById(id).dataset.done).length;
+    completado[p] = done === 3;
+    if (completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg done';
+      const tab = document.getElementById('tab'+p);
+      tab.classList.remove('on');
+      tab.classList.add('completed');
+    }
+  }
+}
+
+function irA(n) {
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    if (!completado[i]) t.classList.toggle('on', i===n);
+  });
+  for (let p = 0; p < 3; p++) {
+    if (!completado[p]) {
+      document.getElementById('ps'+p).className = 'prog-seg' + (p===n ? ' active' : '');
+    }
+  }
+}
+
+function mostrarScore() {
+  const w = document.getElementById('score-wrap');
+  w.classList.add('show');
+  document.getElementById('sc-c').textContent = correctas;
+  document.getElementById('sc-p').textContent = Math.round(correctas/9*100) + '%';
+  const nivel = correctas <= 3 ? 0 : correctas <= 6 ? 1 : correctas <= 8 ? 2 : 3;
+  document.getElementById('sc-msg').textContent = MSGS[nivel];
+}
+
+function reiniciar() {
+  correctas = 0; respondidas = 0;
+  completado.fill(false);
+  document.querySelectorAll('.opciones').forEach(g => delete g.dataset.done);
+  document.querySelectorAll('.opc').forEach(b => { b.classList.remove('ok','mal'); b.disabled = false; });
+  document.querySelectorAll('.fb').forEach(f => { f.className = 'fb'; f.textContent = ''; });
+  document.getElementById('score-wrap').classList.remove('show');
+  for (let p = 0; p < 3; p++) {
+    document.getElementById('ps'+p).className = 'prog-seg';
+    document.getElementById('tab'+p).classList.remove('completed','on');
+  }
+  irA(0);
+  document.getElementById('tab0').classList.add('on');
+  document.getElementById('ps0').className = 'prog-seg active';
+}
+</script>
+</body>
+</html>

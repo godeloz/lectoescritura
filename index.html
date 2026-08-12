@@ -3,340 +3,742 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLEE · Taller de Comprensión Lectora</title>
+<title>PLEE · Taller de Comprensión Lectora · Universidad EAFIT</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --accent:     #0F6E56;
-  --accent-light: #E1F5EE;
-  --accent-mid: #1D9E75;
-  --blue:       #185FA5;
-  --blue-light: #E6F1FB;
-  --blue-dk:    #0C447C;
-  --purple:     #534AB7;
-  --purple-light: #EEEDFE;
-  --purple-dk:  #3C3489;
-  --coral:      #993C1D;
-  --coral-light: #FAECE7;
-  --coral-dk:   #712B13;
-  --amber:      #BA7517;
-  --amber-light: #FAEEDA;
-  --bg:         #ffffff;
-  --bg-secondary: #f5f4f0;
-  --bg-tertiary:  #eeece6;
-  --text:       #1a1a1a;
-  --text-muted: #6b6b68;
-  --text-hint:  #9a9893;
-  --border:     rgba(0,0,0,0.12);
-  --border-med: rgba(0,0,0,0.22);
-  --radius-md:  8px;
-  --radius-lg:  12px;
+  --accent:        #0F6E56;
+  --accent-light:  #E1F5EE;
+  --accent-mid:    #1D9E75;
+  --blue:          #185FA5;
+  --blue-light:    #E6F1FB;
+  --blue-mid:      #0C447C;
+  --amber:         #BA7517;
+  --amber-light:   #FAEEDA;
+  --amber-dark:    #633806;
+  --coral:         #993C1D;
+  --coral-light:   #FAECE7;
+  --coral-dark:    #712B13;
+  --purple:        #534AB7;
+  --purple-light:  #EEEDFE;
+  --purple-dark:   #3C3489;
+  --bg:            #ffffff;
+  --bg-secondary:  #f5f4f0;
+  --bg-tertiary:   #eeece6;
+  --text:          #1a1a1a;
+  --text-muted:    #6b6b68;
+  --text-hint:     #9a9893;
+  --border:        rgba(0,0,0,0.12);
+  --border-med:    rgba(0,0,0,0.22);
+  --radius-md:     8px;
+  --radius-lg:     12px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:         #1c1c1a;
-    --bg-secondary: #252523;
-    --bg-tertiary:  #2e2e2b;
-    --text:       #ede9e3;
-    --text-muted: #9a9893;
-    --text-hint:  #6b6b68;
-    --border:     rgba(255,255,255,0.10);
-    --border-med: rgba(255,255,255,0.20);
+    --bg:            #1c1c1a;
+    --bg-secondary:  #252523;
+    --bg-tertiary:   #2e2e2b;
+    --text:          #ede9e3;
+    --text-muted:    #9a9893;
+    --text-hint:     #6b6b68;
+    --border:        rgba(255,255,255,0.10);
+    --border-med:    rgba(255,255,255,0.20);
+    --accent:        #5DCAA5;
     --accent-light:  #04342C;
+    --blue:          #85B7EB;
     --blue-light:    #042C53;
-    --purple-light:  #26215C;
-    --coral-light:   #4A1B0C;
+    --blue-mid:      #B5D4F4;
+    --amber:         #EF9F27;
     --amber-light:   #412402;
-    --accent:     #5DCAA5;
-    --blue:       #85B7EB;
-    --purple:     #AFA9EC;
-    --coral:      #F0997B;
-    --amber:      #EF9F27;
-    --blue-dk:    #B5D4F4;
-    --purple-dk:  #CECBF6;
-    --coral-dk:   #F5C4B3;
+    --amber-dark:    #FAC775;
+    --coral:         #F0997B;
+    --coral-light:   #4A1B0C;
+    --coral-dark:    #F5C4B3;
+    --purple:        #AFA9EC;
+    --purple-light:  #26215C;
+    --purple-dark:   #CECBF6;
   }
 }
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg-tertiary);
+  font-family: 'Georgia', 'Times New Roman', serif;
   color: var(--text);
+  padding: 2rem 1rem 4rem;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2.5rem 1rem 5rem;
+  -webkit-font-smoothing: antialiased;
 }
+.page-shell { max-width: 720px; width: 100%; margin: 0 auto; }
 
-.shell { width: 100%; max-width: 720px; }
-
-/* ── HEADER ── */
-.header {
-  background: var(--bg);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 1.25rem;
-}
-.header-top {
+/* ══════════ HERO ══════════ */
+.hero {
   background: var(--accent);
-  padding: 1.5rem 1.75rem 1.25rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 1.5rem 1.75rem;
+  display: flex; align-items: flex-start; gap: 1rem;
 }
-.header-icon {
-  width: 48px; height: 48px;
-  border-radius: var(--radius-md);
-  background: rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+@media (prefers-color-scheme: dark) { .hero { background: #0A4437; } }
+.hero-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.16);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.header-icon svg { width: 24px; height: 24px; }
-.header-overline {
-  font-size: 10.5px; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.7); margin-bottom: 4px;
+.hero-icon svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-overline {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; color: rgba(255,255,255,0.75); margin-bottom: 0.3rem;
 }
-.header-title {
-  font-size: 22px; font-weight: 500;
-  color: #ffffff; line-height: 1.2; margin-bottom: 3px;
+.hero-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.42rem; font-weight: 700; color: #fff; line-height: 1.15;
 }
-.header-sub {
-  font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4;
-}
-.header-body {
-  padding: 1.125rem 1.75rem;
-  font-size: 13.5px; color: var(--text-muted);
-  line-height: 1.65; border-top: 0.5px solid var(--border);
-}
-.header-body strong { color: var(--text); font-weight: 500; }
-
-/* ── SESIÓN BADGE ── */
-.sesion-label {
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  color: var(--text-hint); margin-bottom: 0.625rem;
-  padding-left: 0.125rem;
+.hero-sub {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-top: 0.35rem;
 }
 
-/* ── CARDS ── */
-.cards { display: flex; flex-direction: column; gap: 0.75rem; }
-
-.card {
+/* ══════════ INTRO ══════════ */
+.intro {
   background: var(--bg);
-  border: 0.5px solid var(--border);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 1.35rem 1.75rem;
+  font-size: 0.93rem; line-height: 1.7; color: var(--text);
+  margin-bottom: 1.75rem;
+}
+.intro p { margin-bottom: 0.7rem; }
+.intro p:last-child { margin-bottom: 0; }
+
+/* ══════════ SECTION LABEL CON ICONO ══════════ */
+.section-head {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin-bottom: 0.85rem; padding-left: 0.1rem;
+}
+.section-head svg {
+  width: 17px; height: 17px; flex-shrink: 0;
+  fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+}
+.section-label {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.sh-prep svg   { stroke: var(--purple); }
+.sh-prep .section-label { color: var(--purple-dark); }
+.sh-ruta svg   { stroke: var(--accent-mid); }
+.sh-ruta .section-label { color: var(--accent); }
+
+/* ══════════ GUÍA / ACORDEONES ══════════ */
+.guia-wrap { margin-bottom: 2rem; }
+
+.acordeon {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border-med);
   border-radius: var(--radius-lg);
-  display: flex; align-items: stretch;
+  margin-bottom: 0.7rem;
   overflow: hidden;
-  text-decoration: none;
-  color: var(--text);
-  transition: border-color 0.18s, box-shadow 0.18s, transform 0.14s;
-  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
-.card:hover {
-  border-color: var(--border-med);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-}
-.card:active { transform: translateY(0); }
+.acordeon.g-purple { border-left-color: var(--purple); }
+.acordeon.g-blue   { border-left-color: var(--blue); }
+.acordeon.g-coral  { border-left-color: var(--coral); }
+.acordeon:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.06); }
 
-.card-accent {
-  width: 6px; flex-shrink: 0;
+.acordeon summary {
+  list-style: none; cursor: pointer;
+  padding: 0.95rem 1.15rem;
+  display: flex; align-items: center; gap: 0.8rem;
+  transition: background 0.15s;
 }
-.card-icon {
-  width: 56px; flex-shrink: 0;
+.acordeon summary::-webkit-details-marker { display: none; }
+.acordeon summary:hover { background: var(--bg-secondary); }
+
+.ac-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.ac-icon svg { width: 19px; height: 19px; fill: none; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.aci-purple { background: var(--purple-light); }
+.aci-purple svg { stroke: var(--purple-dark); }
+.aci-blue   { background: var(--blue-light); }
+.aci-blue svg { stroke: var(--blue-mid); }
+.aci-coral  { background: var(--coral-light); }
+.aci-coral svg { stroke: var(--coral-dark); }
+
+.ac-text { flex: 1; min-width: 0; }
+.ac-titulo {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.94rem; font-weight: 700; color: var(--text);
+  line-height: 1.25;
+}
+.ac-hint {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.74rem; color: var(--text-muted); margin-top: 0.15rem;
+}
+.ac-toggle {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg-secondary); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
+  transition: transform 0.22s ease, background 0.18s;
 }
-.card-icon-inner {
-  width: 38px; height: 38px;
+.ac-toggle svg { width: 13px; height: 13px; stroke: var(--text-muted); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.acordeon[open] .ac-toggle { transform: rotate(180deg); background: var(--bg-tertiary); }
+.acordeon[open] summary { border-bottom: 1px solid var(--border); }
+
+.acordeon-body { padding: 1.15rem 1.25rem; font-size: 0.9rem; line-height: 1.7; }
+
+/* ══════════ CONCEPTOS ══════════ */
+.grupo-sesion {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--text-hint);
+  padding-bottom: 0.4rem; margin-bottom: 0.95rem;
+  border-bottom: 1px solid var(--border);
+}
+.grupo-sesion::before {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.gs-s1::before { background: var(--accent-mid); }
+.gs-s2::before { background: var(--blue); }
+.grupo-sesion.segundo { margin-top: 1.6rem; }
+
+.concepto { margin-bottom: 1.15rem; }
+.concepto:last-child { margin-bottom: 0; }
+.concepto-nombre {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.3rem;
+}
+.cn-teal   { color: var(--accent); }
+.cn-purple { color: var(--purple-dark); }
+.cn-blue   { color: var(--blue); }
+.cn-amber  { color: var(--amber-dark); }
+.concepto-def { color: var(--text); margin-bottom: 0.4rem; }
+.concepto-clave {
+  font-size: 0.84rem; color: var(--text-muted);
+  padding: 0.45rem 0.75rem; border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border-left: 2px solid var(--border-med);
+}
+
+/* ══════════ RECOMENDACIONES ══════════ */
+.reco-list { list-style: none; }
+.reco-item { display: flex; gap: 0.75rem; margin-bottom: 0.95rem; align-items: flex-start; }
+.reco-item:last-child { margin-bottom: 0; }
+.reco-num {
+  flex-shrink: 0; width: 23px; height: 23px; border-radius: 50%;
+  background: var(--blue-light); color: var(--blue-mid);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 0.1rem;
+}
+.reco-num.x { background: var(--coral-light); color: var(--coral-dark); font-size: 0.78rem; }
+.reco-texto strong { font-weight: 700; color: var(--text); }
+.reco-texto { color: var(--text-muted); }
+
+/* ══════════ NOTA ══════════ */
+.nota {
+  display: flex; gap: 0.7rem; align-items: flex-start;
+  background: var(--amber-light);
+  border: 1px solid var(--amber);
   border-radius: var(--radius-md);
+  padding: 0.9rem 1.05rem;
+  font-size: 0.85rem; line-height: 1.6;
+  color: var(--amber-dark);
+  margin-bottom: 2rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.nota svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 0.1rem; stroke: var(--amber-dark); fill: none; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.nota strong { font-weight: 700; }
+
+/* ══════════ SEPARADOR DE SESIÓN ══════════ */
+.sesion-sep {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin: 1.9rem 0 1rem;
+}
+.sesion-sep.primera { margin-top: 0; }
+.sesion-badge {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.85rem; border-radius: 20px;
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+}
+.sesion-badge svg { width: 13px; height: 13px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.sb-s1 { background: var(--accent);   color: #fff; }
+.sb-s1 svg { stroke: #fff; }
+.sb-s2 { background: var(--blue-mid); color: #fff; }
+.sb-s2 svg { stroke: #fff; }
+@media (prefers-color-scheme: dark) {
+  .sb-s1 { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent-mid); }
+  .sb-s1 svg { stroke: var(--accent); }
+  .sb-s2 { background: var(--blue-light); color: var(--blue-mid); border: 1px solid var(--blue); }
+  .sb-s2 svg { stroke: var(--blue-mid); }
+}
+.sesion-titulo {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+  flex: 1; min-width: 0; line-height: 1.35;
+}
+
+/* ══════════ RUTA / TIMELINE ══════════ */
+.ruta { position: relative; margin-bottom: 0.5rem; }
+.ruta::before {
+  content: ''; position: absolute;
+  left: 27px; top: 46px; bottom: 46px;
+  width: 2px; background: var(--border);
+  z-index: 0;
+}
+
+/* ══════════ TARJETA ══════════ */
+.ej-card {
+  position: relative; z-index: 1;
+  display: flex; align-items: flex-start; gap: 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.15rem;
+  margin-bottom: 0.85rem;
+  text-decoration: none; color: inherit;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.ej-card:hover, .ej-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+  outline: none;
+}
+.ej-card:focus-visible { box-shadow: 0 0 0 3px var(--blue-light), 0 6px 18px rgba(0,0,0,0.09); }
+.c-teal   { border-left-color: var(--accent-mid); }
+.c-purple { border-left-color: var(--purple); }
+.c-coral  { border-left-color: var(--coral); }
+.c-blue   { border-left-color: var(--blue); }
+.c-amber  { border-left-color: var(--amber); }
+
+.ej-icon {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 800; font-size: 1.05rem;
 }
-.card-icon-inner svg { width: 18px; height: 18px; }
+.ic-teal   { background: var(--accent-light); color: var(--accent); }
+.ic-purple { background: var(--purple-light); color: var(--purple-dark); }
+.ic-coral  { background: var(--coral-light);  color: var(--coral-dark); }
+.ic-blue   { background: var(--blue-light);   color: var(--blue-mid); }
+.ic-amber  { background: var(--amber-light);  color: var(--amber-dark); }
 
-.card-body {
-  flex: 1; padding: 1rem 1rem 1rem 0;
+.ej-body { flex: 1; min-width: 0; }
+.ej-meta {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.66rem; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; margin-bottom: 0.2rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem;
 }
-.card-num {
-  font-size: 10px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--text-hint); margin-bottom: 3px;
-}
-.card-title {
-  font-size: 15px; font-weight: 500;
-  color: var(--text); margin-bottom: 4px; line-height: 1.3;
-}
-.card-desc {
-  font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
-}
-.card-pills {
-  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
-}
-.pill {
-  font-size: 10.5px; font-weight: 500;
-  padding: 2px 8px; border-radius: 20px;
-}
+.m-teal   { color: var(--accent); }
+.m-purple { color: var(--purple-dark); }
+.m-coral  { color: var(--coral); }
+.m-blue   { color: var(--blue); }
+.m-amber  { color: var(--amber-dark); }
 
-.card-arrow {
-  padding: 0 1.125rem 0 0.5rem;
-  display: flex; align-items: center;
-  color: var(--text-hint);
-  font-size: 16px;
-  transition: color 0.18s, transform 0.18s;
+.badge-pill {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; padding: 0.12rem 0.45rem;
+  border-radius: 20px;
 }
-.card:hover .card-arrow {
-  transform: translateX(3px);
+.bp-inicio { background: var(--accent-light); color: var(--accent);     border: 1px solid var(--accent-mid); }
+.bp-cierre { background: var(--coral-light);  color: var(--coral-dark); border: 1px solid var(--coral); }
+
+.ej-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.02rem; font-weight: 700; color: var(--text);
+  line-height: 1.25; margin-bottom: 0.28rem;
 }
+.ej-desc {
+  font-size: 0.86rem; line-height: 1.55; color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+.ej-tags { display: flex; flex-wrap: wrap; gap: 0.32rem; }
+.ej-tag {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.66rem; font-weight: 500;
+  padding: 0.16rem 0.5rem; border-radius: 20px;
+}
+.t-teal   { background: var(--accent-light); color: var(--accent); }
+.t-purple { background: var(--purple-light); color: var(--purple-dark); }
+.t-coral  { background: var(--coral-light);  color: var(--coral-dark); }
+.t-blue   { background: var(--blue-light);   color: var(--blue-mid); }
+.t-amber  { background: var(--amber-light);  color: var(--amber-dark); }
 
-/* Colores por tarjeta */
-.c1 .card-accent  { background: var(--blue); }
-.c1 .card-icon-inner { background: var(--blue-light); }
-.c1 .card-icon-inner svg { stroke: var(--blue); }
-.c1 .card-num     { color: var(--blue); }
-.c1:hover .card-arrow { color: var(--blue); }
-.c1 .pill { background: var(--blue-light); color: var(--blue-dk); }
+.ej-chevron {
+  flex-shrink: 0; align-self: center;
+  width: 20px; height: 20px; stroke: var(--text-hint);
+  fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke 0.16s, transform 0.16s;
+}
+.ej-card:hover .ej-chevron { stroke: var(--text-muted); transform: translateX(3px); }
 
-.c2 .card-accent  { background: var(--purple); }
-.c2 .card-icon-inner { background: var(--purple-light); }
-.c2 .card-icon-inner svg { stroke: var(--purple); }
-.c2 .card-num     { color: var(--purple); }
-.c2:hover .card-arrow { color: var(--purple); }
-.c2 .pill { background: var(--purple-light); color: var(--purple-dk); }
-
-.c3 .card-accent  { background: var(--coral); }
-.c3 .card-icon-inner { background: var(--coral-light); }
-.c3 .card-icon-inner svg { stroke: var(--coral); }
-.c3 .card-num     { color: var(--coral); }
-.c3:hover .card-arrow { color: var(--coral); }
-.c3 .pill { background: var(--coral-light); color: var(--coral-dk); }
-
-/* ── FOOTER ── */
+/* ══════════ FOOTER ══════════ */
 .footer {
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-hint);
-  line-height: 1.6;
+  text-align: center; margin-top: 2.25rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.78rem; color: var(--text-hint); line-height: 1.75;
 }
 
-@media (max-width: 480px) {
-  .header-top { padding: 1.25rem; }
-  .header-body { padding: 1rem 1.25rem; }
-  .card-body { padding: 0.875rem 0.75rem 0.875rem 0; }
-  .card-arrow { padding-right: 0.875rem; }
+@media (max-width: 520px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  .hero { padding: 1.25rem 1.15rem; }
+  .intro { padding: 1.15rem 1.15rem; }
+  .hero-title { font-size: 1.2rem; }
+  .ruta::before { left: 23px; }
+  .ej-card { padding: 0.95rem 0.9rem; gap: 0.7rem; }
+  .ej-icon { width: 38px; height: 38px; font-size: 0.95rem; }
+  .sesion-sep { flex-wrap: wrap; gap: 0.5rem; }
+  .acordeon summary { padding: 0.85rem 0.9rem; gap: 0.65rem; }
 }
 </style>
 </head>
 <body>
-<div class="shell">
+<div class="page-shell">
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-top">
-      <div class="header-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          <line x1="9" y1="9" x2="15" y2="9"/>
-          <line x1="9" y1="13" x2="13" y2="13"/>
-        </svg>
-      </div>
-      <div>
-        <div class="header-overline">PLEE · Universidad EAFIT · Área de Lenguaje</div>
-        <div class="header-title">Taller de Comprensión Lectora</div>
-        <div class="header-sub">Sesión 1 · Tema, idea central e intención comunicativa</div>
-      </div>
+  <!-- ══════════ HERO ══════════ -->
+  <div class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
     </div>
-    <div class="header-body">
-      Estos tres ejercicios te ayudarán a desarrollar las competencias de lectura evaluadas en la prueba PLEE. Trabájalos en orden: cada uno profundiza en los conceptos del anterior. Selecciona una opción correcta por pregunta y lee la retroalimentación antes de continuar.
+    <div>
+      <div class="hero-overline">PLEE · Universidad EAFIT · Área de Lenguaje</div>
+      <div class="hero-title">Taller de Comprensión Lectora</div>
+      <div class="hero-sub">Siete ejercicios interactivos · Sesiones 1 y 2</div>
     </div>
-  </header>
+  </div>
 
-  <!-- EJERCICIOS -->
-  <div class="sesion-label">Ejercicios de la sesión</div>
-  <div class="cards">
+  <div class="intro">
+    <p>Estos ejercicios desarrollan las competencias de lectura evaluadas en la prueba PLEE. Están organizados en dos sesiones que se complementan: la primera trabaja <strong>qué dice</strong> un texto; la segunda, <strong>cómo está construido</strong>.</p>
+    <p>Antes de empezar, revisa la guía de preparación: te dará el vocabulario y las estrategias que los ejercicios dan por conocidos.</p>
+  </div>
 
-    <!-- Tarjeta 1 -->
-    <a class="card c1" href="ejercicios_tema_idea_central.html">
-      <div class="card-accent"></div>
-      <div class="card-icon">
-        <div class="card-icon-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
+  <!-- ══════════ GUÍA DE PREPARACIÓN ══════════ -->
+  <div class="section-head sh-prep">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span class="section-label">Guía de preparación</span>
+  </div>
+
+  <div class="guia-wrap">
+
+    <details class="acordeon g-purple">
+      <summary>
+        <div class="ac-icon aci-purple">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="ac-text">
+          <div class="ac-titulo">Los conceptos, en breve</div>
+          <div class="ac-hint">Definiciones y preguntas guía de las dos sesiones</div>
+        </div>
+        <div class="ac-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </summary>
+      <div class="acordeon-body">
+
+        <div class="grupo-sesion gs-s1">Sesión 1 · Qué dice el texto</div>
+
+        <div class="concepto">
+          <div class="concepto-nombre cn-teal">Tema e idea central</div>
+          <div class="concepto-def">El <strong>tema</strong> es el asunto del que trata el texto y se enuncia como sintagma nominal ("la desigualdad en el acceso al agua"). La <strong>idea central</strong> es lo que el autor afirma sobre ese asunto y se enuncia como oración completa.</div>
+          <div class="concepto-clave">Pregúntate: <em>¿de qué habla?</em> (tema) y luego <em>¿qué sostiene sobre eso?</em> (idea central). Si tu respuesta no tiene verbo, aún estás en el tema.</div>
+        </div>
+
+        <div class="concepto">
+          <div class="concepto-nombre cn-purple">Intención y postura</div>
+          <div class="concepto-def">La <strong>intención comunicativa</strong> es el propósito del autor: informar, persuadir, cuestionar, proponer. La <strong>postura</strong> es la posición valorativa que asume frente al tema: a favor, en contra, crítica o matizada.</div>
+          <div class="concepto-clave">Pregúntate: <em>¿para qué escribió esto?</em> y <em>¿de qué lado está?</em> El vocabulario valorativo y los conectores adversativos son las pistas más confiables.</div>
+        </div>
+
+        <div class="grupo-sesion gs-s2 segundo">Sesión 2 · Cómo está construido</div>
+
+        <div class="concepto">
+          <div class="concepto-nombre cn-blue">Tipos de párrafo</div>
+          <div class="concepto-def">Cada párrafo de un texto bien escrito cumple una función específica: presentar el problema, explicar por qué ocurre, ilustrar con un caso, matizar lo dicho antes o cerrar el argumento.</div>
+          <div class="concepto-clave">Pregúntate: <em>¿qué está haciendo este párrafo?</em> No <em>¿de qué habla?</em> Dos párrafos pueden hablar de lo mismo y cumplir funciones distintas.</div>
+        </div>
+
+        <div class="concepto">
+          <div class="concepto-nombre cn-teal">Progresión temática</div>
+          <div class="concepto-def">Es el modo en que la información avanza de un párrafo al siguiente. Normalmente el texto retoma algo ya dicho (el <em>tema</em>, información conocida) y le añade información nueva (el <em>rema</em>).</div>
+          <div class="concepto-clave">Pregúntate: <em>¿qué hay de nuevo en este párrafo respecto al anterior?</em> Si la respuesta es "nada", probablemente estés leyendo mal.</div>
+        </div>
+
+        <div class="concepto">
+          <div class="concepto-nombre cn-amber">Modos discursivos</div>
+          <div class="concepto-def">Es la forma general de organizar el discurso según el propósito: <strong>exponer</strong> (hacer comprender), <strong>argumentar</strong> (defender una posición), <strong>narrar</strong> (relatar hechos en el tiempo) o <strong>describir</strong> (caracterizar algo).</div>
+          <div class="concepto-clave">Un texto casi nunca usa un solo modo. Lo que se evalúa es cuál <em>predomina</em> y qué función cumplen los otros dentro de él.</div>
+        </div>
+
+      </div>
+    </details>
+
+    <details class="acordeon g-blue">
+      <summary>
+        <div class="ac-icon aci-blue">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="ac-text">
+          <div class="ac-titulo">Cómo abordar las preguntas</div>
+          <div class="ac-hint">Seis estrategias para resolver con método</div>
+        </div>
+        <div class="ac-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </summary>
+      <div class="acordeon-body">
+        <ul class="reco-list">
+
+          <li class="reco-item">
+            <div class="reco-num">1</div>
+            <div class="reco-texto"><strong>Lee el texto completo antes de mirar las preguntas.</strong> Las preguntas de estructura exigen ver el conjunto: no puedes saber si un párrafo contrasta o concluye si no sabes qué venía antes y qué viene después.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num">2</div>
+            <div class="reco-texto"><strong>Fíjate en la primera oración de cada párrafo.</strong> Suele anunciar la función del párrafo completo. Expresiones como <em>"Sin embargo"</em>, <em>"Por ejemplo"</em>, <em>"Frente a esto"</em> o <em>"En síntesis"</em> son señales explícitas.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num">3</div>
+            <div class="reco-texto"><strong>Descarta antes de elegir.</strong> Suele haber una opción claramente falsa, una que habla de otra parte del texto y dos plausibles. Elimina las dos primeras y compara las restantes contra el texto, no contra tu memoria.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num">4</div>
+            <div class="reco-texto"><strong>Desconfía de las opciones absolutas.</strong> Términos como <em>"únicamente"</em>, <em>"siempre"</em>, <em>"nunca"</em> o <em>"el único"</em> suelen marcar distractores: los textos académicos rara vez afirman de forma tan tajante.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num">5</div>
+            <div class="reco-texto"><strong>Verifica volviendo al texto.</strong> Antes de confirmar, localiza el fragmento exacto que sustenta tu respuesta. Si no lo encuentras, probablemente estés infiriendo de más.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num">6</div>
+            <div class="reco-texto"><strong>Lee siempre la retroalimentación,</strong> aciertes o no. Cuando aciertas explica el mecanismo para que puedas aplicarlo en otro texto; cuando fallas señala exactamente qué debiste releer.</div>
+          </li>
+
+        </ul>
+      </div>
+    </details>
+
+    <details class="acordeon g-coral">
+      <summary>
+        <div class="ac-icon aci-coral">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="ac-text">
+          <div class="ac-titulo">Errores frecuentes</div>
+          <div class="ac-hint">Cinco trampas que suelen costar puntos</div>
+        </div>
+        <div class="ac-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      </summary>
+      <div class="acordeon-body">
+        <ul class="reco-list">
+
+          <li class="reco-item">
+            <div class="reco-num x">✕</div>
+            <div class="reco-texto"><strong>Confundir el tema con la idea central.</strong> El tema es el asunto; la idea central es lo que se afirma sobre él. Una opción que solo nombra el asunto no puede ser la idea central.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num x">✕</div>
+            <div class="reco-texto"><strong>Confundir el contenido con la función.</strong> Que un párrafo mencione datos no lo convierte en expositivo, ni que mencione un caso lo vuelve de ejemplificación. Lo que define la función es el <em>propósito</em> del párrafo dentro del texto.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num x">✕</div>
+            <div class="reco-texto"><strong>Clasificar el texto por una sola oración.</strong> Una frase narrativa dentro de un texto expositivo no cambia el modo dominante. Evalúa siempre el propósito global antes de decidir.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num x">✕</div>
+            <div class="reco-texto"><strong>Elegir la opción que suena más académica.</strong> Los distractores suelen estar redactados con vocabulario técnico atractivo pero afirman algo que el texto no dice. Contrasta siempre con el texto.</div>
+          </li>
+
+          <li class="reco-item">
+            <div class="reco-num x">✕</div>
+            <div class="reco-texto"><strong>Responder desde tu opinión sobre el tema.</strong> La pregunta es qué hace el texto, no si estás de acuerdo con él. Tu postura personal sobre el asunto es irrelevante para la respuesta correcta.</div>
+          </li>
+
+        </ul>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="nota">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <div><strong>Antes de empezar:</strong> cada ejercicio se abre en esta misma pestaña. Usa el botón <em>Atrás</em> del navegador para volver aquí. Los resultados no se guardan al cerrar, así que termina cada ejercicio en una sola sesión de trabajo.</div>
+  </div>
+
+  <!-- ══════════ RUTA DE EJERCICIOS ══════════ -->
+  <div class="section-head sh-ruta">
+    <svg viewBox="0 0 24 24"><polyline points="4 7 9 12 4 17"/><polyline points="11 7 16 12 11 17"/><line x1="19" y1="7" x2="19" y2="17"/></svg>
+    <span class="section-label">Ruta de ejercicios</span>
+  </div>
+
+  <!-- ── SESIÓN 1 ── -->
+  <div class="sesion-sep primera">
+    <span class="sesion-badge sb-s1">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Sesión 1
+    </span>
+    <span class="sesion-titulo">Contenido del texto: tema, idea central e intención comunicativa</span>
+  </div>
+
+  <div class="ruta">
+
+    <a class="ej-card c-teal" href="ejercicios_tema_idea_central.html">
+      <div class="ej-icon ic-teal">1</div>
+      <div class="ej-body">
+        <div class="ej-meta m-teal">
+          <span>Ejercicio 1 · 9 preguntas</span>
+          <span class="badge-pill bp-inicio">Empieza aquí</span>
+        </div>
+        <div class="ej-title">Tema e idea central</div>
+        <div class="ej-desc">Identifica de qué trata un texto y qué afirma exactamente el autor sobre ese asunto. Distingue el asunto general de la tesis específica que se defiende.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-teal">Tema</span>
+          <span class="ej-tag t-teal">Idea central</span>
+          <span class="ej-tag t-teal">Vocabulario en contexto</span>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-num">Ejercicio 1 · 9 preguntas</div>
-        <div class="card-title">Tema e idea central</div>
-        <div class="card-desc">Identifica de qué trata un texto y qué afirma exactamente el autor sobre ese asunto.</div>
-        <div class="card-pills">
-          <span class="pill">Tema</span>
-          <span class="pill">Idea central</span>
-          <span class="pill">Vocabulario en contexto</span>
-        </div>
-      </div>
-      <div class="card-arrow">›</div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </a>
 
-    <!-- Tarjeta 2 -->
-    <a class="card c2" href="ejercicios_intencion_postura.html">
-      <div class="card-accent"></div>
-      <div class="card-icon">
-        <div class="card-icon-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
+    <a class="ej-card c-purple" href="ejercicios_intencion_postura.html">
+      <div class="ej-icon ic-purple">2</div>
+      <div class="ej-body">
+        <div class="ej-meta m-purple"><span>Ejercicio 2 · 9 preguntas</span></div>
+        <div class="ej-title">Intención y postura del autor</div>
+        <div class="ej-desc">Reconoce para qué escribe el autor y qué posición defiende frente al tema. Detecta lo que el texto refuta sin decirlo de forma explícita.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-purple">Intención comunicativa</span>
+          <span class="ej-tag t-purple">Postura</span>
+          <span class="ej-tag t-purple">Contraargumento</span>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-num">Ejercicio 2 · 9 preguntas</div>
-        <div class="card-title">Intención y postura del autor</div>
-        <div class="card-desc">Reconoce para qué escribe el autor y qué posición defiende frente al tema.</div>
-        <div class="card-pills">
-          <span class="pill">Intención comunicativa</span>
-          <span class="pill">Postura</span>
-          <span class="pill">Contraargumento</span>
-        </div>
-      </div>
-      <div class="card-arrow">›</div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </a>
 
-    <!-- Tarjeta 3 -->
-    <a class="card c3" href="ejercicios_integracion.html">
-      <div class="card-accent"></div>
-      <div class="card-icon">
-        <div class="card-icon-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
+    <a class="ej-card c-coral" href="ejercicios_integracion.html">
+      <div class="ej-icon ic-coral">3</div>
+      <div class="ej-body">
+        <div class="ej-meta m-coral">
+          <span>Ejercicio 3 · 12 preguntas</span>
+          <span class="badge-pill bp-cierre">Cierre Sesión 1</span>
+        </div>
+        <div class="ej-title">Simulacro integrador 1</div>
+        <div class="ej-desc">Aplica los tres conceptos juntos sobre textos más extensos, como en la prueba real. Incluye preguntas sobre recursos argumentativos.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-coral">Tema</span>
+          <span class="ej-tag t-coral">Idea central</span>
+          <span class="ej-tag t-coral">Intención</span>
+          <span class="ej-tag t-coral">Recursos argumentativos</span>
         </div>
       </div>
-      <div class="card-body">
-        <div class="card-num">Ejercicio 3 · 12 preguntas</div>
-        <div class="card-title">Simulacro integrador</div>
-        <div class="card-desc">Aplica los tres conceptos juntos sobre textos más extensos, como en la prueba real.</div>
-        <div class="card-pills">
-          <span class="pill">Tema</span>
-          <span class="pill">Idea central</span>
-          <span class="pill">Intención</span>
-          <span class="pill">Recursos argumentativos</span>
-        </div>
-      </div>
-      <div class="card-arrow">›</div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </a>
 
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
+  <!-- ── SESIÓN 2 ── -->
+  <div class="sesion-sep">
+    <span class="sesion-badge sb-s2">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Sesión 2
+    </span>
+    <span class="sesion-titulo">Estructura del texto: párrafo, progresión y modos discursivos</span>
+  </div>
+
+  <div class="ruta">
+
+    <a class="ej-card c-blue" href="ejercicios_s2_tipos_parrafo.html">
+      <div class="ej-icon ic-blue">4</div>
+      <div class="ej-body">
+        <div class="ej-meta m-blue"><span>Ejercicio 4 · 12 preguntas</span></div>
+        <div class="ej-title">Tipos de párrafo</div>
+        <div class="ej-desc">Reconoce qué función cumple cada párrafo dentro del texto: introducir, explicar causas, ejemplificar, contrastar o concluir.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-blue">Introducción</span>
+          <span class="ej-tag t-blue">Causa-efecto</span>
+          <span class="ej-tag t-blue">Ejemplificación</span>
+          <span class="ej-tag t-blue">Conclusión</span>
+        </div>
+      </div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a class="ej-card c-teal" href="ejercicios_s2_progresion_tematica.html">
+      <div class="ej-icon ic-teal">5</div>
+      <div class="ej-body">
+        <div class="ej-meta m-teal"><span>Ejercicio 5 · 12 preguntas</span></div>
+        <div class="ej-title">Progresión temática</div>
+        <div class="ej-desc">Sigue el hilo del texto: cómo la información avanza de un párrafo al siguiente y qué conectores marcan ese movimiento.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-teal">Tema y rema</span>
+          <span class="ej-tag t-teal">Problema-solución</span>
+          <span class="ej-tag t-teal">Conectores</span>
+          <span class="ej-tag t-teal">Relación entre párrafos</span>
+        </div>
+      </div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a class="ej-card c-amber" href="ejercicios_s2_modos_discursivos.html">
+      <div class="ej-icon ic-amber">6</div>
+      <div class="ej-body">
+        <div class="ej-meta m-amber"><span>Ejercicio 6 · 12 preguntas</span></div>
+        <div class="ej-title">Modos discursivos</div>
+        <div class="ej-desc">Distingue si un texto expone, argumenta, narra o describe, y cómo un mismo texto combina varios modos con propósitos distintos.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-amber">Expositivo</span>
+          <span class="ej-tag t-amber">Argumentativo</span>
+          <span class="ej-tag t-amber">Narrativo</span>
+          <span class="ej-tag t-amber">Descriptivo</span>
+        </div>
+      </div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+    <a class="ej-card c-coral" href="ejercicios_s2_simulacro.html">
+      <div class="ej-icon ic-coral">7</div>
+      <div class="ej-body">
+        <div class="ej-meta m-coral">
+          <span>Ejercicio 7 · 15 preguntas</span>
+          <span class="badge-pill bp-cierre">Cierre Sesión 2</span>
+        </div>
+        <div class="ej-title">Simulacro integrador 2</div>
+        <div class="ej-desc">Aplica los conceptos de estructura textual sobre textos extensos, con el formato y el nivel de exigencia de la prueba real.</div>
+        <div class="ej-tags">
+          <span class="ej-tag t-coral">Tipos de párrafo</span>
+          <span class="ej-tag t-coral">Progresión</span>
+          <span class="ej-tag t-coral">Modos discursivos</span>
+          <span class="ej-tag t-coral">Función discursiva</span>
+        </div>
+      </div>
+      <svg class="ej-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+
+  </div>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <div class="footer">
     Laboratorio CELEE · Maestría en Lectura y Escritura · Área de Lenguaje<br>
     Universidad EAFIT · Política de Lectura y Escritura en Español
-  </footer>
+  </div>
 
 </div>
 </body>

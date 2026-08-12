@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEE · Modos discursivos · Sesión 2</title>
+<style>
+:root {
+  --accent:        #0F6E56;
+  --accent-light:  #E1F5EE;
+  --accent-mid:    #1D9E75;
+  --blue:          #185FA5;
+  --blue-light:    #E6F1FB;
+  --blue-mid:      #0C447C;
+  --amber:         #BA7517;
+  --amber-light:   #FAEEDA;
+  --amber-dark:    #633806;
+  --coral:         #993C1D;
+  --coral-light:   #FAECE7;
+  --coral-dark:    #712B13;
+  --purple:        #534AB7;
+  --purple-light:  #EEEDFE;
+  --purple-dark:   #3C3489;
+  --bg:            #ffffff;
+  --bg-secondary:  #f5f4f0;
+  --bg-tertiary:   #eeece6;
+  --text:          #1a1a1a;
+  --text-muted:    #6b6b68;
+  --text-hint:     #9a9893;
+  --border:        rgba(0,0,0,0.12);
+  --border-med:    rgba(0,0,0,0.22);
+  --ok-bg:         #E1F5EE;
+  --ok-text:       #085041;
+  --ok-border:     #1D9E75;
+  --mal-bg:        #FCEBEB;
+  --mal-text:      #791F1F;
+  --mal-border:    #E24B4A;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #1c1c1a;
+    --bg-secondary:  #252523;
+    --bg-tertiary:   #2e2e2b;
+    --text:          #ede9e3;
+    --text-muted:    #9a9893;
+    --text-hint:     #6b6b68;
+    --border:        rgba(255,255,255,0.10);
+    --border-med:    rgba(255,255,255,0.20);
+    --accent:        #5DCAA5;
+    --accent-light:  #04342C;
+    --blue:          #85B7EB;
+    --blue-light:    #042C53;
+    --blue-mid:      #B5D4F4;
+    --amber:         #EF9F27;
+    --amber-light:   #412402;
+    --amber-dark:    #FAC775;
+    --coral:         #F0997B;
+    --coral-light:   #4A1B0C;
+    --coral-dark:    #F5C4B3;
+    --purple:        #AFA9EC;
+    --purple-light:  #26215C;
+    --purple-dark:   #CECBF6;
+    --ok-bg:         #04342C;
+    --ok-text:       #9FE1CB;
+    --ok-border:     #1D9E75;
+    --mal-bg:        #501313;
+    --mal-text:      #F7C1C1;
+    --mal-border:    #E24B4A;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-tertiary);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text);
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.header-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--amber-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-icon svg { width: 26px; height: 26px; stroke: var(--amber); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-text { flex: 1; }
+.header-overline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+.header-title { font-size: 1.2rem; font-weight: 700; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--text); line-height: 1.2; }
+.header-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.header-pills { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-end; flex-shrink: 0; }
+.pill { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+.pill-amber { background: var(--amber-light); color: var(--amber-dark); }
+.pill-teal  { background: var(--accent-light); color: var(--accent); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { margin-bottom: 1rem; }
+.progress-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.progress-track { display: flex; gap: 4px; height: 6px; }
+.progress-seg { flex: 1; border-radius: 3px; background: var(--border); transition: background 0.4s; }
+.progress-seg.done   { background: var(--amber); }
+.progress-seg.active { background: var(--amber); opacity: 0.45; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; margin-bottom: 1rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-med); }
+.tab-btn {
+  flex: 1; padding: 0.65rem 0.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: none; cursor: pointer;
+  border-right: 1px solid var(--border-med);
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active    { background: var(--amber); color: #fff; }
+.tab-btn.completed { background: var(--amber-light); color: var(--amber-dark); }
+.tab-btn.completed.active { background: var(--amber); color: #fff; }
+
+/* ── CARD ── */
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+
+/* ── FIELD BADGE ── */
+.field-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.25rem 0.75rem; border-radius: 20px; margin-bottom: 0.75rem;
+}
+.badge-amber  { background: var(--amber-light);  color: var(--amber-dark); }
+.badge-blue   { background: var(--blue-light);   color: var(--blue-mid); }
+.badge-coral  { background: var(--coral-light);  color: var(--coral-dark); }
+
+.career-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.career-tag {
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.65rem;
+  padding: 0.15rem 0.5rem; border-radius: 20px;
+  background: var(--bg-secondary); color: var(--text-muted); border: 1px solid var(--border);
+}
+
+/* ── READING CARD ── */
+.reading-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;
+  font-size: 0.92rem; line-height: 1.75; color: var(--text);
+}
+.reading-card p { margin-bottom: 0.85rem; }
+.reading-card p:last-child { margin-bottom: 0; }
+.reading-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.75rem;
+}
+
+/* ── LEYENDA ── */
+.leyenda {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.25rem; padding: 0.75rem 1rem;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.leyenda-titulo {
+  width: 100%; font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.25rem;
+}
+.ley-chip {
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600;
+  padding: 0.2rem 0.65rem; border-radius: 20px;
+}
+.ley-expositivo   { background: var(--blue-light);   color: var(--blue-mid); }
+.ley-argumentativo{ background: var(--amber-light);  color: var(--amber-dark); }
+.ley-narrativo    { background: var(--accent-light); color: var(--accent); }
+.ley-descriptivo  { background: var(--purple-light); color: var(--purple-dark); }
+
+/* ── PREGUNTAS ── */
+.question-block { margin-bottom: 1.5rem; }
+.question-block:last-child { margin-bottom: 0; }
+.q-number {
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--amber); margin-bottom: 0.35rem;
+}
+.q-type-tag {
+  display: inline-block; font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.62rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 10px;
+  margin-bottom: 0.5rem; vertical-align: middle; margin-left: 0.4rem;
+}
+.tag-modo     { background: var(--amber-light);  color: var(--amber-dark); }
+.tag-intencion{ background: var(--blue-light);   color: var(--blue-mid); }
+.tag-secuencia{ background: var(--accent-light); color: var(--accent); }
+.tag-variable { background: var(--purple-light); color: var(--purple-dark); }
+
+.q-text { font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.75rem; color: var(--text); }
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 0.45rem; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.7rem 0.9rem; background: var(--bg-secondary);
+  border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  cursor: pointer; text-align: left; font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; line-height: 1.45; color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--amber); background: var(--amber-light); }
+.opt-btn:disabled { cursor: default; }
+.opt-letter { font-weight: 700; font-size: 0.78rem; color: var(--text-muted); flex-shrink: 0; margin-top: 0.05rem; width: 1.1rem; }
+.opt-btn.selected-ok  { background: var(--ok-bg);  border-color: var(--ok-border); }
+.opt-btn.selected-ok .opt-letter  { color: var(--ok-text); }
+.opt-btn.selected-mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opt-btn.selected-mal .opt-letter { color: var(--mal-text); }
+.opt-btn.reveal-ok    { background: var(--ok-bg);  border-color: var(--ok-border); opacity: 0.6; }
+
+/* ── FEEDBACK ── */
+.fb {
+  display: none; margin-top: 0.6rem; border-radius: var(--radius-md); padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.83rem; line-height: 1.55;
+  overflow: hidden; max-height: 0; transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.fb.show      { display: block; max-height: 240px; padding: 0.7rem 0.9rem; }
+.fb-ok        { background: var(--ok-bg);  color: var(--ok-text);  border: 1px solid var(--ok-border); }
+.fb-mal       { background: var(--mal-bg); color: var(--mal-text); border: 1px solid var(--mal-border); }
+.fb-concepto  { font-weight: 700; margin-bottom: 0.3rem; }
+
+/* ── SCORE ── */
+.score-panel {
+  display: none; background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.25rem;
+  text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.score-panel.show { display: block; }
+.score-big  { font-size: 2.8rem; font-weight: 800; color: var(--amber); line-height: 1; }
+.score-sub  { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 1.25rem; }
+.score-breakdown { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
+.score-chip { font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-weight: 600; }
+.chip-ok    { background: var(--ok-bg);  color: var(--ok-text); }
+.chip-mal   { background: var(--mal-bg); color: var(--mal-text); }
+
+/* ── RESET ── */
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem; background: var(--amber); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.btn-reset:hover { opacity: 0.85; }
+.reset-wrap { text-align: center; margin-bottom: 1rem; }
+
+/* ── DIVIDER ── */
+.q-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <!-- ícono: cuatro cuadrantes / modos -->
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="8" height="8" rx="1"/>
+        <rect x="13" y="3" width="8" height="8" rx="1"/>
+        <rect x="3" y="13" width="8" height="8" rx="1"/>
+        <rect x="13" y="13" width="8" height="8" rx="1"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Modos discursivos</div>
+      <div class="header-desc">3 textos · 4 preguntas de selección múltiple</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-amber">Sesión 2</span>
+      <span class="pill pill-teal">Nivel básico</span>
+    </div>
+  </header>
+
+  <!-- LEYENDA GLOBAL -->
+  <div class="leyenda">
+    <div class="leyenda-titulo">Modos discursivos</div>
+    <span class="ley-chip ley-expositivo">Expositivo</span>
+    <span class="ley-chip ley-argumentativo">Argumentativo</span>
+    <span class="ley-chip ley-narrativo">Narrativo</span>
+    <span class="ley-chip ley-descriptivo">Descriptivo</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-label">Texto 1 de 3</span>
+      <span id="prog-count">0 / 12 respondidas</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg0"></div>
+      <div class="progress-seg" id="seg1"></div>
+      <div class="progress-seg" id="seg2"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab0" onclick="goTab(0)">Texto 1</button>
+    <button class="tab-btn"        id="tab1" onclick="goTab(1)">Texto 2</button>
+    <button class="tab-btn"        id="tab2" onclick="goTab(2)">Texto 3</button>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 1 — Epidemias y respuesta pública
+       Modo dominante: EXPOSITIVO con secuencias narrativas y descriptivas
+       Carreras: Ing. de Sistemas, Psicología, Derecho, Administración
+  ══════════════════════════════════════════ -->
+  <div id="panel0" class="card">
+    <div class="field-badge badge-blue">🦠 Salud pública · Ciencia</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. de Sistemas</span>
+      <span class="career-tag">Psicología</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Administración</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 1 · Cómo se propaga una epidemia: del contagio a la respuesta pública</div>
+      <p>Una epidemia no comienza con miles de enfermos: comienza con uno. El primer caso de una nueva enfermedad infecciosa suele pasar inadvertido porque sus síntomas se confunden con los de patologías más comunes. Solo cuando la cadena de contagios alcanza cierto umbral de visibilidad —cuando los médicos empiezan a ver el mismo patrón clínico en pacientes sin conexión aparente— se activan los sistemas de vigilancia epidemiológica.</p>
+      <p>La velocidad con que una enfermedad se propaga depende de un indicador clave: el número básico de reproducción, conocido como R₀. Este valor representa cuántas personas contagia en promedio un individuo infectado en una población sin inmunidad previa. Un R₀ mayor que uno significa que la enfermedad se expande; menor que uno, que se extingue. El sarampión, con un R₀ de entre 12 y 18, es uno de los agentes infecciosos más contagiosos conocidos; la gripe estacional tiene un R₀ de entre 1,2 y 1,4.</p>
+      <p>La respuesta pública ante una epidemia combina intervenciones de distinto tipo. Las medidas no farmacológicas —cuarentenas, distanciamiento físico, uso de mascarillas— buscan reducir el R₀ por debajo de uno interrumpiendo las cadenas de transmisión. Las medidas farmacológicas, como las vacunas y los antivirales, actúan sobre la susceptibilidad de la población o sobre la gravedad de la enfermedad una vez contraída. La eficacia de ambas depende en gran medida de la velocidad de implementación y de la confianza pública en las instituciones de salud.</p>
+      <p>Entender cómo se propaga una enfermedad es, por tanto, una condición necesaria para diseñar respuestas que lleguen a tiempo. Los sistemas de vigilancia, la comunicación de riesgo y la capacidad de respuesta rápida no son lujos: son la infraestructura básica de la salud pública.</p>
+    </div>
+
+    <!-- T0 Q1 -->
+    <div class="question-block" id="t0q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El modo de organización discursiva que predomina en el texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,0,1,'a')"><span class="opt-letter">a)</span> Narrativo, porque relata en orden cronológico la historia de una epidemia específica con personajes y desenlace.</button>
+        <button class="opt-btn" onclick="answer(0,0,1,'b')"><span class="opt-letter">b)</span> Expositivo, porque el texto explica cómo funciona la propagación de una epidemia y qué mecanismos existen para responder a ella, usando datos, conceptos y clasificaciones.</button>
+        <button class="opt-btn" onclick="answer(0,0,1,'c')"><span class="opt-letter">c)</span> Argumentativo, porque defiende la tesis de que las vacunas son más eficaces que las medidas no farmacológicas.</button>
+        <button class="opt-btn" onclick="answer(0,0,1,'d')"><span class="opt-letter">d)</span> Descriptivo, porque caracteriza en detalle los síntomas físicos de las enfermedades infecciosas más comunes.</button>
+      </div>
+      <div class="fb" id="fb-0-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q2 -->
+    <div class="question-block" id="t0q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-secuencia">secuencia discursiva</span></div>
+      <div class="q-text">El primer párrafo contiene una secuencia narrativa breve ("Una epidemia no comienza con miles de enfermos: comienza con uno"). ¿Qué función cumple esa secuencia dentro de un texto predominantemente expositivo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,1,2,'a')"><span class="opt-letter">a)</span> Cambia el modo del texto de expositivo a narrativo, por lo que el texto completo debe clasificarse como narrativo.</button>
+        <button class="opt-btn" onclick="answer(0,1,2,'b')"><span class="opt-letter">b)</span> Introduce los personajes principales de la historia que el texto va a narrar a continuación.</button>
+        <button class="opt-btn" onclick="answer(0,1,2,'c')"><span class="opt-letter">c)</span> Funciona como ilustración introductoria: usa una imagen narrativa para hacer más concreto el punto de partida del fenómeno que el texto se propone explicar, sin cambiar el modo dominante.</button>
+        <button class="opt-btn" onclick="answer(0,1,2,'d')"><span class="opt-letter">d)</span> Es un argumento para persuadir al lector de que las epidemias son inevitables.</button>
+      </div>
+      <div class="fb" id="fb-0-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q3 -->
+    <div class="question-block" id="t0q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El segundo párrafo, que define el R₀ y aporta valores concretos para el sarampión y la gripe, corresponde principalmente a una secuencia:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,2,0,'a')"><span class="opt-letter">a)</span> Expositiva-definitoria, porque presenta un concepto técnico (R₀), explica qué significa y lo ilustra con datos cuantitativos para que el lector comprenda el fenómeno.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'b')"><span class="opt-letter">b)</span> Narrativa, porque relata el descubrimiento del R₀ como una historia de investigación científica.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'c')"><span class="opt-letter">c)</span> Argumentativa, porque defiende que el R₀ es el único indicador útil para predecir la evolución de una epidemia.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'d')"><span class="opt-letter">d)</span> Descriptiva, porque caracteriza las propiedades físicas del sarampión y la gripe estacional.</button>
+      </div>
+      <div class="fb" id="fb-0-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q4 -->
+    <div class="question-block" id="t0q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-intencion">intención comunicativa</span></div>
+      <div class="q-text">La intención comunicativa principal del texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,3,3,'a')"><span class="opt-letter">a)</span> Persuadir al lector de que debe vacunarse ante cualquier epidemia.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'b')"><span class="opt-letter">b)</span> Narrar la experiencia de los sistemas de salud durante la pandemia de COVID-19.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'c')"><span class="opt-letter">c)</span> Describir los síntomas de las enfermedades infecciosas más peligrosas del mundo actual.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'d')"><span class="opt-letter">d)</span> Explicar los mecanismos de propagación epidémica y los tipos de respuesta pública, con el propósito de que el lector comprenda el fenómeno y su lógica.</button>
+      </div>
+      <div class="fb" id="fb-0-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel0 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 2 — Turismo de masas y patrimonio
+       Modo dominante: ARGUMENTATIVO con secuencias expositivas y descriptivas
+       Carreras: Negocios Internacionales, Derecho, Administración, Psicología
+  ══════════════════════════════════════════ -->
+  <div id="panel1" class="card" style="display:none">
+    <div class="field-badge badge-amber">🏛️ Patrimonio · Turismo</div>
+    <div class="career-tags">
+      <span class="career-tag">Negocios Internacionales</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Administración</span>
+      <span class="career-tag">Psicología</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 2 · Demasiados visitantes: el turismo de masas como amenaza al patrimonio</div>
+      <p>Cada año, más de veinte millones de turistas visitan Venecia. La ciudad, construida sobre un archipiélago de 118 islas en la laguna adriática, es uno de los sitios de patrimonio mundial más reconocidos del planeta. Sus canales, sus palacios góticos y su trama urbana medieval han sobrevivido siglos de inundaciones, guerras y transformaciones políticas. Sin embargo, lo que la ciudad no había enfrentado antes es la presión constante de una multitud que la consume sin habitarla.</p>
+      <p>El turismo de masas no es un problema estético: es una amenaza estructural. El incremento sostenido de visitantes eleva los precios de la vivienda hasta niveles inalcanzables para los residentes locales, convierte los barrios históricos en parques temáticos sin vida cotidiana y degrada físicamente la infraestructura que los turistas mismos vienen a admirar. Venecia ha perdido más del 60 % de su población residente en los últimos cincuenta años; lo que queda es una ciudad-escenario, no una ciudad viva.</p>
+      <p>Frente a esto, la respuesta no puede ser simplemente restringir el acceso. Las economías locales de muchas ciudades patrimonio dependen del turismo para sostener empleos, servicios y restauración de monumentos. Lo que se necesita es una regulación inteligente: límites de aforo diferenciados por zona y temporada, tasas de acceso que financien la conservación, incentivos para redistribuir flujos hacia destinos menos saturados y políticas de vivienda que protejan a los residentes históricos.</p>
+      <p>En síntesis, el turismo puede ser compatible con la preservación del patrimonio, pero solo si se gobierna con criterios que pongan el bien común por encima de la rentabilidad de corto plazo. No se trata de cerrar las ciudades al mundo: se trata de decidir colectivamente qué tipo de turismo queremos y a qué precio estamos dispuestos a recibirlo.</p>
+    </div>
+
+    <!-- T1 Q1 -->
+    <div class="question-block" id="t1q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El modo de organización discursiva que predomina en este texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,0,2,'a')"><span class="opt-letter">a)</span> Narrativo, porque relata en orden cronológico la historia de Venecia desde su fundación hasta el turismo actual.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'b')"><span class="opt-letter">b)</span> Expositivo, porque explica de forma objetiva y neutral qué es el turismo de masas y cómo funciona económicamente.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'c')"><span class="opt-letter">c)</span> Argumentativo, porque el texto defiende una tesis —el turismo de masas amenaza el patrimonio y requiere regulación— y presenta razones, evidencias y propuestas para sostenerla.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'d')"><span class="opt-letter">d)</span> Descriptivo, porque caracteriza detalladamente la arquitectura y el paisaje urbano de Venecia.</button>
+      </div>
+      <div class="fb" id="fb-1-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q2 -->
+    <div class="question-block" id="t1q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-secuencia">secuencia discursiva</span></div>
+      <div class="q-text">El primer párrafo describe a Venecia —sus canales, palacios y trama urbana— antes de plantear el problema. ¿Qué función cumple esa secuencia descriptiva en el texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,1,0,'a')"><span class="opt-letter">a)</span> Establece el valor del objeto que está en riesgo: describe lo que se podría perder para que el lector comprenda la gravedad del problema que el texto argumentará.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'b')"><span class="opt-letter">b)</span> Convierte el texto en descriptivo, porque la descripción de Venecia ocupa más espacio que el argumento principal.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'c')"><span class="opt-letter">c)</span> Es una digresión sin función argumentativa: el autor describe Venecia por razones estéticas, no retóricas.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'d')"><span class="opt-letter">d)</span> Introduce el modo narrativo al relatar la historia arquitectónica de la ciudad desde la Edad Media.</button>
+      </div>
+      <div class="fb" id="fb-1-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q3 -->
+    <div class="question-block" id="t1q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">La afirmación <em>"El turismo de masas no es un problema estético: es una amenaza estructural"</em> que abre el segundo párrafo es característica del modo:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,2,1,'a')"><span class="opt-letter">a)</span> Descriptivo, porque clasifica el turismo de masas según sus características visibles.</button>
+        <button class="opt-btn" onclick="answer(1,2,1,'b')"><span class="opt-letter">b)</span> Argumentativo, porque formula una tesis explícita que el párrafo desarrollará con evidencias y que el lector debe evaluar críticamente.</button>
+        <button class="opt-btn" onclick="answer(1,2,1,'c')"><span class="opt-letter">c)</span> Expositivo, porque ofrece una definición técnica y neutral de qué es el turismo de masas.</button>
+        <button class="opt-btn" onclick="answer(1,2,1,'d')"><span class="opt-letter">d)</span> Narrativo, porque sitúa el problema en un momento histórico concreto para introducir los hechos que vendrán.</button>
+      </div>
+      <div class="fb" id="fb-1-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q4 -->
+    <div class="question-block" id="t1q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">mezcla de modos</span></div>
+      <div class="q-text">El tercer párrafo comienza reconociendo que "la respuesta no puede ser simplemente restringir el acceso" y luego propone medidas concretas. ¿Qué combinación de modos discursivos se observa en ese párrafo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,3,3,'a')"><span class="opt-letter">a)</span> Narrativo y descriptivo: narra las consecuencias de las restricciones y describe cómo funcionan.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'b')"><span class="opt-letter">b)</span> Solo expositivo: explica de forma neutral los distintos modelos de gestión turística sin tomar posición.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'c')"><span class="opt-letter">c)</span> Solo narrativo: relata experiencias de ciudades que han aplicado restricciones con éxito.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'d')"><span class="opt-letter">d)</span> Argumentativo y expositivo: el modo argumentativo define la posición (se necesita regulación inteligente, no solo restricción) y el expositivo detalla las medidas concretas que se proponen.</button>
+      </div>
+      <div class="fb" id="fb-1-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel1 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 3 — El estudio de un terremoto: relato y análisis
+       Modo dominante: NARRATIVO con secuencias expositivas
+       Carreras: Ing. Física, Ing. de Sistemas, Ing. Agronómica, Ing. Mecánica
+  ══════════════════════════════════════════ -->
+  <div id="panel2" class="card" style="display:none">
+    <div class="field-badge badge-coral">🌍 Geociencias · Ingeniería</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Física</span>
+      <span class="career-tag">Ing. de Sistemas</span>
+      <span class="career-tag">Ing. Agronómica</span>
+      <span class="career-tag">Ing. Mecánica</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 3 · El día que el suelo se movió: crónica de un terremoto</div>
+      <p>Eran las 3:14 de la madrugada del 16 de abril de 2016 cuando la tierra comenzó a sacudirse bajo la costa ecuatoriana. El sismo, de magnitud 7,8 en la escala de Richter, duró apenas setenta y siete segundos, pero en ese tiempo derrumbó edificios, destruyó puentes y dejó a más de 650 personas sin vida en las provincias de Manabí y Esmeraldas. Los sobrevivientes describieron el ruido como un trueno subterráneo que no terminaba; muchos corrieron hacia las calles sin saber en qué dirección huir.</p>
+      <p>Un terremoto es el resultado de la liberación súbita de energía acumulada en las fallas geológicas de la corteza terrestre. La placa de Nazca, que se desplaza hacia el este a una velocidad de aproximadamente 6 centímetros por año, choca y se hunde bajo la placa Sudamericana en un proceso llamado subducción. Esta presión acumulada durante décadas o siglos se libera de forma abrupta, generando ondas sísmicas que se propagan en todas las direcciones desde el punto de ruptura —el hipocentro— hasta la superficie —el epicentro.</p>
+      <p>En las horas siguientes al sismo de Pedernales, los equipos de rescate enfrentaron carreteras bloqueadas, cortes de energía y la amenaza de réplicas. Las comunicaciones colapsaron en las zonas más afectadas. Voluntarios de todo el país convergieron hacia la costa, mientras el gobierno declaraba el estado de emergencia y activaba los protocolos de respuesta humanitaria. Durante días, la búsqueda de sobrevivientes entre los escombros alternó momentos de esperanza —una voz detectada bajo los escombros— con la constatación del daño irreversible.</p>
+      <p>El terremoto de Pedernales se convirtió posteriormente en un caso de estudio para ingenieros y sismólogos: permitió evaluar la efectividad de los códigos de construcción vigentes, identificar las zonas de mayor vulnerabilidad estructural y mejorar los sistemas de alerta temprana en la región. Lo que fue una tragedia se transformó, con el tiempo, en una fuente de conocimiento para reducir el impacto de futuros sismos.</p>
+    </div>
+
+    <!-- T2 Q1 -->
+    <div class="question-block" id="t2q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El modo de organización discursiva que predomina en este texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,0,2,'a')"><span class="opt-letter">a)</span> Expositivo, porque el texto explica de forma objetiva cómo funcionan los terremotos y la tectónica de placas.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'b')"><span class="opt-letter">b)</span> Argumentativo, porque el texto defiende la tesis de que los códigos de construcción deben mejorarse en Ecuador.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'c')"><span class="opt-letter">c)</span> Narrativo, porque el texto relata los hechos del terremoto de Pedernales en orden cronológico, con situaciones, acciones y un desenlace concreto.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'d')"><span class="opt-letter">d)</span> Descriptivo, porque caracteriza en detalle las condiciones geológicas de la costa ecuatoriana.</button>
+      </div>
+      <div class="fb" id="fb-2-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q2 -->
+    <div class="question-block" id="t2q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-secuencia">secuencia discursiva</span></div>
+      <div class="q-text">El segundo párrafo interrumpe el relato cronológico para explicar qué es un terremoto y cómo se produce. ¿Cómo se clasifica esa interrupción desde el punto de vista del modo discursivo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,1,0,'a')"><span class="opt-letter">a)</span> Es una secuencia expositiva incrustada en un texto narrativo: su función es explicar el fenómeno para que el lector comprenda mejor los hechos que se están narrando.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'b')"><span class="opt-letter">b)</span> Convierte el modo del texto de narrativo a expositivo, porque la explicación técnica es más extensa que la narración.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'c')"><span class="opt-letter">c)</span> Es una secuencia argumentativa que defiende que la subducción es la causa principal de los sismos en Ecuador.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'d')"><span class="opt-letter">d)</span> Es una secuencia descriptiva que presenta el aspecto físico de la falla geológica en la costa ecuatoriana.</button>
+      </div>
+      <div class="fb" id="fb-2-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q3 -->
+    <div class="question-block" id="t2q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">En el tercer párrafo, la frase <em>"la búsqueda de sobrevivientes entre los escombros alternó momentos de esperanza —una voz detectada bajo los escombros— con la constatación del daño irreversible"</em> es característica del modo:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,2,3,'a')"><span class="opt-letter">a)</span> Expositivo, porque clasifica los momentos del rescate en categorías de esperanza y daño.</button>
+        <button class="opt-btn" onclick="answer(2,2,3,'b')"><span class="opt-letter">b)</span> Argumentativo, porque toma posición sobre qué fue más importante durante las labores de rescate.</button>
+        <button class="opt-btn" onclick="answer(2,2,3,'c')"><span class="opt-letter">c)</span> Descriptivo, porque caracteriza el estado físico de los escombros y de las zonas afectadas.</button>
+        <button class="opt-btn" onclick="answer(2,2,3,'d')"><span class="opt-letter">d)</span> Narrativo, porque relata situaciones concretas con tensión y detalle sensorial (la voz detectada) propios de un relato de hechos.</button>
+      </div>
+      <div class="fb" id="fb-2-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q4 -->
+    <div class="question-block" id="t2q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">mezcla de modos</span></div>
+      <div class="q-text">El cuarto párrafo señala que el terremoto "se convirtió en un caso de estudio". ¿Qué combinación de modos discursivos aparece en ese párrafo y qué función cumple?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,3,1,'a')"><span class="opt-letter">a)</span> Solo narrativo: continúa el relato describiendo lo que ocurrió con los edificios destruidos en los años siguientes.</button>
+        <button class="opt-btn" onclick="answer(2,3,1,'b')"><span class="opt-letter">b)</span> Narrativo y expositivo: el modo narrativo cierra el relato del evento ("se convirtió en caso de estudio") y el expositivo explica qué conocimiento se derivó de él, proyectando el hecho hacia una conclusión de aprendizaje.</button>
+        <button class="opt-btn" onclick="answer(2,3,1,'c')"><span class="opt-letter">c)</span> Argumentativo y descriptivo: defiende que los sismólogos son más importantes que los ingenieros en la prevención de desastres.</button>
+        <button class="opt-btn" onclick="answer(2,3,1,'d')"><span class="opt-letter">d)</span> Solo expositivo: explica de forma técnica y neutral los métodos de análisis sísmico utilizados por los investigadores.</button>
+      </div>
+      <div class="fb" id="fb-2-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel2 -->
+
+  <!-- BOTÓN SIEMPRE VISIBLE -->
+  <div class="reset-wrap">
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpiar resultados y volver a intentar
+    </button>
+  </div>
+
+  <!-- SCORE PANEL -->
+  <div class="score-panel" id="score-panel">
+    <div class="score-big" id="score-pct">—</div>
+    <div class="score-sub" id="score-fraction">— / 12 correctas</div>
+    <div class="score-breakdown" id="score-breakdown"></div>
+  </div>
+
+</div><!-- /page-shell -->
+
+<script>
+const DATA = [
+  // TEXTO 0 — Epidemias
+  [
+    {
+      correct: 1,
+      okMsg: "Modo expositivo. Un texto expositivo busca explicar un fenómeno de forma ordenada usando conceptos, datos y clasificaciones, sin defender una tesis ni narrar una historia. Este texto hace exactamente eso: explica cómo se propaga una epidemia (R₀, umbrales de visibilidad) y qué tipos de respuesta existen. La objetividad del tono y el uso de términos técnicos confirman el modo.",
+      failMsg: "El texto no narra la historia de una epidemia concreta ni describe síntomas físicos ni defiende que las vacunas sean superiores. Su propósito es explicar cómo funciona la propagación epidémica usando conceptos técnicos (R₀), datos cuantitativos y clasificaciones de intervenciones. Ese propósito explicativo y su tono objetivo son los rasgos del modo expositivo."
+    },
+    {
+      correct: 2,
+      okMsg: "Secuencia narrativa al servicio del modo expositivo. Los textos expositivos frecuentemente incorporan secuencias narrativas, descriptivas o argumentativas para cumplir mejor su propósito explicativo. En este caso, la imagen narrativa ('comienza con uno') hace concreto y memorable el punto de partida del fenómeno, pero no cambia el modo dominante del texto, que sigue siendo expositivo.",
+      failMsg: "Una secuencia narrativa breve no convierte un texto en narrativo. El modo de un texto lo determina su propósito y organización global, no el tipo de cada oración. Aquí la narración funciona como recurso introductorio al servicio de la exposición: hace más concreta la idea de cómo comienza una epidemia. El modo dominante sigue siendo expositivo."
+    },
+    {
+      correct: 0,
+      okMsg: "Secuencia expositiva de tipo definitorio. El párrafo define el R₀, explica qué implica cada valor (mayor o menor que 1) y proporciona ejemplos cuantitativos. Esta estructura —concepto + definición + implicaciones + ejemplos— es la organización típica de una secuencia expositiva dentro de un texto informativo o científico.",
+      failMsg: "El párrafo no narra una historia, no describe características físicas de enfermedades y no defiende que el R₀ sea el único indicador útil. Su función es definir un concepto técnico, explicar su significado y ejemplificarlo con datos. Esa estructura —definición + explicación + ejemplos numéricos— es la marca de una secuencia expositiva de tipo definitorio."
+    },
+    {
+      correct: 3,
+      okMsg: "Intención explicativa. La intención comunicativa del modo expositivo es que el lector comprenda un fenómeno, no que cambie su comportamiento ni que el autor defienda una postura. El texto explica mecanismos (R₀, cadenas de contagio) y tipos de respuesta (farmacológica / no farmacológica) con ese propósito. El párrafo final lo confirma: 'Entender cómo se propaga es condición necesaria para diseñar respuestas.'",
+      failMsg: "El texto no invita a vacunarse, no narra la pandemia de COVID-19 ni describe síntomas. Su propósito es explicar cómo funciona la propagación epidémica y cuáles son los mecanismos de respuesta, para que el lector comprenda la lógica del fenómeno. Ese propósito —hacer comprender, no persuadir ni narrar— es la intención comunicativa del modo expositivo."
+    }
+  ],
+  // TEXTO 1 — Turismo
+  [
+    {
+      correct: 2,
+      okMsg: "Modo argumentativo. Un texto argumentativo defiende una tesis con razones y evidencias, y puede incluir propuestas. Este texto lo hace: su tesis es que el turismo de masas amenaza el patrimonio y requiere regulación inteligente. Los datos (pérdida de población en Venecia), el contraargumento (no se puede simplemente restringir) y las propuestas del tercer párrafo confirman la estructura argumentativa.",
+      failMsg: "El texto no narra la historia de Venecia ni explica el turismo de forma neutral. Tiene una tesis explícita ('El turismo de masas no es un problema estético: es una amenaza estructural') que desarrolla con evidencias y propuestas. Esa estructura —tesis + argumentos + contraargumento + propuesta— define el modo argumentativo."
+    },
+    {
+      correct: 0,
+      okMsg: "Descripción al servicio del argumento. En un texto argumentativo, las secuencias descriptivas pueden cumplir una función retórica: al describir el valor del patrimonio amenazado, el autor genera en el lector una valoración positiva de lo que está en riesgo, lo que hace más persuasivo el argumento sobre la necesidad de protegerlo. La descripción está subordinada al argumento, no es un fin en sí misma.",
+      failMsg: "La descripción de Venecia no convierte el texto en descriptivo ni es una digresión estética. En un texto argumentativo, describir el valor del objeto amenazado es una estrategia retórica deliberada: hace que el lector comprenda qué se perdería, reforzando la urgencia del argumento. La descripción está al servicio del argumento, no es independiente de él."
+    },
+    {
+      correct: 1,
+      okMsg: "Tesis argumentativa. La afirmación 'El turismo de masas no es un problema estético: es una amenaza estructural' es una toma de posición explícita: descarta una interpretación y afirma otra más grave. Eso es la formulación de una tesis, el gesto central del modo argumentativo. El resto del párrafo desarrolla evidencias para sostenerla.",
+      failMsg: "La afirmación no define ni clasifica de forma neutral (eso sería expositivo) ni sitúa en el tiempo (eso sería narrativo). Toma posición: afirma que el problema es estructural, no estético. Esa toma de posición explícita —que invita al lector a evaluar y posiblemente disentir— es el gesto definitorio del modo argumentativo."
+    },
+    {
+      correct: 3,
+      okMsg: "Combinación argumentativo + expositivo. El tercer párrafo primero toma posición (argumentativo: no solo restringir, sino regular inteligentemente) y luego detalla las medidas concretas (expositivo: límites de aforo, tasas, incentivos, políticas de vivienda). Esta combinación es muy frecuente en textos argumentativos donde la propuesta necesita ser explicada para resultar convincente.",
+      failMsg: "El párrafo no narra experiencias ni describe aspectos físicos. Combina dos modos: toma una posición sobre qué tipo de respuesta se necesita (argumentativo) y luego explica en qué consisten las medidas propuestas (expositivo). Reconocer esa combinación es clave para entender cómo los textos argumentativos usan la exposición al servicio de la persuasión."
+    }
+  ],
+  // TEXTO 2 — Terremoto
+  [
+    {
+      correct: 2,
+      okMsg: "Modo narrativo. Un texto narrativo relata hechos en un orden temporal, con situaciones concretas, acciones y un desenlace. Este texto lo hace: comienza con la hora exacta del sismo (3:14 a.m.), relata lo que ocurrió durante y después (rescates, réplicas, estado de emergencia) y cierra con el desenlace (caso de estudio). Los datos de tiempo, las acciones y las referencias a personas afectadas confirman el modo narrativo.",
+      failMsg: "El texto no se limita a explicar la tectónica de placas ni defiende una tesis ni describe características geológicas de forma estática. Relata un evento concreto en orden cronológico —con hora de inicio, desarrollo de los hechos y desenlace— usando recursos propios de la narración: acciones secuenciadas, detalles sensoriales y referencias a personas. Ese es el modo narrativo."
+    },
+    {
+      correct: 0,
+      okMsg: "Secuencia expositiva dentro de un texto narrativo. Es muy común que los textos narrativos incorporen secuencias expositivas para explicar el fenómeno que se está narrando. Aquí el autor interrumpe el relato para que el lector entienda qué es exactamente lo que ocurrió a nivel geológico. Esa explicación está al servicio de la narración y no cambia el modo dominante del texto.",
+      failMsg: "Una secuencia expositiva no cambia el modo dominante del texto, y no es argumentativa ni descriptiva. Su función es explicar el fenómeno geológico para que el lector comprenda mejor los hechos narrados. Los textos narrativos frecuentemente incluyen secuencias expositivas como 'pausa explicativa': el relato se detiene, se explica algo, y luego continúa."
+    },
+    {
+      correct: 3,
+      okMsg: "Modo narrativo. La frase describe situaciones concretas con tensión dramática: 'una voz detectada bajo los escombros' es un detalle sensorial específico que genera suspenso y emoción, propios del relato. La alternancia entre esperanza y daño irreversible estructura el tiempo narrativo del episodio. Esos recursos —detalle sensorial, tensión, secuencia de hechos— son marcas del modo narrativo.",
+      failMsg: "La frase no clasifica ni define (expositivo), no toma posición valorativa (argumentativo) ni presenta rasgos estáticos (descriptivo). Relata situaciones concretas con detalle sensorial ('una voz detectada') y tensión narrativa (alternancia esperanza/daño). Esos rasgos —situaciones concretas, detalle sensorial, tensión temporal— son los que definen una secuencia narrativa."
+    },
+    {
+      correct: 1,
+      okMsg: "Combinación narrativo + expositivo. El modo narrativo cierra el arco del relato ('se convirtió en caso de estudio' es el desenlace de la historia) y el modo expositivo explica qué aprendizajes se derivaron (evaluación de códigos de construcción, zonas de vulnerabilidad, sistemas de alerta). Esta combinación es típica de la crónica y el reportaje: narran hechos y los explican para extraer su significado.",
+      failMsg: "El cuarto párrafo no es solo narrativo ni solo expositivo, y no defiende ninguna jerarquía entre profesiones. Combina los dos modos: el narrativo cierra el arco de la historia (de tragedia a caso de estudio) y el expositivo explica qué conocimiento se generó. Reconocer esa combinación ayuda a entender cómo la crónica y el reportaje mezclan narración y explicación para darle sentido a los hechos."
+    }
+  ]
+];
+
+/* ══ STATE ══ */
+const TOTAL = 12;
+let answers = Array.from({length:3}, () => Array(4).fill(null));
+let currentTab = 0;
+
+/* ══ ANSWER ══ */
+function answer(textIdx, qIdx, _unused, chosenLetter) {
+  if (answers[textIdx][qIdx] !== null) return;
+  const d = DATA[textIdx][qIdx];
+  const letterMap = {'a':0,'b':1,'c':2,'d':3};
+  const chosenIdx = letterMap[chosenLetter];
+  const isOk = chosenIdx === d.correct;
+  answers[textIdx][qIdx] = isOk ? 'ok' : 'mal';
+
+  const block = document.getElementById(`t${textIdx}q${qIdx}`);
+  block.querySelectorAll('.opt-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === chosenIdx) btn.classList.add(isOk ? 'selected-ok' : 'selected-mal');
+    if (!isOk && i === d.correct) btn.classList.add('reveal-ok');
+  });
+
+  const fb = document.getElementById(`fb-${textIdx}-${qIdx}`);
+  fb.classList.add('show', isOk ? 'fb-ok' : 'fb-mal');
+  fb.querySelector('.fb-concepto').textContent = isOk ? '✓ Correcto' : '✗ Incorrecto';
+  fb.querySelector('.fb-body').textContent = isOk ? d.okMsg : d.failMsg;
+
+  updateProgress();
+  checkComplete();
+}
+
+/* ══ PROGRESS ══ */
+function countAnswered() { return answers.flat().filter(v => v !== null).length; }
+function countOk()       { return answers.flat().filter(v => v === 'ok').length; }
+function textDone(ti)    { return answers[ti].every(v => v !== null); }
+
+function updateProgress() {
+  document.getElementById('prog-count').textContent = `${countAnswered()} / ${TOTAL} respondidas`;
+  document.getElementById('prog-label').textContent = `Texto ${currentTab+1} de 3`;
+  ['seg0','seg1','seg2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'progress-seg';
+    if (textDone(i))         el.classList.add('done');
+    else if (i===currentTab) el.classList.add('active');
+  });
+  for (let i=0;i<3;i++) {
+    const t = document.getElementById(`tab${i}`);
+    t.classList.toggle('completed', textDone(i));
+  }
+}
+
+/* ══ SCORE ══ */
+function checkComplete() {
+  if (countAnswered() < TOTAL) return;
+  const ok  = countOk();
+  const pct = Math.round(ok/TOTAL*100);
+  document.getElementById('score-pct').textContent      = pct + '%';
+  document.getElementById('score-fraction').textContent = `${ok} / ${TOTAL} correctas`;
+  const bd = document.getElementById('score-breakdown');
+  bd.innerHTML = '';
+  ['Texto 1 — Epidemias','Texto 2 — Turismo','Texto 3 — Terremoto'].forEach((lbl,i)=>{
+    const okN = answers[i].filter(v=>v==='ok').length;
+    const chip = document.createElement('span');
+    chip.className = `score-chip ${okN>=3?'chip-ok':'chip-mal'}`;
+    chip.textContent = `${lbl}: ${okN}/4`;
+    bd.appendChild(chip);
+  });
+  document.getElementById('score-panel').classList.add('show');
+}
+
+/* ══ TABS ══ */
+function goTab(idx) {
+  currentTab = idx;
+  for (let i=0;i<3;i++) {
+    document.getElementById(`panel${i}`).style.display = i===idx ? 'block' : 'none';
+    document.getElementById(`tab${i}`).classList.toggle('active', i===idx);
+  }
+  updateProgress();
+}
+
+/* ══ RESET ══ */
+function resetAll() {
+  answers = Array.from({length:3}, () => Array(4).fill(null));
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('selected-ok','selected-mal','reveal-ok');
+  });
+  document.querySelectorAll('.fb').forEach(fb => {
+    fb.className = 'fb';
+    fb.querySelector('.fb-concepto').textContent = '';
+    fb.querySelector('.fb-body').textContent = '';
+  });
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('completed'));
+  document.getElementById('score-panel').classList.remove('show');
+  goTab(0);
+  updateProgress();
+}
+
+updateProgress();
+</script>
+</body>
+</html>

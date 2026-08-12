@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEE · Tipos de párrafo · Sesión 2</title>
+<style>
+:root {
+  --accent:        #0F6E56;
+  --accent-light:  #E1F5EE;
+  --accent-mid:    #1D9E75;
+  --blue:          #185FA5;
+  --blue-light:    #E6F1FB;
+  --blue-mid:      #0C447C;
+  --amber:         #BA7517;
+  --amber-light:   #FAEEDA;
+  --amber-dark:    #633806;
+  --coral:         #993C1D;
+  --coral-light:   #FAECE7;
+  --coral-dark:    #712B13;
+  --purple:        #534AB7;
+  --purple-light:  #EEEDFE;
+  --purple-dark:   #3C3489;
+  --bg:            #ffffff;
+  --bg-secondary:  #f5f4f0;
+  --bg-tertiary:   #eeece6;
+  --text:          #1a1a1a;
+  --text-muted:    #6b6b68;
+  --text-hint:     #9a9893;
+  --border:        rgba(0,0,0,0.12);
+  --border-med:    rgba(0,0,0,0.22);
+  --ok-bg:         #E1F5EE;
+  --ok-text:       #085041;
+  --ok-border:     #1D9E75;
+  --mal-bg:        #FCEBEB;
+  --mal-text:      #791F1F;
+  --mal-border:    #E24B4A;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #1c1c1a;
+    --bg-secondary:  #252523;
+    --bg-tertiary:   #2e2e2b;
+    --text:          #ede9e3;
+    --text-muted:    #9a9893;
+    --text-hint:     #6b6b68;
+    --border:        rgba(255,255,255,0.10);
+    --border-med:    rgba(255,255,255,0.20);
+    --accent:        #5DCAA5;
+    --accent-light:  #04342C;
+    --blue:          #85B7EB;
+    --blue-light:    #042C53;
+    --blue-mid:      #B5D4F4;
+    --amber:         #EF9F27;
+    --amber-light:   #412402;
+    --amber-dark:    #FAC775;
+    --coral:         #F0997B;
+    --coral-light:   #4A1B0C;
+    --coral-dark:    #F5C4B3;
+    --purple:        #AFA9EC;
+    --purple-light:  #26215C;
+    --purple-dark:   #CECBF6;
+    --ok-bg:         #04342C;
+    --ok-text:       #9FE1CB;
+    --ok-border:     #1D9E75;
+    --mal-bg:        #501313;
+    --mal-text:      #F7C1C1;
+    --mal-border:    #E24B4A;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-tertiary);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text);
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.header-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-icon svg { width: 26px; height: 26px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-text { flex: 1; }
+.header-overline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+.header-title { font-size: 1.2rem; font-weight: 700; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--text); line-height: 1.2; }
+.header-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.header-pills { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-end; flex-shrink: 0; }
+.pill { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+.pill-blue { background: var(--blue-light); color: var(--blue-mid); }
+.pill-teal { background: var(--accent-light); color: var(--accent); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { margin-bottom: 1rem; }
+.progress-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.progress-track { display: flex; gap: 4px; height: 6px; }
+.progress-seg {
+  flex: 1; border-radius: 3px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+.progress-seg.done { background: var(--blue); }
+.progress-seg.active { background: var(--blue-mid); opacity: 0.5; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; margin-bottom: 1rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-med); }
+.tab-btn {
+  flex: 1; padding: 0.65rem 0.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: none; cursor: pointer;
+  border-right: 1px solid var(--border-med);
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active { background: var(--blue); color: #fff; }
+.tab-btn.completed { background: var(--accent-light); color: var(--accent); }
+.tab-btn.completed.active { background: var(--blue); color: #fff; }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ── FIELD BADGE ── */
+.field-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+}
+.badge-blue { background: var(--blue-light); color: var(--blue-mid); }
+.badge-amber { background: var(--amber-light); color: var(--amber-dark); }
+.badge-coral { background: var(--coral-light); color: var(--coral-dark); }
+
+.career-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.career-tag {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.65rem; padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* ── READING CARD ── */
+.reading-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.reading-card p { margin-bottom: 0.85rem; }
+.reading-card p:last-child { margin-bottom: 0; }
+.reading-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 0.75rem;
+}
+
+/* ── PREGUNTAS ── */
+.question-block { margin-bottom: 1.5rem; }
+.question-block:last-child { margin-bottom: 0; }
+.q-number {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--blue); margin-bottom: 0.35rem;
+}
+.q-type-tag {
+  display: inline-block;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.62rem; font-weight: 600;
+  padding: 0.1rem 0.45rem; border-radius: 10px;
+  margin-bottom: 0.5rem;
+  vertical-align: middle; margin-left: 0.4rem;
+}
+.tag-parrafo  { background: var(--blue-light);   color: var(--blue-mid); }
+.tag-progresion { background: var(--accent-light); color: var(--accent); }
+.tag-conector { background: var(--amber-light);  color: var(--amber-dark); }
+.tag-variable { background: var(--purple-light); color: var(--purple-dark); }
+
+.q-text {
+  font-size: 0.92rem; line-height: 1.6;
+  margin-bottom: 0.75rem; color: var(--text);
+}
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 0.45rem; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer; text-align: left;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; line-height: 1.45;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--blue-light); }
+.opt-btn:disabled { cursor: default; }
+.opt-letter {
+  font-weight: 700; font-size: 0.78rem;
+  color: var(--text-muted); flex-shrink: 0; margin-top: 0.05rem;
+  width: 1.1rem;
+}
+.opt-btn.selected-ok  { background: var(--ok-bg);  border-color: var(--ok-border);  }
+.opt-btn.selected-ok .opt-letter  { color: var(--ok-text); }
+.opt-btn.selected-mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opt-btn.selected-mal .opt-letter { color: var(--mal-text); }
+.opt-btn.reveal-ok    { background: var(--ok-bg);  border-color: var(--ok-border);  opacity: 0.6; }
+
+/* ── FEEDBACK ── */
+.fb {
+  display: none; margin-top: 0.6rem;
+  border-radius: var(--radius-md); padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.83rem; line-height: 1.55;
+  overflow: hidden; max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.fb.show {
+  display: block; max-height: 200px; padding: 0.7rem 0.9rem;
+}
+.fb-ok  { background: var(--ok-bg);  color: var(--ok-text);  border: 1px solid var(--ok-border); }
+.fb-mal { background: var(--mal-bg); color: var(--mal-text);  border: 1px solid var(--mal-border); }
+.fb-concepto { font-weight: 700; margin-bottom: 0.3rem; }
+
+/* ── SCORE ── */
+.score-panel {
+  display: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  text-align: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.score-panel.show { display: block; }
+.score-big { font-size: 2.8rem; font-weight: 800; color: var(--blue); line-height: 1; }
+.score-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 1.25rem; }
+.score-breakdown { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.25rem; }
+.score-chip {
+  font-size: 0.75rem; padding: 0.3rem 0.75rem;
+  border-radius: 20px; font-weight: 600;
+}
+.chip-ok  { background: var(--ok-bg);  color: var(--ok-text); }
+.chip-mal { background: var(--mal-bg); color: var(--mal-text); }
+
+/* ── RESET BTN ── */
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+  margin-top: 0.5rem;
+}
+.btn-reset:hover { opacity: 0.85; }
+
+/* ── DIVIDER ── */
+.q-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="16" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><line x1="3" y1="18" x2="13" y2="18"/></svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Tipos de párrafo</div>
+      <div class="header-desc">3 textos · 4 preguntas de selección múltiple</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-blue">Sesión 2</span>
+      <span class="pill pill-teal">Nivel básico</span>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-label">Texto 1 de 3</span>
+      <span id="prog-count">0 / 12 respondidas</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg0"></div>
+      <div class="progress-seg" id="seg1"></div>
+      <div class="progress-seg" id="seg2"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab0" onclick="goTab(0)">Texto 1</button>
+    <button class="tab-btn" id="tab1" onclick="goTab(1)">Texto 2</button>
+    <button class="tab-btn" id="tab2" onclick="goTab(2)">Texto 3</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 1 — Agua y decisiones colectivas
+       Campos: Ing. Agronómica, Derecho, Administración, Ing. Ambiental
+  ══════════════════════════════════════════ -->
+  <div id="panel0" class="card">
+    <div class="field-badge badge-blue">🌿 Gestión ambiental · Derecho</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Agronómica</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Administración</span>
+      <span class="career-tag">Ing. Ambiental</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 1 · El agua que ya no es de todos</div>
+      <p>El acceso al agua potable es, en teoría, un derecho reconocido por las Naciones Unidas desde 2010. Sin embargo, en numerosos territorios ese reconocimiento formal choca con una realidad marcada por la desigualdad: quienes viven en zonas rurales o en asentamientos informales reciben menos agua, de menor calidad y a mayor costo relativo que quienes habitan en barrios consolidados de las ciudades. Esta brecha no es accidental; es el resultado acumulado de decisiones de inversión, de marcos regulatorios deficientes y de prioridades políticas que históricamente han favorecido a ciertos sectores sobre otros.</p>
+      <p>La privatización parcial de los sistemas de distribución hídrica, adoptada en varios países latinoamericanos durante los años noventa, agudizó estas disparidades. Las empresas concesionarias encontraron poco atractivo económico en extender redes hacia comunidades dispersas o de bajos ingresos, por lo que concentraron sus inversiones en zonas de mayor rentabilidad. Los Estados, a su vez, cedieron capacidad regulatoria sin construir mecanismos de supervisión eficaces, lo que generó contratos imposibles de auditar y tarifas difíciles de cuestionar legalmente.</p>
+      <p>Ante esta situación, algunos gobiernos han optado por la remunicipalización: recuperar la gestión del agua bajo control público, con participación ciudadana en la toma de decisiones. Las experiencias de París, Berlín y Cochabamba muestran que este modelo puede funcionar, aunque también evidencian que el éxito depende de la capacidad institucional instalada, de la transparencia en la gestión y de la voluntad política para mantener tarifas asequibles sin deteriorar la infraestructura.</p>
+      <p>En conclusión, el debate sobre el agua no es únicamente técnico ni económico: es ante todo una disputa sobre qué bienes deben permanecer fuera del mercado y qué tipo de Estado queremos construir. Responder esa pregunta exige tanto datos como valores colectivos.</p>
+    </div>
+
+    <!-- P1 Q1 -->
+    <div class="question-block" id="t0q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo del texto cumple principalmente la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,0,0,'a')"><span class="opt-letter">a)</span> Narrar cronológicamente cómo se originó la crisis del agua en América Latina.</button>
+        <button class="opt-btn" onclick="answer(0,0,0,'b')"><span class="opt-letter">b)</span> Presentar el problema central —la brecha en el acceso al agua— y las causas estructurales que lo explican.</button>
+        <button class="opt-btn" onclick="answer(0,0,0,'c')"><span class="opt-letter">c)</span> Describir en detalle las características técnicas de los sistemas de distribución hídrica.</button>
+        <button class="opt-btn" onclick="answer(0,0,0,'d')"><span class="opt-letter">d)</span> Resumir las conclusiones de estudios científicos sobre calidad del agua en zonas rurales.</button>
+      </div>
+      <div class="fb" id="fb-0-0-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P1 Q2 -->
+    <div class="question-block" id="t0q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El segundo párrafo se organiza principalmente como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,1,1,'a')"><span class="opt-letter">a)</span> Ejemplificación, porque ilustra con casos concretos la afirmación del párrafo anterior.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'b')"><span class="opt-letter">b)</span> Descripción, porque detalla las características físicas de la infraestructura hídrica.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'c')"><span class="opt-letter">c)</span> Causa-efecto, porque explica qué decisiones generaron las disparidades y qué consecuencias tuvieron.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'d')"><span class="opt-letter">d)</span> Conclusión, porque cierra el argumento con una síntesis de los datos presentados.</button>
+      </div>
+      <div class="fb" id="fb-0-1-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P1 Q3 -->
+    <div class="question-block" id="t0q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-conector">marcador discursivo</span></div>
+      <div class="q-text">En el tercer párrafo, la expresión <em>"Ante esta situación"</em> cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,2,3,'a')"><span class="opt-letter">a)</span> Introducir un dato estadístico que contradice lo dicho en el párrafo anterior.</button>
+        <button class="opt-btn" onclick="answer(0,2,3,'b')"><span class="opt-letter">b)</span> Retomar el problema planteado antes para presentar respuestas o soluciones frente a él.</button>
+        <button class="opt-btn" onclick="answer(0,2,3,'c')"><span class="opt-letter">c)</span> Señalar una excepción dentro de la misma idea que se viene desarrollando.</button>
+        <button class="opt-btn" onclick="answer(0,2,3,'d')"><span class="opt-letter">d)</span> Anunciar que el texto cambiará de tema hacia un aspecto técnico diferente.</button>
+      </div>
+      <div class="fb" id="fb-0-2-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P1 Q4 -->
+    <div class="question-block" id="t0q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">función del párrafo</span></div>
+      <div class="q-text">El cuarto párrafo, que comienza con "En conclusión…", cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,3,2,'a')"><span class="opt-letter">a)</span> Introducir un nuevo argumento sobre la privatización del agua que no había sido mencionado.</button>
+        <button class="opt-btn" onclick="answer(0,3,2,'b')"><span class="opt-letter">b)</span> Describir en detalle las diferencias entre los modelos hídricos de los países citados.</button>
+        <button class="opt-btn" onclick="answer(0,3,2,'c')"><span class="opt-letter">c)</span> Cerrar el texto sintetizando la dimensión política del debate y proyectando una pregunta de fondo.</button>
+        <button class="opt-btn" onclick="answer(0,3,2,'d')"><span class="opt-letter">d)</span> Narrar el desenlace del conflicto hídrico en Cochabamba como caso emblemático.</button>
+      </div>
+      <div class="fb" id="fb-0-3-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel0 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 2 — Inteligencia artificial y diagnóstico médico
+       Campos: Psicología, Ing. de Sistemas, Finanzas, Derecho
+  ══════════════════════════════════════════ -->
+  <div id="panel1" class="card" style="display:none">
+    <div class="field-badge badge-amber">🤖 Tecnología · Salud</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. de Sistemas</span>
+      <span class="career-tag">Psicología</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Finanzas</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 2 · Cuando el algoritmo lee la radiografía</div>
+      <p>En los últimos años, varios sistemas de inteligencia artificial han demostrado capacidad para detectar ciertos tipos de cáncer, anomalías cardíacas y enfermedades oculares con una precisión comparable —y en algunos casos superior— a la de especialistas médicos experimentados. Estas herramientas aprenden a partir de millones de imágenes clínicas previamente etiquetadas y ajustan sus modelos estadísticos hasta alcanzar umbrales de exactitud que impresionan a la comunidad científica. El potencial es enorme, especialmente en contextos donde escasean los radiólogos o los oftalmólogos.</p>
+      <p>Sin embargo, la precisión técnica no equivale a la fiabilidad clínica. Un modelo entrenado principalmente con imágenes de pacientes caucásicos adultos puede cometer errores sistemáticos al analizar casos de personas de otras etnias, de niños o de pacientes con condiciones comórbidas que no estaban representadas en los datos de entrenamiento. Este sesgo algorítmico no siempre es visible en las métricas globales de rendimiento, lo que lo convierte en un riesgo silencioso. Un médico con experiencia diversa ajusta su interpretación; el algoritmo, si no fue diseñado para hacerlo, no.</p>
+      <p>Por ejemplo, un estudio publicado en 2023 en la revista <em>Nature Medicine</em> encontró que un sistema de IA para detección de neumonía tenía una tasa de error un 18 % mayor en imágenes provenientes de hospitales de países de renta baja, comparado con su desempeño en centros de alta complejidad tecnológica. La diferencia no se debía a fallas del algoritmo en sí, sino a variaciones en la calidad y resolución de los equipos de imagen, factores que el modelo nunca había visto durante su entrenamiento.</p>
+      <p>Lo anterior no implica que la IA deba descartarse en medicina; implica que su adopción debe ir acompañada de auditorías rigurosas, representación diversa en los datos y una regulación que obligue a la transparencia sobre las condiciones en que cada modelo fue entrenado y validado.</p>
+    </div>
+
+    <!-- P2 Q1 -->
+    <div class="question-block" id="t1q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo del texto funciona principalmente como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,0,1,'a')"><span class="opt-letter">a)</span> Conclusión, porque cierra la discusión con una valoración final sobre la IA médica.</button>
+        <button class="opt-btn" onclick="answer(1,0,1,'b')"><span class="opt-letter">b)</span> Introducción-planteamiento, porque presenta el tema, expone los logros de la IA médica y anticipa el contexto del problema.</button>
+        <button class="opt-btn" onclick="answer(1,0,1,'c')"><span class="opt-letter">c)</span> Causa-efecto, porque explica por qué los algoritmos cometen errores sistemáticos.</button>
+        <button class="opt-btn" onclick="answer(1,0,1,'d')"><span class="opt-letter">d)</span> Ejemplificación, porque ilustra con un caso concreto los errores de un algoritmo médico.</button>
+      </div>
+      <div class="fb" id="fb-1-0-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P2 Q2 -->
+    <div class="question-block" id="t1q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El segundo párrafo se organiza como un párrafo de contraste o contraargumento porque:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,1,0,'a')"><span class="opt-letter">a)</span> Compara los sistemas de IA entre sí para determinar cuál es más preciso en diagnóstico.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'b')"><span class="opt-letter">b)</span> Introduce la idea de que la precisión técnica no basta y señala el problema del sesgo algorítmico, matizando lo dicho en el párrafo anterior.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'c')"><span class="opt-letter">c)</span> Enumera las ventajas de los sistemas de IA frente a los médicos humanos en contextos de escasez.</button>
+        <button class="opt-btn" onclick="answer(1,1,0,'d')"><span class="opt-letter">d)</span> Describe en detalle el proceso técnico de entrenamiento de un modelo de inteligencia artificial.</button>
+      </div>
+      <div class="fb" id="fb-1-1-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P2 Q3 -->
+    <div class="question-block" id="t1q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El tercer párrafo que menciona el estudio de <em>Nature Medicine</em> corresponde principalmente a un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,2,2,'a')"><span class="opt-letter">a)</span> Introducción, porque plantea el problema central del texto por primera vez.</button>
+        <button class="opt-btn" onclick="answer(1,2,2,'b')"><span class="opt-letter">b)</span> Conclusión, porque cierra el argumento y propone una solución definitiva al sesgo algorítmico.</button>
+        <button class="opt-btn" onclick="answer(1,2,2,'c')"><span class="opt-letter">c)</span> Ejemplificación-evidencia, porque aporta un caso específico y datos concretos que sustentan la afirmación del párrafo anterior sobre el sesgo.</button>
+        <button class="opt-btn" onclick="answer(1,2,2,'d')"><span class="opt-letter">d)</span> Descripción técnica, porque explica paso a paso el funcionamiento de los equipos de imagen médica.</button>
+      </div>
+      <div class="fb" id="fb-1-2-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P2 Q4 -->
+    <div class="question-block" id="t1q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">función del párrafo</span></div>
+      <div class="q-text">La expresión <em>"Lo anterior no implica que la IA deba descartarse"</em> al inicio del cuarto párrafo cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,3,1,'a')"><span class="opt-letter">a)</span> Introducir un argumento completamente nuevo, sin relación con los párrafos anteriores.</button>
+        <button class="opt-btn" onclick="answer(1,3,1,'b')"><span class="opt-letter">b)</span> Anticipar una posible interpretación equivocada del texto y corregirla antes de proponer una conclusión matizada.</button>
+        <button class="opt-btn" onclick="answer(1,3,1,'c')"><span class="opt-letter">c)</span> Resumir los datos estadísticos presentados en el párrafo de ejemplificación.</button>
+        <button class="opt-btn" onclick="answer(1,3,1,'d')"><span class="opt-letter">d)</span> Describir las condiciones en que un algoritmo médico puede ser aprobado por organismos reguladores.</button>
+      </div>
+      <div class="fb" id="fb-1-3-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel1 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 3 — Idiomas en peligro de extinción
+       Campos: Psicología, Negocios Internacionales, Derecho, Ing. de Sistemas
+  ══════════════════════════════════════════ -->
+  <div id="panel2" class="card" style="display:none">
+    <div class="field-badge badge-coral">🗣️ Lingüística · Cultura</div>
+    <div class="career-tags">
+      <span class="career-tag">Negocios Internacionales</span>
+      <span class="career-tag">Psicología</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Ing. de Sistemas</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 3 · Lo que se pierde cuando muere una lengua</div>
+      <p>Se estima que el mundo cuenta hoy con alrededor de 7.000 idiomas. De ellos, aproximadamente la mitad desaparecerá antes del año 2100 si las tendencias actuales se mantienen. Una lengua muere, en la práctica, cuando fallece su último hablante nativo: ese momento silencioso y casi siempre inadvertido representa la pérdida irreversible de una forma de organizar el mundo, de nombrar las cosas, de transmitir el conocimiento. No se trata solo de vocabulario: se trata de categorías perceptuales, de formas de contar el tiempo, de relaciones entre seres humanos y entorno que no tienen traducción directa.</p>
+      <p>Las causas de la extinción lingüística son diversas y frecuentemente se entrelazan. La presión económica empuja a las comunidades a adoptar idiomas mayoritarios que abren mejores oportunidades laborales y educativas. Los procesos de urbanización rompen las redes comunitarias en las que una lengua minoritaria sobrevivía con naturalidad. Las políticas educativas históricas —en particular el prohibicionismo escolar— castigaron durante décadas el uso de lenguas indígenas, generando en muchas familias la decisión consciente de no transmitirlas a sus hijos para protegerlos de la estigmatización.</p>
+      <p>Sin embargo, no todas las lenguas en peligro están condenadas. El caso del euskera en el País Vasco es quizás el ejemplo más citado de revitalización exitosa: gracias a una política pública sostenida durante décadas, que incluyó la creación de escuelas en esa lengua, su reconocimiento oficial y el apoyo a la producción cultural, el número de hablantes ha crecido significativamente desde los años ochenta. Situaciones similares, aunque con resultados más modestos, se observan con el maorí en Nueva Zelanda y el hawaiano en Estados Unidos.</p>
+      <p>En síntesis, la supervivencia de una lengua depende menos de su belleza intrínseca que de las condiciones sociales, económicas y políticas que la rodean. Preservar la diversidad lingüística es, en el fondo, preservar la diversidad de formas en que los seres humanos han aprendido a habitar el mundo.</p>
+    </div>
+
+    <!-- P3 Q1 -->
+    <div class="question-block" id="t2q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo del texto funciona como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,0,2,'a')"><span class="opt-letter">a)</span> Ejemplificación, porque aporta casos concretos de idiomas que han desaparecido en el siglo XX.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'b')"><span class="opt-letter">b)</span> Conclusión, porque sintetiza el argumento del texto y propone una solución a la extinción lingüística.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'c')"><span class="opt-letter">c)</span> Planteamiento del problema, porque presenta datos sobre la dimensión del fenómeno y define qué implica la pérdida de una lengua.</button>
+        <button class="opt-btn" onclick="answer(2,0,2,'d')"><span class="opt-letter">d)</span> Causa-efecto, porque explica las razones económicas por las que los hablantes abandonan su lengua.</button>
+      </div>
+      <div class="fb" id="fb-2-0-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P3 Q2 -->
+    <div class="question-block" id="t2q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El segundo párrafo se estructura principalmente como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,1,0,'a')"><span class="opt-letter">a)</span> Enumeración de causas, porque presenta de forma organizada los factores que explican la extinción lingüística.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'b')"><span class="opt-letter">b)</span> Descripción de consecuencias, porque explica qué ocurre en la sociedad una vez que una lengua desaparece.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'c')"><span class="opt-letter">c)</span> Contraste, porque opone las políticas lingüísticas exitosas a las fallidas en distintos países.</button>
+        <button class="opt-btn" onclick="answer(2,1,0,'d')"><span class="opt-letter">d)</span> Ejemplificación, porque ilustra con el caso del euskera cómo se puede revertir la extinción.</button>
+      </div>
+      <div class="fb" id="fb-2-1-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P3 Q3 -->
+    <div class="question-block" id="t2q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El tercer párrafo, que comienza con "Sin embargo…", introduce principalmente un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,2,1,'a')"><span class="opt-letter">a)</span> Problema-solución, donde el problema es la presión económica y la solución es el aprendizaje de idiomas mayoritarios.</button>
+        <button class="opt-btn" onclick="answer(2,2,1,'b')"><span class="opt-letter">b)</span> Contraste con ejemplificación, que matiza la idea de extinción inevitable mostrando casos exitosos de revitalización lingüística.</button>
+        <button class="opt-btn" onclick="answer(2,2,1,'c')"><span class="opt-letter">c)</span> Conclusión, donde el autor cierra el texto con una síntesis del argumento principal.</button>
+        <button class="opt-btn" onclick="answer(2,2,1,'d')"><span class="opt-letter">d)</span> Descripción técnica del proceso mediante el cual una lengua oficial se expande en comunidades rurales.</button>
+      </div>
+      <div class="fb" id="fb-2-2-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- P3 Q4 -->
+    <div class="question-block" id="t2q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">función del párrafo</span></div>
+      <div class="q-text">El cuarto párrafo, que comienza con "En síntesis…", cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,3,3,'a')"><span class="opt-letter">a)</span> Ampliar el argumento con nuevos datos estadísticos sobre el número de hablantes de lenguas en peligro.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'b')"><span class="opt-letter">b)</span> Contraargumentar la posición de quienes defienden la extinción natural de las lenguas minoritarias.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'c')"><span class="opt-letter">c)</span> Introducir un nuevo tema sobre la relación entre lengua e identidad nacional en el contexto global.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'d')"><span class="opt-letter">d)</span> Cerrar el texto reformulando la tesis central: la supervivencia lingüística depende de condiciones sociales y políticas, no de atributos intrínsecos de la lengua.</button>
+      </div>
+      <div class="fb" id="fb-2-3-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel2 -->
+
+  <!-- BOTÓN SIEMPRE VISIBLE -->
+  <div style="text-align:center; margin-bottom: 1rem;">
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpiar resultados y volver a intentar
+    </button>
+  </div>
+
+  <!-- SCORE PANEL -->
+  <div class="score-panel" id="score-panel">
+    <div class="score-big" id="score-pct">—</div>
+    <div class="score-sub" id="score-fraction">— / 12 correctas</div>
+    <div class="score-breakdown" id="score-breakdown"></div>
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpiar resultados y volver a intentar
+    </button>
+  </div>
+
+</div><!-- /page-shell -->
+
+<script>
+/* ══════════════════════════════════════
+   DATA: correct answer index (0=a,1=b,2=c,3=d) + feedback
+══════════════════════════════════════ */
+const DATA = [
+  // TEXT 0
+  [
+    {
+      correct: 1,
+      okMsg: "Párrafo de introducción-planteamiento. El primer párrafo cumple esta función porque presenta el tema central (la brecha en el acceso al agua), enuncia el problema (desigualdad), y ofrece una primera explicación de sus causas estructurales. Reconocer esta función ayuda a comprender cómo el resto del texto desarrollará y argumentará esa idea inicial.",
+      failMsg: "Revisá con atención el primer párrafo: no narra hechos en orden cronológico ni describe características técnicas. Sí presenta un problema (la desigualdad en el acceso al agua) y sus causas generales. Ese esquema —tema + problema + causas— es la marca de un párrafo de introducción-planteamiento."
+    },
+    {
+      correct: 2,
+      okMsg: "Párrafo de causa-efecto. El párrafo explica dos causas (la privatización y la cesión de capacidad regulatoria) y sus consecuencias directas (contratos inauditables, tarifas difíciles de cuestionar). Este tipo de párrafo responde a la pregunta ¿por qué ocurrió algo y qué produjo?",
+      failMsg: "Aunque el párrafo menciona casos (empresas concesionarias, Estados), no está organizado para ilustrar con ejemplos, sino para explicar por qué ocurrieron las disparidades y qué consecuencias tuvo cada decisión. Esa lógica —causas → efectos— define el párrafo de causa-efecto."
+    },
+    {
+      correct: 1,
+      okMsg: "Marcador de retoma y contraste. 'Ante esta situación' es un conector que hace referencia a lo dicho antes (el problema de la privatización y sus efectos) para introducir la respuesta o solución que el texto va a describir. Identificar este tipo de conectores ayuda a seguir la progresión argumentativa del texto.",
+      failMsg: "La expresión 'Ante esta situación' no introduce datos nuevos ni señala una excepción. Su función es retomar el problema descrito en el párrafo anterior y anunciar que ahora se presentarán respuestas a ese problema. Es un conector de retoma que articula la transición entre el diagnóstico y las soluciones."
+    },
+    {
+      correct: 2,
+      okMsg: "Párrafo de conclusión. El marcador 'En conclusión' y el contenido del párrafo —síntesis de la dimensión política del debate y proyección de una pregunta abierta— confirman que su función es cerrar el texto, no introducir información nueva. Los párrafos de conclusión suelen reformular la idea central y abrir hacia una reflexión mayor.",
+      failMsg: "El cuarto párrafo no introduce argumentos nuevos ni narra un desenlace narrativo. Comienza con 'En conclusión', lo que ya señala su función de cierre. Su contenido sintetiza el argumento del texto (el debate no es solo técnico o económico) y lo proyecta hacia una pregunta de fondo. Eso es un párrafo de conclusión."
+    }
+  ],
+  // TEXT 1
+  [
+    {
+      correct: 1,
+      okMsg: "Párrafo de introducción-planteamiento. El primer párrafo presenta el tema (la IA en medicina), expone los logros alcanzados (precisión comparable a especialistas) y esboza el contexto que justifica el debate. Esta función introductoria establece el terreno sobre el que el texto construirá su argumento.",
+      failMsg: "El primer párrafo no concluye ni ejemplifica un caso concreto de error. Presenta el tema, expone los avances de la IA médica y anticipa por qué son relevantes. Esa estructura —presentación del tema + contexto + relevancia— es característica de un párrafo de introducción-planteamiento."
+    },
+    {
+      correct: 1,
+      okMsg: "Párrafo de contraste o contraargumento. El conector 'Sin embargo' al inicio es la señal más clara: el párrafo toma la afirmación positiva del anterior (precisión técnica de la IA) y la matiza con una limitación importante (el sesgo algorítmico). Los párrafos de contraste siempre presentan una perspectiva que contradice o limita la anterior.",
+      failMsg: "El párrafo no compara sistemas de IA entre sí ni enumera ventajas. Comienza con 'Sin embargo', lo que señala que viene a matizar o contradecir la idea anterior. Introduce el problema del sesgo algorítmico como contraargumento a la precisión técnica presentada en el párrafo 1. Eso es un párrafo de contraste."
+    },
+    {
+      correct: 2,
+      okMsg: "Párrafo de ejemplificación-evidencia. El uso de 'Por ejemplo' y la referencia a un estudio específico (Nature Medicine, 2023, con datos concretos) confirman que la función es aportar evidencia empírica que respalde la afirmación del párrafo anterior sobre el sesgo. Este tipo de párrafo transforma una afirmación general en una afirmación demostrada.",
+      failMsg: "El párrafo no introduce el tema central ni propone soluciones. Comienza con 'Por ejemplo', lo que ya anuncia su función: ilustrar con un caso concreto y datos reales la idea del sesgo algorítmico planteada antes. Esa combinación —ejemplo específico + datos + fuente— es la marca del párrafo de ejemplificación-evidencia."
+    },
+    {
+      correct: 1,
+      okMsg: "Anticipación de una lectura equivocada (rectificación preventiva). La frase 'Lo anterior no implica que la IA deba descartarse' anticipa la posible conclusión errónea de que el texto rechaza la IA en medicina, y la corrige antes de presentar la propuesta matizada. Esta estrategia ayuda al lector a interpretar correctamente el argumento antes de leer la conclusión.",
+      failMsg: "La expresión 'Lo anterior no implica que…' no introduce información nueva ni resume datos. Su función específica es anticipar una conclusión equivocada que el lector podría sacar (la IA es mala para la medicina) y corregirla explícitamente. Es una estrategia de rectificación preventiva que prepara la propuesta final del texto."
+    }
+  ],
+  // TEXT 2
+  [
+    {
+      correct: 2,
+      okMsg: "Párrafo de planteamiento del problema. El primer párrafo aporta datos cuantitativos (7.000 idiomas, mitad en riesgo antes de 2100), define el fenómeno (la muerte de una lengua) y explica su dimensión real (no es solo vocabulario). Esta combinación de datos + definición + alcance del problema es la estructura típica de un párrafo introductorio de planteamiento.",
+      failMsg: "El primer párrafo no aporta ejemplos de lenguas específicas ni propone soluciones. Presenta el problema con datos generales, define qué significa que una lengua muera y explica qué se pierde. Esa estructura —datos + definición + magnitud— es la del párrafo de planteamiento del problema."
+    },
+    {
+      correct: 0,
+      okMsg: "Párrafo de enumeración de causas. El párrafo identifica y organiza tres factores que explican la extinción lingüística: presión económica, urbanización y políticas educativas históricas. La estructura enumera causas de manera progresiva, lo que la distingue de la descripción de consecuencias o del contraste.",
+      failMsg: "El párrafo no describe consecuencias de la extinción ni opone políticas exitosas a fallidas. Organiza de forma consecutiva tres causas diferentes (presión económica, urbanización, prohibicionismo escolar). Esa estructura de listado explicativo de factores es la del párrafo de enumeración de causas."
+    },
+    {
+      correct: 1,
+      okMsg: "Párrafo de contraste con ejemplificación. El marcador 'Sin embargo' anticipa que el párrafo va a matizar la visión pesimista del anterior. Luego aporta el ejemplo del euskera (y brevemente el maorí y el hawaiano) para demostrar que la extinción no es inevitable. Esta combinación —contraste + evidencia de casos— define la función del párrafo.",
+      failMsg: "El párrafo no describe soluciones a la presión económica ni cierra el texto. Comienza con 'Sin embargo', señal de contraste con lo anterior. Su función es mostrar que no todas las lenguas están condenadas, usando el ejemplo del euskera como evidencia. Eso es un párrafo de contraste con ejemplificación."
+    },
+    {
+      correct: 3,
+      okMsg: "Párrafo de conclusión-síntesis. El marcador 'En síntesis' y el contenido confirman la función: el párrafo no añade información nueva, sino que reformula la idea central del texto (la supervivencia lingüística depende de condiciones sociales y políticas) y la proyecta hacia una reflexión más amplia (preservar lenguas es preservar formas de habitar el mundo).",
+      failMsg: "El párrafo no amplía datos ni contraargumenta otras posiciones. Comienza con 'En síntesis', lo que indica explícitamente una función de cierre y reformulación. Retoma la idea central del texto y la eleva a una conclusión más amplia. Eso es un párrafo de conclusión-síntesis, no un párrafo que introduce temas nuevos."
+    }
+  ]
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+const TOTAL = 12;
+let answers = Array.from({length:3}, () => Array(4).fill(null)); // null | 'ok' | 'mal'
+let currentTab = 0;
+
+/* ══════════════════════════════════════
+   ANSWER HANDLER
+══════════════════════════════════════ */
+function answer(textIdx, qIdx, _unused, chosenLetter) {
+  if (answers[textIdx][qIdx] !== null) return; // already answered
+
+  const d = DATA[textIdx][qIdx];
+  const letterMap = {'a':0,'b':1,'c':2,'d':3};
+  const chosenIdx = letterMap[chosenLetter];
+  const isOk = (chosenIdx === d.correct);
+  answers[textIdx][qIdx] = isOk ? 'ok' : 'mal';
+
+  // Style buttons
+  const block = document.getElementById(`t${textIdx}q${qIdx}`);
+  const btns = block.querySelectorAll('.opt-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === chosenIdx) btn.classList.add(isOk ? 'selected-ok' : 'selected-mal');
+    if (!isOk && i === d.correct) btn.classList.add('reveal-ok');
+  });
+
+  // Feedback — find the fb div by known id pattern
+  // id format: fb-{textIdx}-{qIdx}-{correctIdx}
+  const fbEl = block.querySelector('.fb');
+  fbEl.classList.add('show', isOk ? 'fb-ok' : 'fb-mal');
+  fbEl.querySelector('.fb-concepto').textContent = isOk ? '✓ Correcto' : '✗ Incorrecto';
+  fbEl.querySelector('.fb-body').textContent = isOk ? d.okMsg : d.failMsg;
+
+  updateProgress();
+  checkComplete();
+}
+
+/* ══════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════ */
+function countAnswered() {
+  return answers.flat().filter(v => v !== null).length;
+}
+function countOk() {
+  return answers.flat().filter(v => v === 'ok').length;
+}
+function textDone(ti) {
+  return answers[ti].every(v => v !== null);
+}
+
+function updateProgress() {
+  const answered = countAnswered();
+  document.getElementById('prog-count').textContent = `${answered} / ${TOTAL} respondidas`;
+  document.getElementById('prog-label').textContent = `Texto ${currentTab+1} de 3`;
+
+  ['seg0','seg1','seg2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'progress-seg';
+    if (textDone(i)) el.classList.add('done');
+    else if (i === currentTab) el.classList.add('active');
+  });
+
+  // Tab completed state
+  for (let i=0; i<3; i++) {
+    const tab = document.getElementById(`tab${i}`);
+    if (textDone(i)) tab.classList.add('completed');
+  }
+}
+
+/* ══════════════════════════════════════
+   CHECK COMPLETE
+══════════════════════════════════════ */
+function checkComplete() {
+  if (countAnswered() < TOTAL) return;
+  const ok = countOk();
+  const pct = Math.round(ok/TOTAL*100);
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('score-fraction').textContent = `${ok} / ${TOTAL} correctas`;
+
+  const bd = document.getElementById('score-breakdown');
+  bd.innerHTML = '';
+  const labels = ['Texto 1 — Agua', 'Texto 2 — IA médica', 'Texto 3 — Lenguas'];
+  answers.forEach((arr, i) => {
+    const okN = arr.filter(v=>v==='ok').length;
+    const chip = document.createElement('span');
+    chip.className = `score-chip ${okN>=3?'chip-ok':'chip-mal'}`;
+    chip.textContent = `${labels[i]}: ${okN}/4`;
+    bd.appendChild(chip);
+  });
+
+  document.getElementById('score-panel').classList.add('show');
+}
+
+/* ══════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════ */
+function goTab(idx) {
+  currentTab = idx;
+  for (let i=0; i<3; i++) {
+    document.getElementById(`panel${i}`).style.display = i===idx ? 'block' : 'none';
+    const tab = document.getElementById(`tab${i}`);
+    tab.classList.toggle('active', i===idx);
+  }
+  document.getElementById('prog-label').textContent = `Texto ${idx+1} de 3`;
+  updateProgress();
+}
+
+/* ══════════════════════════════════════
+   RESET
+══════════════════════════════════════ */
+function resetAll() {
+  answers = Array.from({length:3}, () => Array(4).fill(null));
+
+  // Re-enable all buttons, remove classes, hide feedbacks
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove('selected-ok','selected-mal','reveal-ok');
+  });
+  document.querySelectorAll('.fb').forEach(fb => {
+    fb.className = 'fb';
+    fb.querySelector('.fb-concepto').textContent = '';
+    fb.querySelector('.fb-body').textContent = '';
+  });
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('completed'));
+
+  document.getElementById('score-panel').classList.remove('show');
+  goTab(0);
+  updateProgress();
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+updateProgress();
+</script>
+</body>
+</html>

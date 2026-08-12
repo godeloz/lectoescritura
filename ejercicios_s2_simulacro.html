@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEE · Simulacro S2</title>
+<style>
+:root {
+  --accent:        #0F6E56;
+  --accent-light:  #E1F5EE;
+  --accent-mid:    #1D9E75;
+  --blue:          #185FA5;
+  --blue-light:    #E6F1FB;
+  --blue-mid:      #0C447C;
+  --amber:         #BA7517;
+  --amber-light:   #FAEEDA;
+  --amber-dark:    #633806;
+  --coral:         #993C1D;
+  --coral-light:   #FAECE7;
+  --coral-dark:    #712B13;
+  --purple:        #534AB7;
+  --purple-light:  #EEEDFE;
+  --purple-dark:   #3C3489;
+  --bg:            #ffffff;
+  --bg-secondary:  #f5f4f0;
+  --bg-tertiary:   #eeece6;
+  --text:          #1a1a1a;
+  --text-muted:    #6b6b68;
+  --text-hint:     #9a9893;
+  --border:        rgba(0,0,0,0.12);
+  --border-med:    rgba(0,0,0,0.22);
+  --ok-bg:         #E1F5EE;
+  --ok-text:       #085041;
+  --ok-border:     #1D9E75;
+  --mal-bg:        #FCEBEB;
+  --mal-text:      #791F1F;
+  --mal-border:    #E24B4A;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #1c1c1a;
+    --bg-secondary:  #252523;
+    --bg-tertiary:   #2e2e2b;
+    --text:          #ede9e3;
+    --text-muted:    #9a9893;
+    --text-hint:     #6b6b68;
+    --border:        rgba(255,255,255,0.10);
+    --border-med:    rgba(255,255,255,0.20);
+    --accent:        #5DCAA5;
+    --accent-light:  #04342C;
+    --blue:          #85B7EB;
+    --blue-light:    #042C53;
+    --blue-mid:      #B5D4F4;
+    --amber:         #EF9F27;
+    --amber-light:   #412402;
+    --amber-dark:    #FAC775;
+    --coral:         #F0997B;
+    --coral-light:   #4A1B0C;
+    --coral-dark:    #F5C4B3;
+    --purple:        #AFA9EC;
+    --purple-light:  #26215C;
+    --purple-dark:   #CECBF6;
+    --ok-bg:         #04342C;
+    --ok-text:       #9FE1CB;
+    --ok-border:     #1D9E75;
+    --mal-bg:        #501313;
+    --mal-text:      #F7C1C1;
+    --mal-border:    #E24B4A;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-tertiary);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text);
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+}
+
+.page-shell { max-width: 720px; width: 100%; margin: 0 auto; }
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+  display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+}
+.header-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  background: var(--coral-light); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.header-icon svg { width: 26px; height: 26px; stroke: var(--coral); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-text { flex: 1; }
+.header-overline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+.header-title { font-size: 1.2rem; font-weight: 700; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--text); line-height: 1.2; }
+.header-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.header-pills { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-end; flex-shrink: 0; }
+.pill { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+.pill-coral { background: var(--coral-light); color: var(--coral-dark); }
+.pill-teal  { background: var(--accent-light); color: var(--accent); }
+
+/* ── LEYENDA ── */
+.leyenda {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.25rem; padding: 0.75rem 1rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+}
+.leyenda-titulo { width: 100%; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.25rem; }
+.ley-chip { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.65rem; border-radius: 20px; }
+.ley-parrafo    { background: var(--blue-light);   color: var(--blue-mid); }
+.ley-progresion { background: var(--accent-light); color: var(--accent); }
+.ley-modo       { background: var(--amber-light);  color: var(--amber-dark); }
+.ley-variable   { background: var(--purple-light); color: var(--purple-dark); }
+
+/* ── PROGRESS ── */
+.progress-wrap { margin-bottom: 1rem; }
+.progress-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.progress-track { display: flex; gap: 4px; height: 6px; }
+.progress-seg { flex: 1; border-radius: 3px; background: var(--border); transition: background 0.4s; }
+.progress-seg.done   { background: var(--coral); }
+.progress-seg.active { background: var(--coral); opacity: 0.45; }
+
+/* ── TABS ── */
+.tabs { display: flex; margin-bottom: 1rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-med); }
+.tab-btn {
+  flex: 1; padding: 0.65rem 0.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.78rem; font-weight: 600;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: none; cursor: pointer; border-right: 1px solid var(--border-med);
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active    { background: var(--coral); color: #fff; }
+.tab-btn.completed { background: var(--coral-light); color: var(--coral-dark); }
+.tab-btn.completed.active { background: var(--coral); color: #fff; }
+
+/* ── CARD ── */
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
+
+/* ── FIELD BADGE ── */
+.field-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600;
+  padding: 0.25rem 0.75rem; border-radius: 20px; margin-bottom: 0.75rem;
+}
+.badge-coral  { background: var(--coral-light);  color: var(--coral-dark); }
+.badge-blue   { background: var(--blue-light);   color: var(--blue-mid); }
+.badge-purple { background: var(--purple-light); color: var(--purple-dark); }
+
+.career-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.career-tag { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 20px; background: var(--bg-secondary); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* ── READING CARD ── */
+.reading-card {
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-left: 3px solid var(--coral); border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;
+  font-size: 0.92rem; line-height: 1.75; color: var(--text);
+}
+.reading-card p { margin-bottom: 0.85rem; }
+.reading-card p:last-child { margin-bottom: 0; }
+.reading-title { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--coral); margin-bottom: 0.75rem; }
+
+/* ── PREGUNTAS ── */
+.question-block { margin-bottom: 1.5rem; }
+.question-block:last-child { margin-bottom: 0; }
+.q-number { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--coral); margin-bottom: 0.35rem; }
+.q-type-tag { display: inline-block; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 10px; margin-bottom: 0.5rem; vertical-align: middle; margin-left: 0.4rem; }
+.tag-parrafo    { background: var(--blue-light);   color: var(--blue-mid); }
+.tag-progresion { background: var(--accent-light); color: var(--accent); }
+.tag-modo       { background: var(--amber-light);  color: var(--amber-dark); }
+.tag-variable   { background: var(--purple-light); color: var(--purple-dark); }
+
+.q-text { font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.75rem; color: var(--text); }
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 0.45rem; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.7rem 0.9rem; background: var(--bg-secondary);
+  border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  cursor: pointer; text-align: left; font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; line-height: 1.45; color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--coral); background: var(--coral-light); }
+.opt-btn:disabled { cursor: default; }
+.opt-letter { font-weight: 700; font-size: 0.78rem; color: var(--text-muted); flex-shrink: 0; margin-top: 0.05rem; width: 1.1rem; }
+.opt-btn.selected-ok  { background: var(--ok-bg);  border-color: var(--ok-border); }
+.opt-btn.selected-ok .opt-letter  { color: var(--ok-text); }
+.opt-btn.selected-mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opt-btn.selected-mal .opt-letter { color: var(--mal-text); }
+.opt-btn.reveal-ok    { background: var(--ok-bg);  border-color: var(--ok-border); opacity: 0.6; }
+
+/* ── FEEDBACK ── */
+.fb {
+  display: none; margin-top: 0.6rem; border-radius: var(--radius-md); padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.83rem; line-height: 1.55;
+  overflow: hidden; max-height: 0; transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.fb.show     { display: block; max-height: 240px; padding: 0.7rem 0.9rem; }
+.fb-ok       { background: var(--ok-bg);  color: var(--ok-text);  border: 1px solid var(--ok-border); }
+.fb-mal      { background: var(--mal-bg); color: var(--mal-text); border: 1px solid var(--mal-border); }
+.fb-concepto { font-weight: 700; margin-bottom: 0.3rem; }
+
+/* ── SCORE ── */
+.score-panel {
+  display: none; background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.25rem;
+  text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.score-panel.show { display: block; }
+.score-big  { font-size: 2.8rem; font-weight: 800; color: var(--coral); line-height: 1; }
+.score-sub  { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 1.25rem; }
+.score-breakdown { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
+.score-chip { font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-weight: 600; }
+.chip-ok  { background: var(--ok-bg);  color: var(--ok-text); }
+.chip-mal { background: var(--mal-bg); color: var(--mal-text); }
+
+/* ── RESET ── */
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem; background: var(--coral); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.btn-reset:hover { opacity: 0.85; }
+.reset-wrap { text-align: center; margin-bottom: 1rem; }
+
+/* ── DIVIDER ── */
+.q-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Simulacro integrador — Sesión 2</div>
+      <div class="header-desc">3 textos · 5 preguntas por texto · Tipos de párrafo, progresión temática y modos discursivos</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-coral">Sesión 2</span>
+      <span class="pill pill-teal">Simulacro</span>
+    </div>
+  </header>
+
+  <!-- LEYENDA -->
+  <div class="leyenda">
+    <div class="leyenda-titulo">Tipos de pregunta</div>
+    <span class="ley-chip ley-parrafo">Tipo de párrafo</span>
+    <span class="ley-chip ley-progresion">Progresión temática</span>
+    <span class="ley-chip ley-modo">Modo discursivo</span>
+    <span class="ley-chip ley-variable">Función discursiva</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-label">Texto 1 de 3</span>
+      <span id="prog-count">0 / 15 respondidas</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg0"></div>
+      <div class="progress-seg" id="seg1"></div>
+      <div class="progress-seg" id="seg2"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab0" onclick="goTab(0)">Texto 1</button>
+    <button class="tab-btn"        id="tab1" onclick="goTab(1)">Texto 2</button>
+    <button class="tab-btn"        id="tab2" onclick="goTab(2)">Texto 3</button>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 1 — Migración y remesas
+       Carreras: Finanzas, Negocios Internacionales, Derecho, Administración
+  ══════════════════════════════════════════ -->
+  <div id="panel0" class="card">
+    <div class="field-badge badge-coral">💸 Economía · Migración</div>
+    <div class="career-tags">
+      <span class="career-tag">Finanzas</span>
+      <span class="career-tag">Negocios Internacionales</span>
+      <span class="career-tag">Derecho</span>
+      <span class="career-tag">Administración</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 1 · El dinero que cruza fronteras: remesas y desarrollo</div>
+      <p>En 2023, los migrantes latinoamericanos enviaron a sus países de origen más de 155.000 millones de dólares en remesas. Esta cifra supera con creces la suma de la inversión extranjera directa y la ayuda oficial al desarrollo recibida por la región en el mismo año. Para millones de familias en México, Guatemala, El Salvador, Colombia y Honduras, el dinero enviado por un pariente desde Estados Unidos, España o Chile representa la diferencia entre cubrir los gastos básicos o no hacerlo.</p>
+      <p>Sin embargo, las remesas no son un sustituto del desarrollo. El dinero que llega a los hogares tiende a destinarse principalmente al consumo —alimentos, salud, educación, vivienda— antes que a la inversión productiva. Esto no es un defecto moral de las familias receptoras: es el resultado lógico de la precariedad. Cuando lo urgente consume lo disponible, el ahorro y la inversión quedan para después. Además, la dependencia de remesas puede desincentivar la búsqueda de empleo local y hacer frágil la economía familiar ante cualquier interrupción del flujo.</p>
+      <p>Algunos gobiernos han intentado canalizar parte de estos recursos hacia proyectos de infraestructura o emprendimiento mediante programas de cofinanciamiento: por cada dólar que una comunidad migrante invierte colectivamente en su región de origen, el Estado aporta una cantidad equivalente. México fue pionero en este modelo con el programa Tres por Uno. Los resultados han sido heterogéneos: el programa sí generó obras en comunidades pequeñas, pero tuvo dificultades para escalar y para garantizar la sostenibilidad de los proyectos una vez terminado el financiamiento.</p>
+      <p>En síntesis, las remesas son un activo real para las familias y una fuente significativa de divisas para las economías receptoras, pero su potencial como palanca de desarrollo depende de condiciones estructurales que van mucho más allá del flujo de dinero en sí: mercados laborales locales, acceso a crédito, infraestructura y estabilidad institucional.</p>
+    </div>
+
+    <!-- T0 Q1 — tipo de párrafo -->
+    <div class="question-block" id="t0q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo del texto cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(0,0,'a')"><span class="opt-letter">a)</span> Concluir el argumento central con una síntesis de los datos presentados a lo largo del texto.</button>
+        <button class="opt-btn" onclick="ans(0,0,'b')"><span class="opt-letter">b)</span> Presentar el fenómeno con datos cuantitativos que establecen su magnitud y su relevancia para las familias de la región.</button>
+        <button class="opt-btn" onclick="ans(0,0,'c')"><span class="opt-letter">c)</span> Enumerar las causas que explican por qué los migrantes envían dinero a sus países de origen.</button>
+        <button class="opt-btn" onclick="ans(0,0,'d')"><span class="opt-letter">d)</span> Describir las características físicas y culturales de los países receptores de remesas en América Latina.</button>
+      </div>
+      <div class="fb" id="fb-0-0"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q2 — tipo de párrafo -->
+    <div class="question-block" id="t0q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El segundo párrafo, que comienza con "Sin embargo, las remesas no son un sustituto del desarrollo", se organiza principalmente como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(0,1,'a')"><span class="opt-letter">a)</span> Contraste-matiz, porque introduce una limitación importante a la idea positiva del párrafo anterior y explica por qué ocurre.</button>
+        <button class="opt-btn" onclick="ans(0,1,'b')"><span class="opt-letter">b)</span> Ejemplificación, porque aporta casos concretos de familias que han invertido sus remesas con éxito.</button>
+        <button class="opt-btn" onclick="ans(0,1,'c')"><span class="opt-letter">c)</span> Conclusión, porque cierra el texto con una síntesis del argumento sobre el potencial de las remesas.</button>
+        <button class="opt-btn" onclick="ans(0,1,'d')"><span class="opt-letter">d)</span> Narración, porque relata en orden cronológico cómo evolucionó el uso de las remesas en la región.</button>
+      </div>
+      <div class="fb" id="fb-0-1"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q3 — progresión temática -->
+    <div class="question-block" id="t0q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">¿Cómo avanza el tema entre el segundo y el tercer párrafo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(0,2,'a')"><span class="opt-letter">a)</span> El tercer párrafo contradice al segundo al afirmar que las remesas sí generan inversión productiva de forma espontánea.</button>
+        <button class="opt-btn" onclick="ans(0,2,'b')"><span class="opt-letter">b)</span> El tercer párrafo repite con otras palabras las mismas limitaciones señaladas en el segundo.</button>
+        <button class="opt-btn" onclick="ans(0,2,'c')"><span class="opt-letter">c)</span> El tercer párrafo avanza desde el diagnóstico del problema (remesas no generan inversión por sí solas) hacia las respuestas institucionales que intentan corregirlo, completando el movimiento problema → solución parcial.</button>
+        <button class="opt-btn" onclick="ans(0,2,'d')"><span class="opt-letter">d)</span> El tercer párrafo cambia de tema hacia la historia del programa Tres por Uno sin conexión con lo anterior.</button>
+      </div>
+      <div class="fb" id="fb-0-2"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q4 — modo discursivo -->
+    <div class="question-block" id="t0q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El modo de organización discursiva que predomina en el texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(0,3,'a')"><span class="opt-letter">a)</span> Narrativo, porque relata en orden cronológico la historia de la migración latinoamericana desde el siglo XX.</button>
+        <button class="opt-btn" onclick="ans(0,3,'b')"><span class="opt-letter">b)</span> Descriptivo, porque caracteriza las condiciones de vida de las familias receptoras de remesas.</button>
+        <button class="opt-btn" onclick="ans(0,3,'c')"><span class="opt-letter">c)</span> Argumentativo, porque el texto defiende una tesis —las remesas son un activo real pero no un sustituto del desarrollo— y la sustenta con evidencias, contraargumentos y una conclusión.</button>
+        <button class="opt-btn" onclick="ans(0,3,'d')"><span class="opt-letter">d)</span> Expositivo, porque explica de forma objetiva y neutral qué son las remesas y cómo funcionan los programas de cofinanciamiento.</button>
+      </div>
+      <div class="fb" id="fb-0-3"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q5 — función discursiva -->
+    <div class="question-block" id="t0q4">
+      <div class="q-number">Pregunta 5 <span class="q-type-tag tag-variable">función discursiva</span></div>
+      <div class="q-text">La afirmación "Esto no es un defecto moral de las familias receptoras: es el resultado lógico de la precariedad" cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(0,4,'a')"><span class="opt-letter">a)</span> Introducir un dato estadístico que sustenta la tesis sobre el uso del dinero de las remesas.</button>
+        <button class="opt-btn" onclick="ans(0,4,'b')"><span class="opt-letter">b)</span> Anticipar y refutar una interpretación moralista del comportamiento de las familias, reencuadrando el fenómeno como consecuencia estructural.</button>
+        <button class="opt-btn" onclick="ans(0,4,'c')"><span class="opt-letter">c)</span> Describir las características psicológicas de los migrantes que envían remesas a sus familias.</button>
+        <button class="opt-btn" onclick="ans(0,4,'d')"><span class="opt-letter">d)</span> Resumir el argumento del primer párrafo antes de pasar al tema del programa Tres por Uno.</button>
+      </div>
+      <div class="fb" id="fb-0-4"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+  </div><!-- /panel0 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 2 — Inteligencia artificial y creatividad
+       Carreras: Ing. de Sistemas, Psicología, Ing. Mecánica, Ing. Física
+  ══════════════════════════════════════════ -->
+  <div id="panel1" class="card" style="display:none">
+    <div class="field-badge badge-blue">🎨 Tecnología · Cultura</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. de Sistemas</span>
+      <span class="career-tag">Psicología</span>
+      <span class="career-tag">Ing. Mecánica</span>
+      <span class="career-tag">Ing. Física</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 2 · ¿Puede una máquina ser creativa?</div>
+      <p>En 2018, una pintura generada por un algoritmo de inteligencia artificial se vendió en Christie's por 432.500 dólares. La obra, titulada <em>Portrait of Edmond de Belamy</em>, fue producida por el colectivo artístico Obvious utilizando una red generativa adversarial entrenada con 15.000 retratos históricos. El hecho provocó una pregunta que desde entonces no ha dejado de resonar en debates filosóficos, artísticos y tecnológicos: ¿puede una máquina ser creativa?</p>
+      <p>Quienes responden que no señalan que la creatividad implica intencionalidad, subjetividad y experiencia vivida: el artista humano crea desde un cuerpo, desde una historia personal, desde emociones que la máquina no puede tener. El algoritmo, por más sofisticado que sea, no elige qué quiere decir: recombina patrones estadísticos a partir de lo que ha visto. Produce resultados que parecen creativos sin que haya un sujeto detrás que los haya querido.</p>
+      <p>Quienes sostienen lo contrario argumentan que la creatividad humana también se apoya en la recombinación de influencias previas, en patrones aprendidos y en restricciones técnicas. Ningún artista crea desde cero. Si el criterio es la novedad del resultado y su capacidad para provocar en el espectador una respuesta estética genuina, entonces las obras generadas por IA pueden cumplirlo. El debate, dicen, refleja más nuestro apego a una definición romántica del arte que una distinción real entre procesos creativos.</p>
+      <p>Más allá de la respuesta filosófica, lo que resulta claro es que las herramientas de IA están transformando la práctica artística de forma acelerada: facilitan la producción, amplían el acceso, plantean nuevos problemas de autoría y propiedad intelectual, y obligan a repensar qué valoramos en una obra de arte y por qué. La pregunta por la creatividad de la máquina es, en el fondo, una pregunta sobre la creatividad humana.</p>
+    </div>
+
+    <!-- T1 Q1 — tipo de párrafo -->
+    <div class="question-block" id="t1q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo del texto funciona principalmente como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(1,0,'a')"><span class="opt-letter">a)</span> Conclusión, porque sintetiza el argumento del texto y propone una respuesta a la pregunta sobre la creatividad de la IA.</button>
+        <button class="opt-btn" onclick="ans(1,0,'b')"><span class="opt-letter">b)</span> Causa-efecto, porque explica por qué los algoritmos producen obras que se venden a precios tan altos.</button>
+        <button class="opt-btn" onclick="ans(1,0,'c')"><span class="opt-letter">c)</span> Planteamiento mediante caso concreto, porque usa el ejemplo de la subasta de Christie's para introducir la pregunta central que el texto va a explorar.</button>
+        <button class="opt-btn" onclick="ans(1,0,'d')"><span class="opt-letter">d)</span> Descripción técnica, porque explica en detalle cómo funcionan las redes generativas adversariales.</button>
+      </div>
+      <div class="fb" id="fb-1-0"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q2 — progresión temática -->
+    <div class="question-block" id="t1q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">¿Cómo avanza el tema entre el segundo y el tercer párrafo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(1,1,'a')"><span class="opt-letter">a)</span> El tercero repite los argumentos del segundo con distintas palabras para reforzar la misma posición.</button>
+        <button class="opt-btn" onclick="ans(1,1,'b')"><span class="opt-letter">b)</span> El tercero presenta la posición contraria a la del segundo, construyendo una estructura de debate con dos voces en tensión sobre la misma pregunta central.</button>
+        <button class="opt-btn" onclick="ans(1,1,'c')"><span class="opt-letter">c)</span> El tercero cambia completamente de tema hacia la historia del arte digital en el siglo XX.</button>
+        <button class="opt-btn" onclick="ans(1,1,'d')"><span class="opt-letter">d)</span> El tercero concluye el debate al demostrar que la IA sí puede ser creativa con evidencia definitiva.</button>
+      </div>
+      <div class="fb" id="fb-1-1"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q3 — modo discursivo -->
+    <div class="question-block" id="t1q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">Los párrafos segundo y tercero presentan dos posiciones opuestas sobre la creatividad de la IA. ¿Qué modo discursivo predomina en esa estructura?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(1,2,'a')"><span class="opt-letter">a)</span> Narrativo, porque relata en orden cronológico cómo evolucionó el debate sobre la creatividad artificial.</button>
+        <button class="opt-btn" onclick="ans(1,2,'b')"><span class="opt-letter">b)</span> Descriptivo, porque caracteriza detalladamente las propiedades técnicas de los sistemas de IA generativa.</button>
+        <button class="opt-btn" onclick="ans(1,2,'c')"><span class="opt-letter">c)</span> Expositivo, porque explica de forma neutral las dos posiciones sin tomar partido por ninguna de ellas.</button>
+        <button class="opt-btn" onclick="ans(1,2,'d')"><span class="opt-letter">d)</span> Argumentativo, porque presenta razones y contrarazones organizadas para que el lector evalúe una pregunta controvertida, sin que el texto adopte una posición definitiva.</button>
+      </div>
+      <div class="fb" id="fb-1-2"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q4 — tipo de párrafo -->
+    <div class="question-block" id="t1q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El cuarto párrafo, que comienza con "Más allá de la respuesta filosófica…", cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(1,3,'a')"><span class="opt-letter">a)</span> Retomar el debate filosófico del texto para defender que la IA no puede ser creativa.</button>
+        <button class="opt-btn" onclick="ans(1,3,'b')"><span class="opt-letter">b)</span> Cerrar el texto desplazando el foco de la pregunta filosófica hacia las consecuencias prácticas y culturales del uso de la IA en el arte, ampliando el tema hacia su implicación social.</button>
+        <button class="opt-btn" onclick="ans(1,3,'c')"><span class="opt-letter">c)</span> Narrar el proceso técnico mediante el cual el colectivo Obvious entrenó el algoritmo que produjo el retrato.</button>
+        <button class="opt-btn" onclick="ans(1,3,'d')"><span class="opt-letter">d)</span> Introducir un nuevo argumento sobre propiedad intelectual que contradice los dos párrafos anteriores.</button>
+      </div>
+      <div class="fb" id="fb-1-3"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q5 — función discursiva -->
+    <div class="question-block" id="t1q4">
+      <div class="q-number">Pregunta 5 <span class="q-type-tag tag-variable">función discursiva</span></div>
+      <div class="q-text">La frase final "La pregunta por la creatividad de la máquina es, en el fondo, una pregunta sobre la creatividad humana" cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(1,4,'a')"><span class="opt-letter">a)</span> Introducir un dato empírico nuevo que resuelve el debate planteado en los párrafos anteriores.</button>
+        <button class="opt-btn" onclick="ans(1,4,'b')"><span class="opt-letter">b)</span> Describir las características cognitivas que diferencian al artista humano del algoritmo generativo.</button>
+        <button class="opt-btn" onclick="ans(1,4,'c')"><span class="opt-letter">c)</span> Reformular la pregunta central del texto en un nivel más profundo, sugiriendo que el verdadero objeto de reflexión somos nosotros mismos, no la máquina.</button>
+        <button class="opt-btn" onclick="ans(1,4,'d')"><span class="opt-letter">d)</span> Resumir los argumentos del segundo párrafo a favor de la creatividad humana sobre la artificial.</button>
+      </div>
+      <div class="fb" id="fb-1-4"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+  </div><!-- /panel1 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 3 — Suelos y agricultura sostenible
+       Carreras: Ing. Agronómica, Ing. Física, Ing. Mecánica, Negocios Internacionales
+  ══════════════════════════════════════════ -->
+  <div id="panel2" class="card" style="display:none">
+    <div class="field-badge badge-purple">🌱 Agronomía · Sostenibilidad</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Agronómica</span>
+      <span class="career-tag">Ing. Física</span>
+      <span class="career-tag">Ing. Mecánica</span>
+      <span class="career-tag">Negocios Internacionales</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 3 · El suelo vivo: lo que la agricultura industrial no contabiliza</div>
+      <p>Un centímetro de suelo fértil tarda entre cien y mil años en formarse. En ese horizonte superficial convive una comunidad de organismos —bacterias, hongos, lombrices, artrópodos— cuya actividad descompone la materia orgánica, fija el nitrógeno atmosférico y regula la disponibilidad de nutrientes para las plantas. Esta biodiversidad subterránea es la base invisible sobre la que descansa la agricultura: sin ella, ningún fertilizante sintético puede sostener la productividad a largo plazo.</p>
+      <p>La agricultura industrial de las últimas décadas ha tratado el suelo como un soporte inerte, no como un ecosistema vivo. El uso intensivo de agroquímicos altera la composición microbiana, compacta las capas arables y reduce la materia orgánica. La labranza profunda y repetida destruye las redes de hongos micorrícicos que conectan las raíces de distintas plantas y facilitan el intercambio de nutrientes. El resultado, visible ya en grandes extensiones de tierra cultivable en todo el mundo, es la degradación progresiva de la fertilidad natural del suelo.</p>
+      <p>Frente a este diagnóstico, la agroecología y la agricultura regenerativa proponen un conjunto de prácticas orientadas a restaurar la vida del suelo: labranza mínima o nula, rotación de cultivos, uso de coberturas vegetales, incorporación de materia orgánica y reducción progresiva de agroquímicos. Estas prácticas no son una vuelta al pasado: son la aplicación del conocimiento ecológico moderno a los sistemas de producción alimentaria.</p>
+      <p>La transición, sin embargo, no es sencilla. En el corto plazo, reducir los insumos externos puede bajar los rendimientos mientras el suelo se recupera. Esta brecha temporal es un obstáculo real para los agricultores que viven de lo que producen cada temporada. Por eso, la transformación del modelo agrícola requiere no solo conocimiento técnico, sino también políticas de acompañamiento que reduzcan el riesgo económico de la transición para quienes la emprenden.</p>
+    </div>
+
+    <!-- T2 Q1 — modo discursivo -->
+    <div class="question-block" id="t2q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-modo">modo discursivo</span></div>
+      <div class="q-text">El modo de organización discursiva que predomina en el texto es:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(2,0,'a')"><span class="opt-letter">a)</span> Narrativo, porque relata en orden cronológico la historia de la agricultura industrial desde el siglo XX.</button>
+        <button class="opt-btn" onclick="ans(2,0,'b')"><span class="opt-letter">b)</span> Argumentativo, porque el texto defiende la tesis de que el modelo agrícola industrial degrada el suelo y propone alternativas, sustentando ambas ideas con razones y evidencias.</button>
+        <button class="opt-btn" onclick="ans(2,0,'c')"><span class="opt-letter">c)</span> Expositivo, porque explica de forma neutral y objetiva qué es el suelo y cómo funciona la agricultura industrial.</button>
+        <button class="opt-btn" onclick="ans(2,0,'d')"><span class="opt-letter">d)</span> Descriptivo, porque caracteriza detalladamente los organismos que habitan el suelo y sus funciones biológicas.</button>
+      </div>
+      <div class="fb" id="fb-2-0"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q2 — tipo de párrafo -->
+    <div class="question-block" id="t2q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El primer párrafo, que describe la formación del suelo y su biodiversidad, funciona principalmente como:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(2,1,'a')"><span class="opt-letter">a)</span> Un párrafo de conclusión que sintetiza el argumento sobre la necesidad de proteger el suelo.</button>
+        <button class="opt-btn" onclick="ans(2,1,'b')"><span class="opt-letter">b)</span> Un párrafo de causa-efecto que explica por qué los fertilizantes sintéticos no funcionan.</button>
+        <button class="opt-btn" onclick="ans(2,1,'c')"><span class="opt-letter">c)</span> Un párrafo de planteamiento que establece el valor del suelo como ecosistema vivo antes de mostrar cómo ese valor está siendo destruido.</button>
+        <button class="opt-btn" onclick="ans(2,1,'d')"><span class="opt-letter">d)</span> Un párrafo de ejemplificación que ilustra con casos concretos la degradación del suelo en América Latina.</button>
+      </div>
+      <div class="fb" id="fb-2-1"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q3 — progresión temática -->
+    <div class="question-block" id="t2q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">Considerando los cuatro párrafos en conjunto, ¿cuál es la estructura de progresión temática que mejor describe el texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(2,2,'a')"><span class="opt-letter">a)</span> Valor del objeto → destrucción del objeto → alternativas de restauración → obstáculos de la transición: cada párrafo añade una capa de análisis que avanza desde el diagnóstico hasta la complejidad de la solución.</button>
+        <button class="opt-btn" onclick="ans(2,2,'b')"><span class="opt-letter">b)</span> Causas → efectos → causas adicionales → más efectos: el texto acumula causas y consecuencias sin avanzar hacia soluciones ni conclusiones.</button>
+        <button class="opt-btn" onclick="ans(2,2,'c')"><span class="opt-letter">c)</span> Descripción → narración → argumentación → descripción: el texto alterna modos sin una progresión temática clara.</button>
+        <button class="opt-btn" onclick="ans(2,2,'d')"><span class="opt-letter">d)</span> Comparación → contraste → síntesis → conclusión: el texto compara modelos agrícolas de distintos países para determinar cuál es más sostenible.</button>
+      </div>
+      <div class="fb" id="fb-2-2"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q4 — tipo de párrafo -->
+    <div class="question-block" id="t2q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-parrafo">tipo de párrafo</span></div>
+      <div class="q-text">El cuarto párrafo, que comienza con "La transición, sin embargo, no es sencilla", se organiza como un párrafo de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(2,3,'a')"><span class="opt-letter">a)</span> Ejemplificación, porque aporta casos concretos de agricultores que han realizado la transición con éxito.</button>
+        <button class="opt-btn" onclick="ans(2,3,'b')"><span class="opt-letter">b)</span> Problema-condición, porque reconoce el obstáculo real de la transición (brecha de rendimientos a corto plazo) y señala las condiciones necesarias para superarlo (políticas de acompañamiento).</button>
+        <button class="opt-btn" onclick="ans(2,3,'c')"><span class="opt-letter">c)</span> Causa-efecto, porque explica por qué la labranza profunda destruye los hongos micorrícicos del suelo.</button>
+        <button class="opt-btn" onclick="ans(2,3,'d')"><span class="opt-letter">d)</span> Introducción, porque presenta el tema del texto por primera vez y anticipa la pregunta central.</button>
+      </div>
+      <div class="fb" id="fb-2-3"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q5 — función discursiva -->
+    <div class="question-block" id="t2q4">
+      <div class="q-number">Pregunta 5 <span class="q-type-tag tag-variable">función discursiva</span></div>
+      <div class="q-text">La afirmación "Estas prácticas no son una vuelta al pasado: son la aplicación del conocimiento ecológico moderno a los sistemas de producción alimentaria" cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="ans(2,4,'a')"><span class="opt-letter">a)</span> Anticipar y refutar la objeción de que la agroecología es una propuesta retrógrada, reencuadrando las prácticas alternativas como innovación basada en ciencia.</button>
+        <button class="opt-btn" onclick="ans(2,4,'b')"><span class="opt-letter">b)</span> Describir en detalle las técnicas específicas de labranza mínima utilizadas en la agricultura regenerativa.</button>
+        <button class="opt-btn" onclick="ans(2,4,'c')"><span class="opt-letter">c)</span> Introducir un nuevo argumento sobre la historia de la agricultura que no había sido mencionado antes.</button>
+        <button class="opt-btn" onclick="ans(2,4,'d')"><span class="opt-letter">d)</span> Concluir el texto resumiendo el argumento central sobre la degradación del suelo agrícola.</button>
+      </div>
+      <div class="fb" id="fb-2-4"><div class="fb-concepto"></div><span class="fb-body"></span></div>
+    </div>
+  </div><!-- /panel2 -->
+
+  <!-- BOTÓN SIEMPRE VISIBLE -->
+  <div class="reset-wrap">
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpiar resultados y volver a intentar
+    </button>
+  </div>
+
+  <!-- SCORE PANEL -->
+  <div class="score-panel" id="score-panel">
+    <div class="score-big" id="score-pct">—</div>
+    <div class="score-sub" id="score-fraction">— / 15 correctas</div>
+    <div class="score-breakdown" id="score-breakdown"></div>
+  </div>
+
+</div><!-- /page-shell -->
+
+<script>
+/* ══════════════════════════════════════
+   DATA — correct: índice de la letra correcta (0=a,1=b,2=c,3=d)
+   La función ans() calcula el índice elegido desde la letra,
+   nunca desde un parámetro hardcodeado en el HTML.
+══════════════════════════════════════ */
+const DATA = [
+  // ── TEXTO 0 — Remesas ──
+  [
+    { // Q1 — tipo de párrafo — correcta: b (1)
+      correct: 1,
+      okMsg: "Párrafo de planteamiento con datos. El primer párrafo establece la magnitud del fenómeno (155.000 millones de dólares) y lo ancla en la vida concreta de las familias. Esta combinación de dato cuantitativo + relevancia humana es típica de un párrafo introductorio que le da al lector razones para seguir leyendo.",
+      failMsg: "El primer párrafo no concluye ni enumera causas ni describe características físicas. Abre el texto presentando el fenómeno con datos de magnitud y mostrando su relevancia para millones de familias. Esa función —situar el tema y justificar su importancia— es la del párrafo de planteamiento introductorio."
+    },
+    { // Q2 — tipo de párrafo — correcta: a (0)
+      correct: 0,
+      okMsg: "Párrafo de contraste-matiz. El marcador 'Sin embargo' al inicio señala que el párrafo va a matizar la imagen positiva de las remesas presentada antes. Introduce la limitación (no son sustituto del desarrollo), explica por qué (la precariedad), y añade otra consecuencia (desincentivo del empleo local). Esa estructura —contraste + explicación de la limitación— define el párrafo de matiz o contraargumento.",
+      failMsg: "El párrafo no aporta casos concretos de familias exitosas ni cierra el texto ni narra hechos en orden cronológico. Comienza con 'Sin embargo', lo que anuncia un giro: va a matizar la imagen positiva del párrafo anterior. Su función es introducir las limitaciones reales de las remesas y explicar por qué ocurren. Eso es un párrafo de contraste-matiz."
+    },
+    { // Q3 — progresión temática — correcta: c (2)
+      correct: 2,
+      okMsg: "Avance problema → solución parcial. El segundo párrafo diagnosticó el problema (las remesas no generan inversión por sí solas). El tercero toma ese diagnóstico como punto de partida y presenta las respuestas institucionales que intentan corregirlo. Ese movimiento —del problema a las intervenciones— es una de las formas más comunes de progresión temática en textos argumentativos.",
+      failMsg: "El tercer párrafo no contradice al segundo ni lo repite ni cambia de tema. Toma el problema identificado (remesas no generan inversión) y avanza hacia las respuestas: los programas de cofinanciamiento como el Tres por Uno. Esa relación —diagnóstico en el párrafo 2, respuesta institucional en el párrafo 3— es el movimiento problema → solución parcial."
+    },
+    { // Q4 — modo discursivo — correcta: c (2)
+      correct: 2,
+      okMsg: "Modo argumentativo. El texto tiene una tesis implícita (las remesas son un activo real pero insuficiente como palanca de desarrollo) que desarrolla con evidencias (datos, ejemplo del Tres por Uno), contraargumentos (la limitación del consumo sobre la inversión) y una conclusión que reformula la posición. Esa estructura —tesis + argumentos + conclusión— es la del texto argumentativo.",
+      failMsg: "El texto no narra cronológicamente la historia de la migración ni describe características de los países ni explica de forma neutral qué son las remesas. Tiene una posición clara (las remesas son un activo real pero no un sustituto del desarrollo) que sostiene con evidencias, matices y una conclusión. Esa estructura define el modo argumentativo."
+    },
+    { // Q5 — función discursiva — correcta: b (1)
+      correct: 1,
+      okMsg: "Rectificación preventiva o refutación anticipada. La afirmación anticipa la interpretación de que las familias 'gastan mal' el dinero y la descarta antes de que el lector pueda adoptarla, reencuadrando el comportamiento como consecuencia estructural de la precariedad. Esta estrategia es frecuente en textos argumentativos que buscan evitar lecturas simplistas o moralistas.",
+      failMsg: "La afirmación no introduce datos ni resume el párrafo anterior ni describe características psicológicas. Su función es específica: anticipar una lectura moralista ('las familias no ahorran por falta de disciplina') y refutarla antes de que el lector la adopte, reencuadrando el fenómeno como resultado estructural. Eso es una rectificación preventiva, una estrategia argumentativa muy frecuente."
+    }
+  ],
+  // ── TEXTO 1 — IA y creatividad ──
+  [
+    { // Q1 — tipo de párrafo — correcta: c (2)
+      correct: 2,
+      okMsg: "Planteamiento mediante caso concreto. El párrafo usa el ejemplo de la subasta de Christie's como detonador de la pregunta central. Este recurso —comenzar con un hecho real llamativo para introducir el problema— es muy eficaz porque ancla una discusión abstracta (¿qué es la creatividad?) en algo concreto y verificable. Es un tipo de introducción habitual en textos que abordan debates filosóficos o culturales.",
+      failMsg: "El párrafo no concluye ni explica causas de precios ni describe el funcionamiento técnico del algoritmo. Usa un hecho concreto —la venta de la pintura de IA— para plantear la pregunta que el texto va a explorar. Esa estrategia —caso real → pregunta central— es la de un párrafo de planteamiento mediante ejemplo, no una conclusión ni una descripción técnica."
+    },
+    { // Q2 — progresión temática — correcta: b (1)
+      correct: 1,
+      okMsg: "Progresión por debate: tesis → antítesis. El segundo párrafo presenta una posición (la creatividad requiere intencionalidad y subjetividad, la IA no las tiene). El tercero presenta la posición contraria (la creatividad humana también recombina; si la IA produce novedad y respuesta estética, puede cumplir el criterio). Este movimiento tesis-antítesis es una forma deliberada de progresión que simula el debate real sobre la cuestión.",
+      failMsg: "El tercer párrafo no repite el segundo ni cambia de tema ni concluye el debate. Presenta exactamente la posición contraria: mientras el segundo argumenta que la IA no puede ser creativa, el tercero argumenta que sí puede. Esa estructura deliberada —párrafo 2: no / párrafo 3: sí— es una progresión por debate (tesis-antítesis) sobre la misma pregunta central."
+    },
+    { // Q3 — modo discursivo — correcta: d (3)
+      correct: 3,
+      okMsg: "Modo argumentativo con estructura de debate. Los párrafos 2 y 3 no son neutrales: cada uno presenta razones organizadas para sostener una posición. El hecho de que el texto no resuelva el debate no lo convierte en expositivo: la presentación de razones en tensión, orientada a que el lector evalúe críticamente, es una forma de argumentación. Un texto puede ser argumentativo sin imponer una conclusión.",
+      failMsg: "La estructura no es narrativa ni descriptiva. Aunque el texto presenta dos posiciones sin resolver el debate, no lo hace de forma neutral: cada párrafo organiza razones para sostener una postura. Esa presentación de argumentos en tensión —orientada a que el lector evalúe— es argumentativa. Un texto argumentativo no necesita concluir con una sola respuesta; puede abrir el debate con posiciones fundamentadas."
+    },
+    { // Q4 — tipo de párrafo — correcta: b (1)
+      correct: 1,
+      okMsg: "Párrafo de cierre con desplazamiento temático. El párrafo no resuelve la pregunta filosófica: la deja abierta y desplaza el foco hacia las consecuencias prácticas. Esta estrategia de cierre es frecuente en textos que abordan debates sin resolución definitiva: en lugar de forzar una respuesta, el texto amplía la perspectiva hacia lo que sí puede saberse (las transformaciones reales que la IA ya está produciendo en el arte).",
+      failMsg: "El cuarto párrafo no retoma el debate del segundo ni narra el proceso técnico ni contradice los párrafos anteriores. Su función es cerrar el texto desplazando la atención desde la pregunta filosófica (¿puede la máquina ser creativa?) hacia sus consecuencias prácticas y culturales (propiedad intelectual, autoría, valor del arte). Ese desplazamiento es la estrategia de un párrafo de cierre ampliador."
+    },
+    { // Q5 — función discursiva — correcta: c (2)
+      correct: 2,
+      okMsg: "Reformulación profunda de la pregunta central. La frase no responde la pregunta original sino que la reencuadra: al preguntar por la creatividad de la máquina, en realidad estamos preguntando qué entendemos por creatividad humana. Este giro —la pregunta sobre el otro deviene pregunta sobre uno mismo— es una estrategia de cierre filosófico que amplía el significado del debate más allá de su formulación inicial.",
+      failMsg: "La frase no introduce datos empíricos ni describe diferencias cognitivas ni resume el segundo párrafo. Su función es reformular la pregunta del texto en un nivel más profundo: si nos preguntamos si la máquina puede ser creativa, en realidad estamos cuestionando qué es la creatividad humana. Ese giro reflexivo —la pregunta sobre el otro como pregunta sobre uno mismo— es una estrategia de cierre que amplía el debate."
+    }
+  ],
+  // ── TEXTO 2 — Suelo ──
+  [
+    { // Q1 — modo discursivo — correcta: b (1)
+      correct: 1,
+      okMsg: "Modo argumentativo. El texto tiene una tesis implícita (la agricultura industrial destruye el suelo y se necesita una transición hacia modelos regenerativos) que desarrolla con evidencias (degradación microbiana, datos sobre formación del suelo), propuestas (agroecología) y reconocimiento de obstáculos (brecha de rendimientos). Esa estructura compleja —diagnóstico + propuesta + obstáculos— es característica del argumentativo.",
+      failMsg: "El texto no narra cronológicamente ni explica de forma neutral ni se limita a describir. Tiene una posición: la agricultura industrial está destruyendo el suelo y se necesita cambiar el modelo. Esa posición se desarrolla con evidencias, propuestas y reconocimiento de obstáculos. Esa estructura —tesis implícita + argumentos + condiciones— define el modo argumentativo."
+    },
+    { // Q2 — tipo de párrafo — correcta: c (2)
+      correct: 2,
+      okMsg: "Párrafo de planteamiento del valor. Antes de mostrar cómo el suelo está siendo destruido, el texto establece cuánto vale y por qué importa: tarda siglos en formarse, aloja una biodiversidad crucial, sostiene toda la agricultura. Este movimiento estratégico —primero el valor, luego la amenaza— hace más impactante el diagnóstico del párrafo siguiente.",
+      failMsg: "El primer párrafo no concluye ni explica por qué fallan los fertilizantes ni aporta casos de degradación. Establece el valor del suelo como ecosistema vivo antes de mostrar cómo ese valor está siendo destruido. Esa función —presentar lo que está en riesgo para que el lector entienda la gravedad del problema— es la del párrafo de planteamiento del valor, una estrategia introductoria frecuente en textos argumentativos."
+    },
+    { // Q3 — progresión temática — correcta: a (0)
+      correct: 0,
+      okMsg: "Progresión en capas de profundidad creciente. El texto avanza del valor del objeto (suelo como ecosistema) a su destrucción (agricultura industrial) a las alternativas (agroecología) a los obstáculos de la solución (brecha de rendimientos y políticas). Cada párrafo añade una capa de análisis que profundiza el problema y su complejidad, sin repetir ni contradecir lo anterior.",
+      failMsg: "El texto no acumula causas indefinidamente ni alterna modos sin hilo ni compara países. Avanza en capas: primero establece el valor del suelo, luego muestra cómo se destruye, luego presenta alternativas, y finalmente reconoce los obstáculos de la transición. Esa secuencia —valor → amenaza → respuesta → obstáculos— es una progresión temática en profundidad creciente."
+    },
+    { // Q4 — tipo de párrafo — correcta: b (1)
+      correct: 1,
+      okMsg: "Párrafo de problema-condición. El párrafo reconoce un obstáculo real (la brecha de rendimientos a corto plazo) y señala lo que hace falta para superarlo (políticas de acompañamiento). Esta estructura —obstáculo + condición necesaria para resolverlo— es distinta de la causa-efecto (que explica por qué ocurrió algo) y de la ejemplificación (que ilustra con casos concretos).",
+      failMsg: "El párrafo no aporta ejemplos de agricultores concretos ni explica la labranza profunda ni introduce el tema del texto. Reconoce un problema específico de la transición (la caída de rendimientos a corto plazo) y señala las condiciones necesarias para superarlo (políticas de acompañamiento). Esa estructura —obstáculo + condición— es la del párrafo de problema-condición."
+    },
+    { // Q5 — función discursiva — correcta: a (0)
+      correct: 0,
+      okMsg: "Refutación anticipada de una objeción frecuente. La afirmación previene la lectura de que la agroecología es conservadora o antiprogresista ('vuelta al pasado') y la reencuadra como aplicación de ciencia moderna. Esta estrategia —anticipar la objeción más probable y desactivarla antes de que el lector la adopte— es una forma clásica de argumentación defensiva muy eficaz en textos sobre cambio tecnológico.",
+      failMsg: "La afirmación no describe técnicas ni introduce historia agrícola ni concluye el texto. Su función es específica: anticipar la objeción de que la agroecología es una propuesta retrógrada y refutarla antes de que el lector la adopte, reencuadrando las prácticas como innovación científica. Esa estrategia —anticipar y desactivar la objeción más previsible— es una refutación anticipada, recurso frecuente en textos argumentativos."
+    }
+  ]
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+const TOTAL = 15;
+const QS_PER_TEXT = 5;
+const LETTER_MAP = {'a':0,'b':1,'c':2,'d':3};
+
+let answers = Array.from({length:3}, () => Array(QS_PER_TEXT).fill(null));
+let currentTab = 0;
+
+/* ══════════════════════════════════════
+   ANSWER — usa la letra elegida, nunca un índice hardcodeado
+══════════════════════════════════════ */
+function ans(textIdx, qIdx, chosenLetter) {
+  if (answers[textIdx][qIdx] !== null) return;
+
+  const d = DATA[textIdx][qIdx];
+  const chosenIdx = LETTER_MAP[chosenLetter];   // 0–3 según la letra real
+  const isOk = (chosenIdx === d.correct);
+  answers[textIdx][qIdx] = isOk ? 'ok' : 'mal';
+
+  const block = document.getElementById(`t${textIdx}q${qIdx}`);
+  block.querySelectorAll('.opt-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === chosenIdx) btn.classList.add(isOk ? 'selected-ok' : 'selected-mal');
+    if (!isOk && i === d.correct) btn.classList.add('reveal-ok');
+  });
+
+  const fb = document.getElementById(`fb-${textIdx}-${qIdx}`);
+  fb.classList.add('show', isOk ? 'fb-ok' : 'fb-mal');
+  fb.querySelector('.fb-concepto').textContent = isOk ? '✓ Correcto' : '✗ Incorrecto';
+  fb.querySelector('.fb-body').textContent = isOk ? d.okMsg : d.failMsg;
+
+  updateProgress();
+  checkComplete();
+}
+
+/* ══════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════ */
+function countAnswered() { return answers.flat().filter(v => v !== null).length; }
+function countOk()       { return answers.flat().filter(v => v === 'ok').length; }
+function textDone(ti)    { return answers[ti].every(v => v !== null); }
+
+function updateProgress() {
+  document.getElementById('prog-count').textContent = `${countAnswered()} / ${TOTAL} respondidas`;
+  document.getElementById('prog-label').textContent = `Texto ${currentTab+1} de 3`;
+  ['seg0','seg1','seg2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'progress-seg';
+    if (textDone(i))         el.classList.add('done');
+    else if (i===currentTab) el.classList.add('active');
+  });
+  for (let i=0; i<3; i++) {
+    document.getElementById(`tab${i}`).classList.toggle('completed', textDone(i));
+  }
+}
+
+/* ══════════════════════════════════════
+   SCORE
+══════════════════════════════════════ */
+function checkComplete() {
+  if (countAnswered() < TOTAL) return;
+  const ok  = countOk();
+  const pct = Math.round(ok / TOTAL * 100);
+  document.getElementById('score-pct').textContent      = pct + '%';
+  document.getElementById('score-fraction').textContent = `${ok} / ${TOTAL} correctas`;
+
+  const bd = document.getElementById('score-breakdown');
+  bd.innerHTML = '';
+  ['Texto 1 — Remesas', 'Texto 2 — IA y creatividad', 'Texto 3 — Suelo'].forEach((lbl, i) => {
+    const okN = answers[i].filter(v => v === 'ok').length;
+    const chip = document.createElement('span');
+    chip.className = `score-chip ${okN >= 4 ? 'chip-ok' : 'chip-mal'}`;
+    chip.textContent = `${lbl}: ${okN}/5`;
+    bd.appendChild(chip);
+  });
+  document.getElementById('score-panel').classList.add('show');
+}
+
+/* ══════════════════════════════════════
+   TABS
+══════════════════════════════════════ */
+function goTab(idx) {
+  currentTab = idx;
+  for (let i=0; i<3; i++) {
+    document.getElementById(`panel${i}`).style.display = i===idx ? 'block' : 'none';
+    document.getElementById(`tab${i}`).classList.toggle('active', i===idx);
+  }
+  updateProgress();
+}
+
+/* ══════════════════════════════════════
+   RESET
+══════════════════════════════════════ */
+function resetAll() {
+  answers = Array.from({length:3}, () => Array(QS_PER_TEXT).fill(null));
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('selected-ok','selected-mal','reveal-ok');
+  });
+  document.querySelectorAll('.fb').forEach(fb => {
+    fb.className = 'fb';
+    fb.querySelector('.fb-concepto').textContent = '';
+    fb.querySelector('.fb-body').textContent = '';
+  });
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('completed'));
+  document.getElementById('score-panel').classList.remove('show');
+  goTab(0);
+  updateProgress();
+}
+
+updateProgress();
+</script>
+</body>
+</html>

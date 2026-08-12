@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEE · Progresión temática · Sesión 2</title>
+<style>
+:root {
+  --accent:        #0F6E56;
+  --accent-light:  #E1F5EE;
+  --accent-mid:    #1D9E75;
+  --blue:          #185FA5;
+  --blue-light:    #E6F1FB;
+  --blue-mid:      #0C447C;
+  --amber:         #BA7517;
+  --amber-light:   #FAEEDA;
+  --amber-dark:    #633806;
+  --coral:         #993C1D;
+  --coral-light:   #FAECE7;
+  --coral-dark:    #712B13;
+  --purple:        #534AB7;
+  --purple-light:  #EEEDFE;
+  --purple-dark:   #3C3489;
+  --bg:            #ffffff;
+  --bg-secondary:  #f5f4f0;
+  --bg-tertiary:   #eeece6;
+  --text:          #1a1a1a;
+  --text-muted:    #6b6b68;
+  --text-hint:     #9a9893;
+  --border:        rgba(0,0,0,0.12);
+  --border-med:    rgba(0,0,0,0.22);
+  --ok-bg:         #E1F5EE;
+  --ok-text:       #085041;
+  --ok-border:     #1D9E75;
+  --mal-bg:        #FCEBEB;
+  --mal-text:      #791F1F;
+  --mal-border:    #E24B4A;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:            #1c1c1a;
+    --bg-secondary:  #252523;
+    --bg-tertiary:   #2e2e2b;
+    --text:          #ede9e3;
+    --text-muted:    #9a9893;
+    --text-hint:     #6b6b68;
+    --border:        rgba(255,255,255,0.10);
+    --border-med:    rgba(255,255,255,0.20);
+    --accent:        #5DCAA5;
+    --accent-light:  #04342C;
+    --blue:          #85B7EB;
+    --blue-light:    #042C53;
+    --blue-mid:      #B5D4F4;
+    --amber:         #EF9F27;
+    --amber-light:   #412402;
+    --amber-dark:    #FAC775;
+    --coral:         #F0997B;
+    --coral-light:   #4A1B0C;
+    --coral-dark:    #F5C4B3;
+    --purple:        #AFA9EC;
+    --purple-light:  #26215C;
+    --purple-dark:   #CECBF6;
+    --ok-bg:         #04342C;
+    --ok-text:       #9FE1CB;
+    --ok-border:     #1D9E75;
+    --mal-bg:        #501313;
+    --mal-text:      #F7C1C1;
+    --mal-border:    #E24B4A;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-tertiary);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--text);
+  padding: 2rem 1rem 4rem;
+  min-height: 100vh;
+}
+
+.page-shell {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.header-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-icon svg { width: 26px; height: 26px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.header-text { flex: 1; }
+.header-overline { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+.header-title { font-size: 1.2rem; font-weight: 700; font-family: 'Helvetica Neue', Arial, sans-serif; color: var(--text); line-height: 1.2; }
+.header-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.header-pills { display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-end; flex-shrink: 0; }
+.pill { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+.pill-teal  { background: var(--accent-light); color: var(--accent); }
+.pill-green { background: var(--accent-light); color: var(--accent); }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { margin-bottom: 1rem; }
+.progress-label { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+.progress-track { display: flex; gap: 4px; height: 6px; }
+.progress-seg {
+  flex: 1; border-radius: 3px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+.progress-seg.done   { background: var(--accent-mid); }
+.progress-seg.active { background: var(--accent-mid); opacity: 0.45; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; margin-bottom: 1rem; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-med); }
+.tab-btn {
+  flex: 1; padding: 0.65rem 0.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: none; cursor: pointer;
+  border-right: 1px solid var(--border-med);
+  transition: background 0.2s, color 0.2s;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active    { background: var(--accent); color: #fff; }
+.tab-btn.completed { background: var(--accent-light); color: var(--accent); }
+.tab-btn.completed.active { background: var(--accent); color: #fff; }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ── FIELD BADGE ── */
+.field-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.7rem; font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+}
+.badge-teal   { background: var(--accent-light); color: var(--accent); }
+.badge-amber  { background: var(--amber-light);  color: var(--amber-dark); }
+.badge-purple { background: var(--purple-light); color: var(--purple-dark); }
+
+.career-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.career-tag {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.65rem; padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: var(--bg-secondary); color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* ── READING CARD ── */
+.reading-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-mid);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.reading-card p { margin-bottom: 0.85rem; }
+.reading-card p:last-child { margin-bottom: 0; }
+.reading-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--accent-mid); margin-bottom: 0.75rem;
+}
+
+/* ── PREGUNTAS ── */
+.question-block { margin-bottom: 1.5rem; }
+.question-block:last-child { margin-bottom: 0; }
+.q-number {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--accent); margin-bottom: 0.35rem;
+}
+.q-type-tag {
+  display: inline-block;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.62rem; font-weight: 600;
+  padding: 0.1rem 0.45rem; border-radius: 10px;
+  margin-bottom: 0.5rem;
+  vertical-align: middle; margin-left: 0.4rem;
+}
+.tag-progresion  { background: var(--accent-light);  color: var(--accent); }
+.tag-tema        { background: var(--blue-light);     color: var(--blue-mid); }
+.tag-conector    { background: var(--amber-light);    color: var(--amber-dark); }
+.tag-variable    { background: var(--purple-light);   color: var(--purple-dark); }
+
+.q-text {
+  font-size: 0.92rem; line-height: 1.6;
+  margin-bottom: 0.75rem; color: var(--text);
+}
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 0.45rem; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer; text-align: left;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.85rem; line-height: 1.45;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+.opt-btn:disabled { cursor: default; }
+.opt-letter {
+  font-weight: 700; font-size: 0.78rem;
+  color: var(--text-muted); flex-shrink: 0; margin-top: 0.05rem;
+  width: 1.1rem;
+}
+.opt-btn.selected-ok  { background: var(--ok-bg);  border-color: var(--ok-border); }
+.opt-btn.selected-ok .opt-letter  { color: var(--ok-text); }
+.opt-btn.selected-mal { background: var(--mal-bg); border-color: var(--mal-border); }
+.opt-btn.selected-mal .opt-letter { color: var(--mal-text); }
+.opt-btn.reveal-ok    { background: var(--ok-bg);  border-color: var(--ok-border); opacity: 0.6; }
+
+/* ── FEEDBACK ── */
+.fb {
+  display: none; margin-top: 0.6rem;
+  border-radius: var(--radius-md); padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.83rem; line-height: 1.55;
+  overflow: hidden; max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.fb.show      { display: block; max-height: 220px; padding: 0.7rem 0.9rem; }
+.fb-ok        { background: var(--ok-bg);  color: var(--ok-text);  border: 1px solid var(--ok-border); }
+.fb-mal       { background: var(--mal-bg); color: var(--mal-text); border: 1px solid var(--mal-border); }
+.fb-concepto  { font-weight: 700; margin-bottom: 0.3rem; }
+
+/* ── SCORE ── */
+.score-panel {
+  display: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+  text-align: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.score-panel.show { display: block; }
+.score-big  { font-size: 2.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
+.score-sub  { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 1.25rem; }
+.score-breakdown { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
+.score-chip { font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 20px; font-weight: 600; }
+.chip-ok    { background: var(--ok-bg);  color: var(--ok-text); }
+.chip-mal   { background: var(--mal-bg); color: var(--mal-text); }
+
+/* ── RESET BTN ── */
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.btn-reset:hover { opacity: 0.85; }
+.reset-wrap { text-align: center; margin-bottom: 1rem; }
+
+/* ── DIVIDER ── */
+.q-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+<div class="page-shell">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-icon">
+      <!-- ícono: flecha progresiva / flujo temático -->
+      <svg viewBox="0 0 24 24">
+        <polyline points="4 7 9 12 4 17"/>
+        <polyline points="11 7 16 12 11 17"/>
+        <line x1="19" y1="7" x2="19" y2="17"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-overline">PLEE · Comprensión lectora</div>
+      <div class="header-title">Progresión temática</div>
+      <div class="header-desc">3 textos · 4 preguntas de selección múltiple</div>
+    </div>
+    <div class="header-pills">
+      <span class="pill pill-teal">Sesión 2</span>
+      <span class="pill pill-green">Nivel básico</span>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-label">Texto 1 de 3</span>
+      <span id="prog-count">0 / 12 respondidas</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-seg" id="seg0"></div>
+      <div class="progress-seg" id="seg1"></div>
+      <div class="progress-seg" id="seg2"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab0" onclick="goTab(0)">Texto 1</button>
+    <button class="tab-btn"        id="tab1" onclick="goTab(1)">Texto 2</button>
+    <button class="tab-btn"        id="tab2" onclick="goTab(2)">Texto 3</button>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 1 — Automatización y trabajo
+       Carreras: Ing. Mecánica, Administración, Finanzas, Derecho
+  ══════════════════════════════════════════ -->
+  <div id="panel0" class="card">
+    <div class="field-badge badge-teal">⚙️ Economía · Trabajo</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Mecánica</span>
+      <span class="career-tag">Administración</span>
+      <span class="career-tag">Finanzas</span>
+      <span class="career-tag">Derecho</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 1 · El trabajo que viene: automatización y desigualdad</div>
+      <p>Durante la Revolución Industrial del siglo XIX, la introducción de máquinas de vapor en las fábricas desplazó a miles de artesanos que hasta entonces producían bienes de forma manual. La respuesta social fue intensa: hubo protestas, destrucción de maquinaria y debates parlamentarios sobre si el Estado debía frenar la tecnología o adaptarse a ella. Al final, la economía generó nuevos empleos en sectores que antes no existían, aunque ese proceso tomó décadas y produjo profundas transformaciones en las condiciones laborales.</p>
+      <p>La automatización actual plantea un desafío de escala similar, pero con una diferencia crucial: su velocidad. Los robots industriales y los sistemas de inteligencia artificial no solo reemplazan tareas físicas repetitivas, como ocurrió en el siglo XIX, sino también tareas cognitivas de nivel medio: contabilidad básica, análisis de documentos legales, diagnóstico médico de rutina. Esta expansión del rango automatizable comprime el tiempo disponible para que los trabajadores y los sistemas educativos se adapten.</p>
+      <p>Los efectos sobre el mercado laboral no son uniformes. Los trabajadores con baja cualificación y los de alta especialización parecen relativamente más protegidos —los primeros por el costo de automatizar tareas físicas no estandarizadas, los segundos por la complejidad de su conocimiento—, mientras que el segmento intermedio enfrenta la mayor presión. Este fenómeno, conocido como polarización del mercado de trabajo, amplía la brecha entre los extremos de la distribución salarial y debilita la clase media.</p>
+      <p>Comprender esta dinámica es el primer paso para diseñar políticas que acompañen la transición: sistemas de reconversión laboral, redes de protección social más flexibles y marcos regulatorios que distribuyan los beneficios de la productividad tecnológica de manera más equitativa.</p>
+    </div>
+
+    <!-- T0 Q1 -->
+    <div class="question-block" id="t0q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">El texto avanza desde el ejemplo histórico de la Revolución Industrial hacia el presente. ¿Cuál es la función de ese movimiento en la progresión temática?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,0,2,'a')"><span class="opt-letter">a)</span> Demostrar que la automatización actual es idéntica a la del siglo XIX y que sus efectos serán los mismos.</button>
+        <button class="opt-btn" onclick="answer(0,0,2,'b')"><span class="opt-letter">b)</span> Narrar la historia del movimiento obrero para contextualizar la situación laboral actual.</button>
+        <button class="opt-btn" onclick="answer(0,0,2,'c')"><span class="opt-letter">c)</span> Establecer un antecedente conocido que sirve de punto de comparación para introducir el problema contemporáneo con mayor claridad.</button>
+        <button class="opt-btn" onclick="answer(0,0,2,'d')"><span class="opt-letter">d)</span> Describir en detalle las causas económicas del desempleo en la Europa del siglo XIX.</button>
+      </div>
+      <div class="fb" id="fb-0-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q2 -->
+    <div class="question-block" id="t0q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">En el segundo párrafo, la expresión <em>"pero con una diferencia crucial: su velocidad"</em> cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,1,1,'a')"><span class="opt-letter">a)</span> Cerrar el tema del siglo XIX y abrir un tema completamente nuevo sin relación con lo anterior.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'b')"><span class="opt-letter">b)</span> Introducir el elemento diferenciador que permite avanzar del antecedente histórico al problema específico del presente, desarrollando el tema central.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'c')"><span class="opt-letter">c)</span> Resumir la idea central del texto en una sola frase para que el lector no necesite leer más.</button>
+        <button class="opt-btn" onclick="answer(0,1,1,'d')"><span class="opt-letter">d)</span> Proporcionar datos estadísticos sobre la velocidad de instalación de robots en fábricas latinoamericanas.</button>
+      </div>
+      <div class="fb" id="fb-0-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q3 -->
+    <div class="question-block" id="t0q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-tema">tema-rema</span></div>
+      <div class="q-text">En el tercer párrafo, la oración <em>"Los efectos sobre el mercado laboral no son uniformes"</em> funciona como tema (información conocida que ancla el párrafo) porque:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,2,0,'a')"><span class="opt-letter">a)</span> Retoma el concepto de "mercado laboral" ya introducido en los párrafos anteriores y lo convierte en el punto de partida para desarrollar información nueva sobre los grupos afectados.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'b')"><span class="opt-letter">b)</span> Presenta un dato completamente nuevo que el lector no podía anticipar a partir de los párrafos anteriores.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'c')"><span class="opt-letter">c)</span> Cierra la discusión sobre automatización y abre el tema de las políticas públicas de reconversión laboral.</button>
+        <button class="opt-btn" onclick="answer(0,2,0,'d')"><span class="opt-letter">d)</span> Introduce una voz experta externa que contradice la tesis del autor sobre la polarización salarial.</button>
+      </div>
+      <div class="fb" id="fb-0-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T0 Q4 -->
+    <div class="question-block" id="t0q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">relación entre párrafos</span></div>
+      <div class="q-text">¿Cuál es la relación temática entre el tercer y el cuarto párrafo del texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(0,3,3,'a')"><span class="opt-letter">a)</span> El cuarto párrafo contradice el tercero al afirmar que la automatización no produce polarización salarial.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'b')"><span class="opt-letter">b)</span> El cuarto párrafo repite con otras palabras el mismo contenido del tercero sin añadir nada nuevo.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'c')"><span class="opt-letter">c)</span> El cuarto párrafo cambia de tema hacia la historia de la automatización en Asia, sin conexión con el tercero.</button>
+        <button class="opt-btn" onclick="answer(0,3,3,'d')"><span class="opt-letter">d)</span> El cuarto párrafo avanza el tema: toma la dinámica descrita en el tercero (polarización) como diagnóstico y propone qué hacer con ese conocimiento, completando el recorrido problema → solución.</button>
+      </div>
+      <div class="fb" id="fb-0-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel0 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 2 — Alimentación y sistemas alimentarios
+       Carreras: Ing. Agronómica, Negocios Internacionales, Ing. Física, Psicología
+  ══════════════════════════════════════════ -->
+  <div id="panel1" class="card" style="display:none">
+    <div class="field-badge badge-amber">🌾 Agronomía · Sostenibilidad</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Agronómica</span>
+      <span class="career-tag">Negocios Internacionales</span>
+      <span class="career-tag">Ing. Física</span>
+      <span class="career-tag">Psicología</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 2 · Comer distinto: la transformación de los sistemas alimentarios</div>
+      <p>La dieta promedio de un ciudadano urbano en América Latina ha cambiado más en los últimos cincuenta años que en los cinco siglos anteriores. El consumo de alimentos ultraprocesados ha crecido de manera sostenida desde los años ochenta, impulsado por la urbanización, el aumento del trabajo femenino remunerado —que redujo el tiempo disponible para cocinar en el hogar— y estrategias agresivas de mercadeo dirigidas a niños y jóvenes. Este giro alimentario tiene consecuencias directas sobre la salud pública: las tasas de obesidad, diabetes tipo 2 y enfermedades cardiovasculares en la región son hoy significativamente más altas que hace tres décadas.</p>
+      <p>Detrás del producto que llega al supermercado hay una cadena de decisiones que pocas veces resulta visible para el consumidor. Los sistemas alimentarios globales dependen de monocultivos a gran escala que maximizan rendimientos a corto plazo pero degradan la biodiversidad del suelo, aumentan la vulnerabilidad frente a plagas y contribuyen a la emisión de gases de efecto invernadero. La concentración del mercado en pocas corporaciones transnacionales reduce la diversidad de opciones disponibles y alinea la producción con la rentabilidad antes que con la nutrición o la sostenibilidad.</p>
+      <p>Sin embargo, frente a este panorama han emergido respuestas concretas. Los mercados campesinos urbanos, la agroecología, los sellos de comercio justo y las políticas de etiquetado frontal de advertencia —adoptadas ya en México, Chile y Colombia— representan intentos de reconfigurar la relación entre producción, distribución y consumo. Ninguna de estas iniciativas es suficiente por sí sola, pero cada una actúa sobre un nodo diferente del sistema.</p>
+      <p>El cambio real, sin embargo, requiere transformaciones estructurales: subsidios agrícolas que privilegien la diversificación sobre el monocultivo, regulación efectiva de la publicidad de alimentos ultraprocesados y sistemas de compras públicas que conecten a productores locales con comedores escolares y hospitalarios. La alimentación no es solo un asunto privado; es una política.</p>
+    </div>
+
+    <!-- T1 Q1 -->
+    <div class="question-block" id="t1q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">El primer párrafo desarrolla el tema de la transformación alimentaria moviéndose desde las causas hacia las consecuencias. ¿Cuál de las siguientes afirmaciones describe mejor ese recorrido?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,0,2,'a')"><span class="opt-letter">a)</span> Parte de las enfermedades (consecuencias) y retrocede para explicar qué las causó, en un recorrido de efecto a causa.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'b')"><span class="opt-letter">b)</span> Describe únicamente las causas del cambio alimentario sin mencionar sus efectos sobre la salud pública.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'c')"><span class="opt-letter">c)</span> Introduce primero el cambio (mayor consumo de ultraprocesados), luego sus causas (urbanización, mercadeo, tiempo) y finalmente sus efectos (enfermedades), avanzando en cadena causa → efecto.</button>
+        <button class="opt-btn" onclick="answer(1,0,2,'d')"><span class="opt-letter">d)</span> Compara la dieta latinoamericana con la europea para determinar cuál es más saludable.</button>
+      </div>
+      <div class="fb" id="fb-1-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q2 -->
+    <div class="question-block" id="t1q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">¿Cómo avanza el tema entre el primer y el segundo párrafo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,1,1,'a')"><span class="opt-letter">a)</span> El segundo párrafo repite las causas del cambio alimentario con distintas palabras para reforzar la idea del primero.</button>
+        <button class="opt-btn" onclick="answer(1,1,1,'b')"><span class="opt-letter">b)</span> El segundo párrafo profundiza en una dimensión nueva: los sistemas de producción que están detrás del producto, expandiendo el tema desde el consumo hacia la cadena productiva.</button>
+        <button class="opt-btn" onclick="answer(1,1,1,'c')"><span class="opt-letter">c)</span> El segundo párrafo contradice al primero al afirmar que los sistemas alimentarios globales favorecen la biodiversidad.</button>
+        <button class="opt-btn" onclick="answer(1,1,1,'d')"><span class="opt-letter">d)</span> El segundo párrafo cambia completamente de tema hacia la historia del comercio agrícola en el siglo XX.</button>
+      </div>
+      <div class="fb" id="fb-1-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q3 -->
+    <div class="question-block" id="t1q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-conector">marcador discursivo</span></div>
+      <div class="q-text">El tercer párrafo comienza con <em>"Sin embargo, frente a este panorama han emergido respuestas concretas."</em> ¿Qué función cumple esta oración en la progresión del texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,2,0,'a')"><span class="opt-letter">a)</span> Introduce un giro temático: retoma el panorama problemático de los párrafos anteriores y anuncia que el texto ahora explorará respuestas, completando el movimiento problema → solución.</button>
+        <button class="opt-btn" onclick="answer(1,2,0,'b')"><span class="opt-letter">b)</span> Presenta una refutación directa a los datos sobre obesidad mencionados en el primer párrafo.</button>
+        <button class="opt-btn" onclick="answer(1,2,0,'c')"><span class="opt-letter">c)</span> Cierra definitivamente el tema del texto antes de que el cuarto párrafo introduzca una temática completamente diferente.</button>
+        <button class="opt-btn" onclick="answer(1,2,0,'d')"><span class="opt-letter">d)</span> Describe las características técnicas de los sistemas de etiquetado frontal adoptados en Colombia.</button>
+      </div>
+      <div class="fb" id="fb-1-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T1 Q4 -->
+    <div class="question-block" id="t1q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">relación entre párrafos</span></div>
+      <div class="q-text">Considerando los cuatro párrafos en conjunto, ¿cuál es la estructura de progresión temática que mejor describe el texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(1,3,3,'a')"><span class="opt-letter">a)</span> Descripción → narración → argumentación → descripción: el texto alterna entre modos sin un hilo temático claro.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'b')"><span class="opt-letter">b)</span> Comparación → contraste → síntesis → conclusión: el texto compara sistemas alimentarios de distintos países.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'c')"><span class="opt-letter">c)</span> Causa → efecto → solución parcial → solución estructural: cada párrafo amplía el tema anterior añadiendo una nueva capa de análisis hasta llegar a la propuesta de fondo.</button>
+        <button class="opt-btn" onclick="answer(1,3,3,'d')"><span class="opt-letter">d)</span> Fenómeno → causas → causas adicionales → más causas: el texto acumula causas sin avanzar hacia consecuencias ni soluciones.</button>
+      </div>
+      <div class="fb" id="fb-1-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel1 -->
+
+
+  <!-- ══════════════════════════════════════════
+       TEXTO 3 — Ciudades y movilidad sostenible
+       Carreras: Ing. Mecánica, Ing. Física, Administración, Negocios Internacionales
+  ══════════════════════════════════════════ -->
+  <div id="panel2" class="card" style="display:none">
+    <div class="field-badge badge-purple">🚆 Urbanismo · Ingeniería</div>
+    <div class="career-tags">
+      <span class="career-tag">Ing. Mecánica</span>
+      <span class="career-tag">Ing. Física</span>
+      <span class="career-tag">Administración</span>
+      <span class="career-tag">Negocios Internacionales</span>
+    </div>
+
+    <div class="reading-card">
+      <div class="reading-title">Texto 3 · Mover la ciudad: el problema del transporte urbano</div>
+      <p>Las ciudades latinoamericanas crecieron, en su mayor parte, sin planificación de largo plazo. El automóvil particular fue el eje alrededor del cual se organizó el espacio urbano durante la segunda mitad del siglo XX: se construyeron autopistas, se ampliaron avenidas y se diseñaron zonas residenciales que asumían que cada hogar tendría uno o varios vehículos propios. El resultado es visible hoy en la congestión crónica de ciudades como Bogotá, Ciudad de México o São Paulo, donde millones de horas productivas se pierden cada año atrapadas en el tráfico.</p>
+      <p>Este modelo tiene costos que van más allá del tiempo perdido. La dependencia del automóvil privado genera altos niveles de emisiones de carbono y material particulado, con efectos documentados sobre la salud respiratoria de la población, especialmente en niños y adultos mayores. Además, reproduce desigualdades: quienes no pueden acceder a un vehículo propio —generalmente los sectores de menores ingresos— quedan relegados a sistemas de transporte público deficientes, con tiempos de desplazamiento mucho mayores.</p>
+      <p>Frente a este diagnóstico, varias ciudades del mundo han apostado por modelos de movilidad centrados en el transporte público masivo, la infraestructura ciclista y la reducción del espacio destinado al automóvil. Ámsterdam, Copenhague y Seúl han reconfigurado partes importantes de su trama urbana con resultados medibles en calidad del aire, accidentalidad vial y satisfacción ciudadana. En América Latina, Bogotá y Curitiba han avanzado en esta dirección, aunque con resultados más heterogéneos y con retos mayores derivados de la escala y la desigualdad.</p>
+      <p>El problema central no es técnico: las soluciones existen y están documentadas. El obstáculo es político: modificar el modelo de movilidad implica redistribuir el espacio público, afectar intereses económicos consolidados y cambiar hábitos culturales profundamente arraigados. Sin voluntad política sostenida y sin participación ciudadana activa, las transformaciones necesarias difícilmente llegarán a escala.</p>
+    </div>
+
+    <!-- T2 Q1 -->
+    <div class="question-block" id="t2q0">
+      <div class="q-number">Pregunta 1 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">El primer párrafo sitúa el problema en un contexto histórico (el crecimiento urbano basado en el automóvil) antes de mencionar las consecuencias actuales. ¿Por qué es relevante ese orden para la progresión del texto?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,0,1,'a')"><span class="opt-letter">a)</span> Porque permite que el lector conozca primero la solución antes de entender el problema, facilitando la comprensión.</button>
+        <button class="opt-btn" onclick="answer(2,0,1,'b')"><span class="opt-letter">b)</span> Porque establece las raíces históricas del problema como información conocida antes de presentar sus efectos actuales como información nueva, lo que facilita la comprensión del por qué la congestión es estructural y no accidental.</button>
+        <button class="opt-btn" onclick="answer(2,0,1,'c')"><span class="opt-letter">c)</span> Porque narrar hechos históricos es más fácil de entender que analizar problemas contemporáneos, y el autor prefiere comenzar por lo simple.</button>
+        <button class="opt-btn" onclick="answer(2,0,1,'d')"><span class="opt-letter">d)</span> Porque el contexto histórico es el tema principal del texto y las ciudades actuales son solo un ejemplo secundario.</button>
+      </div>
+      <div class="fb" id="fb-2-0">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q2 -->
+    <div class="question-block" id="t2q1">
+      <div class="q-number">Pregunta 2 <span class="q-type-tag tag-progresion">progresión temática</span></div>
+      <div class="q-text">La expresión <em>"Este modelo tiene costos que van más allá del tiempo perdido"</em> al inicio del segundo párrafo cumple la función de:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,1,2,'a')"><span class="opt-letter">a)</span> Introducir un tema completamente distinto al del primer párrafo, centrado en la economía del transporte urbano.</button>
+        <button class="opt-btn" onclick="answer(2,1,2,'b')"><span class="opt-letter">b)</span> Resumir todo el texto en una sola oración para orientar al lector antes de los ejemplos internacionales.</button>
+        <button class="opt-btn" onclick="answer(2,1,2,'c')"><span class="opt-letter">c)</span> Retomar el "modelo" introducido en el párrafo anterior (ciudad organizada alrededor del automóvil) y ampliar el tema hacia otros costos no mencionados aún, manteniendo la continuidad temática.</button>
+        <button class="opt-btn" onclick="answer(2,1,2,'d')"><span class="opt-letter">d)</span> Contradecir la afirmación del primer párrafo de que la congestión genera pérdida de horas productivas.</button>
+      </div>
+      <div class="fb" id="fb-2-1">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q3 -->
+    <div class="question-block" id="t2q2">
+      <div class="q-number">Pregunta 3 <span class="q-type-tag tag-tema">tema-rema</span></div>
+      <div class="q-text">En el tercer párrafo, la expresión <em>"Frente a este diagnóstico"</em> funciona como elemento de cohesión temática porque:</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,2,0,'a')"><span class="opt-letter">a)</span> Resume en dos palabras todo el contenido de los párrafos anteriores (el diagnóstico del problema de movilidad) y lo convierte en punto de partida para desarrollar las respuestas o alternativas.</button>
+        <button class="opt-btn" onclick="answer(2,2,0,'b')"><span class="opt-letter">b)</span> Introduce información nueva sobre un diagnóstico médico relacionado con la contaminación del aire en las ciudades.</button>
+        <button class="opt-btn" onclick="answer(2,2,0,'c')"><span class="opt-letter">c)</span> Señala que el texto va a contradecir el argumento de los dos primeros párrafos con evidencia científica nueva.</button>
+        <button class="opt-btn" onclick="answer(2,2,0,'d')"><span class="opt-letter">d)</span> Anuncia que el autor va a describir los sistemas de transporte de Ámsterdam y Copenhague en detalle técnico.</button>
+      </div>
+      <div class="fb" id="fb-2-2">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+    <hr class="q-divider">
+
+    <!-- T2 Q4 -->
+    <div class="question-block" id="t2q3">
+      <div class="q-number">Pregunta 4 <span class="q-type-tag tag-variable">relación entre párrafos</span></div>
+      <div class="q-text">El cuarto párrafo afirma que <em>"el problema central no es técnico"</em>. ¿Cómo se relaciona esta afirmación con la progresión temática del texto completo?</div>
+      <div class="options">
+        <button class="opt-btn" onclick="answer(2,3,3,'a')"><span class="opt-letter">a)</span> Contradice los párrafos anteriores al negar que las ciudades enfrenten un problema de movilidad real.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'b')"><span class="opt-letter">b)</span> Introduce un tema nuevo sobre historia política de las ciudades que no tiene conexión con los párrafos anteriores.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'c')"><span class="opt-letter">c)</span> Repite con otras palabras el argumento del primer párrafo sobre el crecimiento urbano sin planificación.</button>
+        <button class="opt-btn" onclick="answer(2,3,3,'d')"><span class="opt-letter">d)</span> Cierra la progresión al reformular el problema en su nivel más profundo: habiendo recorrido las causas históricas, los costos y las soluciones disponibles, el texto concluye que el verdadero obstáculo es político, no de conocimiento ni de tecnología.</button>
+      </div>
+      <div class="fb" id="fb-2-3">
+        <div class="fb-concepto"></div>
+        <span class="fb-body"></span>
+      </div>
+    </div>
+  </div><!-- /panel2 -->
+
+  <!-- BOTÓN SIEMPRE VISIBLE -->
+  <div class="reset-wrap">
+    <button class="btn-reset" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      Limpiar resultados y volver a intentar
+    </button>
+  </div>
+
+  <!-- SCORE PANEL -->
+  <div class="score-panel" id="score-panel">
+    <div class="score-big" id="score-pct">—</div>
+    <div class="score-sub" id="score-fraction">— / 12 correctas</div>
+    <div class="score-breakdown" id="score-breakdown"></div>
+  </div>
+
+</div><!-- /page-shell -->
+
+<script>
+/* ══════════════════════════════════════
+   DATA: correct index (0=a,1=b,2=c,3=d) + feedback
+══════════════════════════════════════ */
+const DATA = [
+  // TEXTO 0 — Automatización
+  [
+    {
+      correct: 2,
+      okMsg: "Progresión por antecedente. El primer párrafo usa el ejemplo histórico de la Revolución Industrial como información conocida (tema) para que el lector comprenda mejor el problema contemporáneo (rema). Este movimiento de lo familiar a lo nuevo es una estrategia clásica de progresión temática: anclar lo desconocido en lo conocido.",
+      failMsg: "El propósito del ejemplo histórico no es demostrar que ambas automatizaciones son idénticas ni narrar la historia obrera. Es usarlo como punto de comparación que el lector ya conoce, para desde ahí presentar el problema actual con mayor claridad. Ese movimiento de lo conocido a lo nuevo es la base de la progresión temática."
+    },
+    {
+      correct: 1,
+      okMsg: "Elemento diferenciador que impulsa el avance temático. La frase 'pero con una diferencia crucial: su velocidad' no cierra el tema anterior ni lo repite: lo retoma y añade el factor que distingue la situación presente, empujando el texto hacia información nueva. Identificar estos conectores de contraste es clave para seguir la progresión.",
+      failMsg: "Esta expresión no cierra el tema ni resume el texto. Conecta lo anterior (el antecedente histórico) con lo nuevo (el problema actual), señalando el factor diferenciador —la velocidad— que hace más urgente el problema presente. Es el motor que impulsa el avance temático entre los dos primeros párrafos."
+    },
+    {
+      correct: 0,
+      okMsg: "Tema como información conocida. La oración retoma el concepto de 'mercado laboral' ya trabajado en los párrafos anteriores y lo establece como punto de partida estable. A partir de ese tema conocido, el párrafo desarrolla información nueva: que los efectos son desiguales según el nivel de cualificación. Así funciona la estructura tema-rema.",
+      failMsg: "La noción de 'mercado laboral' no es nueva para el lector en ese punto del texto: ya se ha mencionado antes. Por eso funciona como tema (información conocida que ancla el párrafo), no como información sorprendente. La información nueva —el rema— es la distinción entre grupos de trabajadores que el párrafo desarrolla a continuación."
+    },
+    {
+      correct: 3,
+      okMsg: "Avance problema → solución. El tercer párrafo describe la polarización del mercado laboral como un problema (diagnóstico). El cuarto párrafo toma ese diagnóstico como punto de partida y avanza hacia lo que se debe hacer: diseñar políticas. Esta relación problema → acción es una forma muy frecuente de progresión temática en textos argumentativos.",
+      failMsg: "El cuarto párrafo no contradice ni repite el tercero, ni cambia de tema. Toma el problema descrito (polarización) y avanza hacia la propuesta: qué hacer con ese conocimiento. Esa relación —diagnóstico en el párrafo 3, prescripción en el párrafo 4— es la estructura problema → solución, una de las formas más comunes de progresión temática."
+    }
+  ],
+  // TEXTO 1 — Alimentación
+  [
+    {
+      correct: 2,
+      okMsg: "Cadena causa → efecto. El párrafo introduce primero el fenómeno (mayor consumo de ultraprocesados), luego sus causas (urbanización, trabajo femenino, mercadeo) y finalmente sus efectos (enfermedades). Este recorrido en cadena es una forma de progresión temática que construye la comprensión del problema capa por capa.",
+      failMsg: "El párrafo no comienza por las enfermedades ni se limita a las causas. Su recorrido es: fenómeno → causas → efectos, avanzando en cadena. Reconocer ese orden es importante para entender cómo el texto construye su argumento: primero muestra qué cambió, luego por qué, y finalmente qué consecuencias tiene."
+    },
+    {
+      correct: 1,
+      okMsg: "Ampliación hacia una dimensión nueva. El segundo párrafo no repite ni contradice el primero. Lo expande: si el primero habló del consumo, el segundo explora la producción y la cadena de suministro que está detrás. Este tipo de progresión —ir de lo visible (el producto) a lo invisible (el sistema)— profundiza el tema añadiendo una perspectiva nueva.",
+      failMsg: "El segundo párrafo no repite el primero ni lo contradice. Lo amplía hacia un aspecto diferente: mientras el primero se ocupó del consumo y sus efectos en la salud, el segundo explora qué hay detrás del producto —la cadena productiva, los monocultivos, la concentración corporativa. Eso es una expansión temática, no una repetición ni una contradicción."
+    },
+    {
+      correct: 0,
+      okMsg: "Giro temático problema → solución. La expresión 'Sin embargo, frente a este panorama' cumple dos funciones: retomar el problema descrito antes (el panorama negativo) y señalar que el texto va a explorar respuestas a ese problema. Este giro es una bisagra temática que articula el diagnóstico con las alternativas.",
+      failMsg: "La oración no refuta datos ni cierra el texto. Hace algo más específico: retoma el 'panorama' problemático descrito en los dos párrafos anteriores y anuncia que ahora vendrán respuestas. Ese movimiento —de problema a solución— es una bisagra temática que articula dos secciones del texto."
+    },
+    {
+      correct: 2,
+      okMsg: "Estructura en capas: fenómeno → sistema → respuestas parciales → transformación estructural. Cada párrafo añade una capa de análisis al anterior: el primero describe el problema en el consumidor; el segundo, en el sistema productivo; el tercero, las respuestas parciales; y el cuarto, lo que hace falta a mayor escala. Esta progresión en profundidad creciente es característica de los textos argumentativos bien construidos.",
+      failMsg: "El texto no alterna modos sin coherencia ni compara países. Avanza en profundidad: del fenómeno (consumo) al sistema (producción) a las respuestas (iniciativas) a la propuesta estructural. Esa secuencia —cada párrafo añade una capa de análisis más profunda— es la progresión temática que organiza el texto."
+    }
+  ],
+  // TEXTO 2 — Movilidad urbana
+  [
+    {
+      correct: 1,
+      okMsg: "Información conocida como ancla. El recorrido histórico establece las causas del problema como información compartida (el contexto que el lector puede verificar) antes de presentar las consecuencias actuales como información nueva. Esto permite que el lector comprenda la congestión no como un accidente, sino como el resultado lógico de décadas de decisiones de planificación.",
+      failMsg: "El orden no es arbitrario ni está pensado para facilitar lo 'más simple'. Tiene una función temática precisa: establecer primero las causas históricas (información conocida) para que el lector entienda las consecuencias actuales (información nueva) como algo estructural, no accidental. Esa es la lógica de la progresión tema-rema."
+    },
+    {
+      correct: 2,
+      okMsg: "Retoma y amplía. La expresión 'Este modelo' recoge el concepto del párrafo anterior (la ciudad organizada alrededor del automóvil) y lo convierte en el tema del segundo párrafo. Luego presenta información nueva: que los costos van más allá del tiempo perdido (emisiones, salud, desigualdad). Así funciona la progresión lineal: el rema de un párrafo se convierte en el tema del siguiente.",
+      failMsg: "La expresión 'Este modelo' no introduce un tema nuevo ni resume todo el texto. Retoma el 'modelo' del párrafo anterior (ciudad para el automóvil) y lo amplía hacia nuevos costos no mencionados. Esa estructura —retomar lo anterior como tema y añadir información nueva como rema— es la progresión lineal, una de las formas más comunes de avance temático."
+    },
+    {
+      correct: 0,
+      okMsg: "Cohesión por referencia resumida. 'Frente a este diagnóstico' no introduce información nueva: hace referencia condensada a todo el problema descrito en los dos párrafos anteriores (las causas históricas y los costos del modelo). Al nombrarlo 'diagnóstico', cierra esa sección y convierte lo ya dicho en punto de partida para las respuestas. Esa función de referencia-resumen es un mecanismo clave de cohesión temática.",
+      failMsg: "La expresión 'Frente a este diagnóstico' no habla de medicina ni refuta nada. Hace referencia al problema descrito antes (el diagnóstico del modelo de movilidad) y lo convierte en punto de partida para presentar las respuestas. Esa capacidad de condensar lo anterior en una expresión breve es un mecanismo de cohesión temática muy frecuente en textos argumentativos."
+    },
+    {
+      correct: 3,
+      okMsg: "Cierre que reformula el problema en profundidad. El texto recorrió las causas históricas (párrafo 1), los costos (párrafo 2) y las soluciones disponibles (párrafo 3). El cuarto párrafo no repite ni contradice: concluye la progresión señalando que el verdadero obstáculo no es la falta de soluciones, sino la voluntad política. Este reencuadre final es la capa más profunda del argumento.",
+      failMsg: "El cuarto párrafo no contradice ni repite lo anterior, ni cambia de tema. Cierra la progresión: habiendo recorrido causas, costos y soluciones técnicas, el texto llega a la conclusión más profunda: el obstáculo real es político. Esa reformulación final es la última capa de un argumento construido en profundidad creciente."
+    }
+  ]
+];
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+const TOTAL = 12;
+let answers = Array.from({length:3}, () => Array(4).fill(null));
+let currentTab = 0;
+
+/* ══════════════════════════════════════
+   ANSWER
+══════════════════════════════════════ */
+function answer(textIdx, qIdx, _unused, chosenLetter) {
+  if (answers[textIdx][qIdx] !== null) return;
+
+  const d = DATA[textIdx][qIdx];
+  const letterMap = {'a':0,'b':1,'c':2,'d':3};
+  const chosenIdx = letterMap[chosenLetter];
+  const isOk = (chosenIdx === d.correct);
+  answers[textIdx][qIdx] = isOk ? 'ok' : 'mal';
+
+  const block = document.getElementById(`t${textIdx}q${qIdx}`);
+  const btns = block.querySelectorAll('.opt-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === chosenIdx) btn.classList.add(isOk ? 'selected-ok' : 'selected-mal');
+    if (!isOk && i === d.correct) btn.classList.add('reveal-ok');
+  });
+
+  const fbEl = document.getElementById(`fb-${textIdx}-${qIdx}`);
+  fbEl.classList.add('show', isOk ? 'fb-ok' : 'fb-mal');
+  fbEl.querySelector('.fb-concepto').textContent = isOk ? '✓ Correcto' : '✗ Incorrecto';
+  fbEl.querySelector('.fb-body').textContent = isOk ? d.okMsg : d.failMsg;
+
+  updateProgress();
+  checkComplete();
+}
+
+/* ══════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════ */
+function countAnswered() { return answers.flat().filter(v => v !== null).length; }
+function countOk()       { return answers.flat().filter(v => v === 'ok').length; }
+function textDone(ti)    { return answers[ti].every(v => v !== null); }
+
+function updateProgress() {
+  const answered = countAnswered();
+  document.getElementById('prog-count').textContent = `${answered} / ${TOTAL} respondidas`;
+  document.getElementById('prog-label').textContent = `Texto ${currentTab+1} de 3`;
+
+  ['seg0','seg1','seg2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'progress-seg';
+    if (textDone(i))      el.classList.add('done');
+    else if (i===currentTab) el.classList.add('active');
+  });
+
+  for (let i=0; i<3; i++) {
+    const tab = document.getElementById(`tab${i}`);
+    if (textDone(i)) tab.classList.add('completed');
+  }
+}
+
+/* ══════════════════════════════════════
+   SCORE
+══════════════════════════════════════ */
+function checkComplete() {
+  if (countAnswered() < TOTAL) return;
+  const ok  = countOk();
+  const pct = Math.round(ok / TOTAL * 100);
+
+  document.getElementById('score-pct').textContent      = pct + '%';
+  document.getElementById('score-fraction').textContent = `${ok} / ${TOTAL} correctas`;
+
+  const bd = document.getElementById('score-breakdown');
+  bd.innerHTML = '';
+  const labels = ['Texto 1 — Automatización', 'Texto 2 — Alimentación', 'Texto 3 — Movilidad urbana'];
+  answers.forEach((arr, i) => {
+    const okN = arr.filter(v => v==='ok').length;
+    const chip = document.createElement('span');
+    chip.className = `score-chip ${okN >= 3 ? 'chip-ok' : 'chip-mal'}`;
+    chip.textContent = `${labels[i]}: ${okN}/4`;
+    bd.appendChild(chip);
+  });
+
+  document.getElementById('score-panel').classList.add('show');
+}
+
+/* ══════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════ */
+function goTab(idx) {
+  currentTab = idx;
+  for (let i=0; i<3; i++) {
+    document.getElementById(`panel${i}`).style.display = i===idx ? 'block' : 'none';
+    document.getElementById(`tab${i}`).classList.toggle('active', i===idx);
+  }
+  updateProgress();
+}
+
+/* ══════════════════════════════════════
+   RESET
+══════════════════════════════════════ */
+function resetAll() {
+  answers = Array.from({length:3}, () => Array(4).fill(null));
+
+  document.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove('selected-ok','selected-mal','reveal-ok');
+  });
+  document.querySelectorAll('.fb').forEach(fb => {
+    fb.className = 'fb';
+    fb.querySelector('.fb-concepto').textContent = '';
+    fb.querySelector('.fb-body').textContent = '';
+  });
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('completed'));
+
+  document.getElementById('score-panel').classList.remove('show');
+  goTab(0);
+  updateProgress();
+}
+
+/* init */
+updateProgress();
+</script>
+</body>
+</html>
